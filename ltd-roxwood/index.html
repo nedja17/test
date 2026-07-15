@@ -1,1549 +1,722 @@
 <!DOCTYPE html>
-
 <html lang="fr">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>LTD Roxwood - Commande Client</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
-
     
-
     <!-- FIREBASE CDN (Scripts pour la base de données) -->
-
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-
-
     <style>
-
         /* --- DESIGN (CSS) --- */
-
         body {
-
             font-family: 'Roboto Slab', serif;
-
             background-color: #1a1a1a;
-
             color: #e0e0e0;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             min-height: 100vh;
-
             margin: 0;
-
             padding: 20px;
-
             /* Image de fond */
-
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('ltd.png');
-
             background-size: cover;
-
             background-position: center;
-
             background-repeat: no-repeat;
-
             background-attachment: fixed;
-
         }
-
-
 
         .container {
-
             background-color: rgba(45, 45, 45, 0.95);
-
             padding: 40px;
-
             border-radius: 15px;
-
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-
             width: 1000px; /* Élargi un peu pour l'historique */
-
             text-align: center;
-
             border: 1px solid #555;
-
             backdrop-filter: blur(5px);
-
         }
-
-
 
         h1 {
-
             color: #ff9800;
-
             letter-spacing: 1px;
-
             margin-bottom: 15px;
-
             font-size: 2.5em;
-
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-
         }
-
-
 
         h3 {
-
             color: #ff9800;
-
             border-bottom: 2px solid #ff9800;
-
             padding-bottom: 10px;
-
             margin-top: 30px;
-
             font-size: 1.5em;
-
             text-align: left;
-
         }
-
         
-
         /* Style titre Contrat (Rouge) */
-
         h3.contrat-title {
-
             color: #d32f2f; 
-
             border-bottom: 2px solid #d32f2f;
-
             margin-top: 40px;
-
         }
-
-
 
         /* Style titre Pack (Vert) */
-
         h3.pack-title {
-
             color: #4caf50; 
-
             border-bottom: 2px solid #4caf50;
-
             margin-top: 40px;
-
         }
-
-
 
         p {
-
             font-size: 1.1em;
-
             margin-bottom: 20px;
-
         }
-
-
 
         /* --- NAVIGATION --- */
-
         .navbar {
-
             display: flex;
-
             justify-content: center;
-
             gap: 15px;
-
             margin-bottom: 30px;
-
             border-bottom: 1px solid #555;
-
             padding-bottom: 20px;
-
         }
-
         
-
         .nav-btn {
-
             padding: 10px 20px;
-
             background-color: rgba(30, 30, 30, 0.8);
-
             border: 1px solid #ff9800;
-
             color: white;
-
             font-family: 'Roboto Slab', serif;
-
             font-weight: bold;
-
             border-radius: 5px;
-
             cursor: pointer;
-
             transition: background-color 0.2s, color 0.2s;
-
         }
-
-
 
         .nav-btn:hover, .nav-btn.active {
-
             background-color: #ff9800;
-
             color: #1a1a1a;
-
         }
-
-
 
         /* --- STYLE : GRILLE DE PRODUITS --- */
-
         .product-grid {
-
             display: grid;
-
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-
             gap: 20px;
-
             margin-top: 20px;
-
             margin-bottom: 20px;
-
         }
-
-
 
         .product-card {
-
             background-color: rgba(30, 30, 30, 0.8);
-
             border: 1px solid #ff9800;
-
             border-radius: 10px;
-
             padding: 15px;
-
             display: flex;
-
             flex-direction: column;
-
             align-items: center;
-
             justify-content: space-between;
-
             transition: transform 0.2s, box-shadow 0.2s;
-
         }
-
         
-
         /* Style carte Contrat */
-
         .product-card.contrat-card {
-
             border: 1px solid #d32f2f;
-
         }
-
         .product-card.contrat-card .prod-name {
-
             color: #ef5350;
-
         }
-
-
 
         /* Style carte Pack */
-
         .product-card.pack-card {
-
             border: 1px solid #4caf50;
-
         }
-
         .product-card.pack-card .prod-name {
-
             color: #81c784;
-
         }
-
-
 
         .product-card:hover {
-
             transform: translateY(-5px);
-
             box-shadow: 0 5px 15px rgba(255, 152, 0, 0.2);
-
             background-color: rgba(40, 40, 40, 0.9);
-
         }
-
-
 
         .prod-name {
-
             font-size: 0.9em; 
-
             font-weight: bold;
-
             color: #ff9800;
-
             margin-bottom: 5px;
-
             height: 50px; 
-
             display: flex;
-
             align-items: center;
-
             justify-content: center;
-
             text-align: center;
-
             line-height: 1.2;
-
         }
-
-
 
         .prod-price {
-
             color: #ccc;
-
             font-size: 0.9em;
-
             margin-bottom: 10px;
-
         }
-
-
 
         .prod-subtotal {
-
             margin-top: 10px;
-
             font-weight: bold;
-
             color: #4caf50;
-
         }
-
-
 
         /* Styles des champs de saisie */
-
         .login-input, .info-input, select.info-input {
-
             width: 80%;
-
             padding: 12px;
-
             margin: 10px 0;
-
             background-color: rgba(26, 26, 26, 0.8);
-
             border: 1px solid #ff9800;
-
             color: white;
-
             border-radius: 8px;
-
             text-align: center;
-
             font-family: 'Roboto Slab', serif;
-
             font-size: 1em;
-
             transition: border-color 0.3s, box-shadow 0.3s;
-
         }
-
         
-
         select.info-input option {
-
             background-color: #1a1a1a;
-
             color: white;
-
         }
-
-
 
         .login-input:focus, .info-input:focus, .qty-input:focus {
-
             outline: none;
-
             border-color: #e68900;
-
             box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
-
         }
-
-
 
         .qty-input {
-
             width: 80px;
-
             padding: 8px;
-
             background-color: rgba(255, 255, 255, 0.1);
-
             border: 1px solid #555;
-
             color: white;
-
             border-radius: 5px;
-
             text-align: center;
-
             font-weight: bold;
-
             font-family: 'Roboto Slab', serif;
-
             font-size: 1.2em;
-
         }
-
-
 
         input[type="date"], input[type="time"] {
-
             color-scheme: dark;
-
         }
-
-
 
         textarea.info-input {
-
             height: 80px;
-
             text-align: left;
-
             resize: vertical;
-
         }
-
-
 
         /* Barre de total global */
-
         .total-bar {
-
             background-color: rgba(51, 51, 51, 0.9);
-
             padding: 15px;
-
             border-radius: 8px;
-
             margin-top: 20px;
-
             border: 1px solid #4caf50;
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
         }
-
-
 
         .total-label { font-size: 1.2em; font-weight: bold; color: white; }
-
         .total-amount { font-size: 1.8em; font-weight: bold; color: #4caf50; }
 
-
-
         /* Styles des boutons */
-
         .btn {
-
             width: 85%;
-
             padding: 15px;
-
             background: linear-gradient(45deg, #ff9800, #e68900);
-
             border: none;
-
             color: #1a1a1a;
-
             font-weight: bold;
-
             cursor: pointer;
-
             border-radius: 8px;
-
             margin-top: 20px;
-
             font-size: 1.1em;
-
             transition: transform 0.2s, box-shadow 0.2s;
-
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-
         }
-
-
 
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); }
-
         .btn:active { transform: translateY(0); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
-
         
-
         .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; width: 100%; }
-
         .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); width: 100%; margin-top: 15px; color: white; }
-
         
-
         /* Petit bouton pour l'historique */
-
         .btn-small { 
-
             width: auto; 
-
             padding: 8px 12px; 
-
             margin-top: 0; 
-
             font-size: 0.9em; 
-
         }
-
-
 
         /* Section info livraison */
-
         .delivery-info-section {
-
             margin-top: 30px;
-
             text-align: left;
-
             background-color: rgba(34, 34, 34, 0.6);
-
             padding: 20px;
-
             border-radius: 10px;
-
             border: 1px solid #444;
-
         }
-
-
 
         .delivery-info-row {
-
             display: flex;
-
             gap: 10px;
-
             justify-content: space-between;
-
             margin-bottom: 15px;
-
         }
-
         
-
         .delivery-info-row .info-input { margin: 0; }
 
-
-
         /* --- HISTORIQUE (TABLEAU) --- */
-
         .history-table {
-
             width: 100%;
-
             border-collapse: collapse;
-
             margin-top: 20px;
-
             text-align: left;
-
             background-color: rgba(30, 30, 30, 0.8);
-
             border-radius: 8px;
-
             overflow: hidden;
-
         }
-
-
 
         .history-table th, .history-table td {
-
             padding: 12px;
-
             border-bottom: 1px solid #444;
-
         }
-
-
 
         .history-table th {
-
             background-color: rgba(255, 152, 0, 0.2);
-
             color: #ff9800;
-
             font-weight: bold;
-
         }
-
-
 
         .history-table tr:hover {
-
             background-color: rgba(50, 50, 50, 0.9);
-
         }
-
-
 
         .status-select {
-
             background-color: #1a1a1a;
-
             color: white;
-
             border: 1px solid #555;
-
             padding: 5px;
-
             border-radius: 4px;
-
             font-family: inherit;
-
             width: 100%;
-
         }
-
         
-
         /* Cacher les sections au départ */
-
         #main-app, #dashboard, #success-screen, #history-screen { display: none; }
-
         
-
         /* Style spécifique écran succès */
-
         #success-screen h1 { color: #43a047; }
-
         #success-screen p { font-size: 1.3em; line-height: 1.6; }
-
         .success-icon { font-size: 4em; margin-bottom: 20px; display: block; }
 
-
-
     </style>
-
 </head>
-
 <body>
 
-
-
     <div class="container">
-
         <!-- ÉCRAN DE CONNEXION -->
-
         <div id="login-screen">
-
             <h1>LTD Roxwood</h1>
-
             <p>Accès Employés</p>
-
             <input type="text" id="username" class="login-input" placeholder="Identifiant">
-
             <input type="password" id="password" class="login-input" placeholder="Mot de passe">
-
             <button class="btn" onclick="checkLogin()">CONNEXION</button>
-
             <p id="error" style="color:red; display:none; margin-top:10px; font-weight: bold;">Identifiants incorrects.</p>
-
         </div>
 
-
-
         <!-- APPLICATION PRINCIPALE (Après connexion) -->
-
         <div id="main-app">
-
             
-
             <!-- MENU DE NAVIGATION -->
-
             <div class="navbar">
-
                 <button class="nav-btn active" id="btn-dashboard" onclick="switchTab('dashboard')">📝 Nouvelle Commande</button>
-
                 <button class="nav-btn" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi des Commandes</button>
-
                 <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="logout()">❌ Déconnexion</button>
-
             </div>
-
-
 
             <!-- ONGLET 1 : NOUVELLE COMMANDE -->
-
             <div id="dashboard">
-
                 <h1>Nouvelle Commande</h1>
-
                 <p>Vendeur connecté : <span id="user-display" style="color:#ff9800; font-weight: bold;"></span></p>
 
-
-
                 <h3>PRODUITS STANDARDS</h3>
-
                 <div id="product-grid-standard" class="product-grid"></div>
 
-
-
                 <h3 class="pack-title">OFFRES SPÉCIALES (PACKS)</h3>
-
                 <div id="product-grid-pack" class="product-grid"></div>
 
-
-
                 <h3 class="contrat-title">ZONE CONTRAT (RÉSERVÉ)</h3>
-
                 <div id="product-grid-contrat" class="product-grid"></div>
 
-
-
                 <div class="total-bar">
-
                     <span class="total-label">TOTAL À PAYER :</span>
-
                     <span class="total-amount" id="grand-total">0.00 $</span>
-
                 </div>
-
-
 
                 <div class="delivery-info-section">
-
                     <h3>INFORMATIONS DE LIVRAISON</h3>
-
                     <div class="delivery-info-row">
-
                         <input type="text" id="client-firstname" class="info-input" placeholder="Prénom Client" style="width: 48%;">
-
                         <input type="text" id="client-lastname" class="info-input" placeholder="Nom Client" style="width: 48%;">
-
                     </div>
-
                     
-
                     <div class="delivery-info-row">
-
                         <input type="text" id="client-phone" class="info-input" placeholder="📞 Tél. Client" style="width: 25%;">
-
                         <input type="date" id="delivery-date" class="info-input" style="width: 20%;">
-
                         <input type="time" id="delivery-time" class="info-input" style="width: 15%;">
-
                         
-
                         <select id="delivery-zone" class="info-input" style="width: 35%;" onchange="calculateTotal()">
-
                             <option value="0">Roxwood / Paleto (0$)</option>
-
                             <option value="150">Nord (Sandy et les alentours) (150$)</option>
-
                             <option value="300">Sud (A Partir Du Péage) (300$)</option>
-
                         </select>
-
                     </div>
-
                     <textarea id="other-info" class="info-input" placeholder="📝 Autres informations (Numéro à contacter en plus etc.)" style="width: 100%; box-sizing: border-box;"></textarea>
-
                 </div>
 
-
-
-                <button class="btn btn-green" onclick="sendToDiscord()">VALIDER LA COMMANDE</button>
-
+                <button class="btn btn-green" onclick="submitOrder()">VALIDER LA COMMANDE</button>
                 <button class="btn btn-red" onclick="resetForm()">REMISE À ZÉRO</button>
-
             </div>
-
-
 
             <!-- ONGLET 2 : HISTORIQUE -->
-
             <div id="history-screen">
-
                 <h2>Suivi Global des Commandes</h2>
-
                 <p style="font-size: 0.9em; color: #aaa;">Les commandes sont synchronisées en temps réel pour tous les employés (Firebase).</p>
-
                 
-
                 <table class="history-table">
-
                     <thead>
-
                         <tr>
-
                             <th>Date & Heure</th>
-
                             <th>Vendeur</th>
-
                             <th>Client</th>
-
                             <th>Total</th>
-
                             <th>Statut</th>
-
                             <th>Action</th>
-
                         </tr>
-
                     </thead>
-
                     <tbody id="history-body">
-
                         <!-- Lignes générées par la base de données -->
-
                     </tbody>
-
                 </table>
-
             </div>
-
-
 
             <!-- ONGLET 3 : SUCCÈS -->
-
             <div id="success-screen">
-
                 <span class="success-icon">✅</span>
-
                 <h1>Commande Validée !</h1>
-
-                <p>La commande a bien été transmise au LTD Roxwood.</p>
-
-                <button class="btn" onclick="switchTab('dashboard')">FAIRE UNE AUTRE COMMANDE</button>
-
+                <p>La commande a bien été enregistrée dans la base de données.</p>
+                <button class="btn" onclick="returnToDashboard()">FAIRE UNE AUTRE COMMANDE</button>
             </div>
 
-
-
         </div> <!-- Fin main-app -->
-
     </div>
 
-
-
     <script>
-
         // ================= CONFIGURATION FIREBASE =================
-
-        // COPIE-COLLE LES CLÉS QUE FIREBASE T'A DONNÉES ICI :
-
         const firebaseConfig = {
-
             apiKey: "AIzaSyBxqUR8EtJw6gnUCUVQ5DTvbOnpvpPqZ3E",
-
             authDomain: "ltd-roxwood-afe8b.firebaseapp.com",
-
+            databaseURL: "https://ltd-roxwood-afe8b-default-rtdb.firebaseio.com", // Ajout de l'URL pour corriger l'erreur
             projectId: "ltd-roxwood-afe8b",
-
             storageBucket: "ltd-roxwood-afe8b.firebasestorage.app",
-
             messagingSenderId: "901585175041",
-
             appId: "1:901585175041:web:55fb39c9d5074934bc3600",
-
             measurementId: "G-RCXJN0813L"
-
         };
-
         
-
         // Initialisation de Firebase
-
         firebase.initializeApp(firebaseConfig);
-
         const db = firebase.database();
-
         // =========================================================
 
-
-
         const authorizedUsers = [
-
             { name: "admin", pass: "admin" },
-
             { name: "test", pass: "test" },
-
             { name: "Direction Roxwood", pass: "@dmin!5" },
-
             { name: "Hibiscus Evergreen", pass: "06122003" },
-
             { name: "Kayla Mayers", pass: "09031999" },
-
             { name: "Oliver Campbell", pass: "03092002" },
-
             { name: "Issa Wekesa", pass: "17082003" }
-
         ];
-
-
 
         const inventory = [
-
             { name: "Caoutchouc", price: 5.0 },
-
             { name: "Appât",      price: 10.0 },
-
             { name: "Bouteille d'eau", price: 8.0 },
-
             { name: "Fertilisant", price: 8.0 },
-
             { name: "Pot de fleur", price: 8.0 },
-
             { name: "Lumière Violette", price: 36.0 },
-
             { name: "Sachet Vide", price: 5.0 },
-
             { name: "Foret de perceuse", price: 600.0 },
-
             
-
             // PACKS 
-
             { name: "Pack Jardinage (300 Bouteille d'eau, 100 Fertilisant, 100 Pot de fleur, 10 Lumière Violette)", price: 4000.0 },
 
-
-
             // PRODUITS CONTRAT
-
             { name: "Appât (contrat)", price: 8.0 },
-
             { name: "Foret de perceuse (contrat)", price: 500.0 }
-
         ];
 
-
-
-        //const webhookURL = "https://discord.com/api/webhooks/1349536935936262215/yH-F8GYEzbSkwQ5d_NF2WhWFPYfj3bZM-3GkHe6qvBg6m5V9cNm9FrdAUaWeltUK3nQM"; 
-
-
-
-        // =================================================
-
-
-
         let currentUser = "";
-
         let ordersHistory = []; // Tableau qui va recevoir les données de Firebase
 
-
-
         function checkLogin() {
-
             const u = document.getElementById("username").value;
-
             const p = document.getElementById("password").value;
-
             
-
             const foundUser = authorizedUsers.find(user => user.name === u && user.pass === p);
 
-
-
             if(foundUser) {
-
                 currentUser = foundUser.name;
-
                 document.getElementById("login-screen").style.display = "none";
-
                 
-
                 // On affiche main-app au lieu de dashboard seul
-
                 document.getElementById("main-app").style.display = "block";
-
                 document.getElementById("user-display").innerText = currentUser;
-
                 
-
                 initTable();
-
                 syncDatabase(); // Lancement de la connexion avec Firebase
-
                 switchTab('dashboard'); // On met l'onglet dashboard par défaut
-
             } else {
-
                 document.getElementById("error").style.display = "block";
-
             }
-
         }
-
-
 
         // --- FONCTION POUR CHANGER D'ONGLET ---
-
         function switchTab(tabId) {
-
             document.getElementById('dashboard').style.display = 'none';
-
             document.getElementById('history-screen').style.display = 'none';
-
             document.getElementById('success-screen').style.display = 'none';
-
             
-
             document.getElementById('btn-dashboard').classList.remove('active');
-
             document.getElementById('btn-history').classList.remove('active');
 
-
-
             document.getElementById(tabId).style.display = 'block';
-
             
-
             if(tabId === 'dashboard') {
-
                 document.getElementById('btn-dashboard').classList.add('active');
-
             } else if(tabId === 'history-screen') {
-
                 document.getElementById('btn-history').classList.add('active');
-
             }
-
         }
-
-
 
         function initTable() {
-
             const gridStandard = document.getElementById("product-grid-standard");
-
             const gridContrat = document.getElementById("product-grid-contrat");
-
             const gridPack = document.getElementById("product-grid-pack");
-
             
-
             gridStandard.innerHTML = ""; 
-
             gridContrat.innerHTML = "";
-
             gridPack.innerHTML = "";
-
             
-
             inventory.forEach((item, index) => {
-
                 const nameLower = item.name.toLowerCase();
-
                 const isContrat = nameLower.includes("(contrat)");
-
                 const isPack = nameLower.includes("pack");
-
                 
-
                 let cardClass = "product-card";
-
                 if(isContrat) cardClass += " contrat-card";
-
                 if(isPack) cardClass += " pack-card";
 
-
-
                 let card = `
-
                 <div class="${cardClass}">
-
                     <div class="prod-name">${item.name}</div>
-
                     <div class="prod-price">Prix : ${item.price.toFixed(2)} $</div>
-
                     
-
                     <input type="number" min="0" class="qty-input" 
-
                            oninput="calculateTotal()" 
-
                            id="qty-${index}" placeholder="0">
-
                            
-
                     <div class="prod-subtotal" id="sub-${index}">Total : 0.00 $</div>
-
                 </div>`;
-
                 
-
                 if(isContrat) {
-
                     gridContrat.innerHTML += card;
-
                 } else if (isPack) {
-
                     gridPack.innerHTML += card;
-
                 } else {
-
                     gridStandard.innerHTML += card;
-
                 }
-
             });
-
         }
-
-
 
         function calculateTotal() {
-
             let grandTotal = 0;
-
             inventory.forEach((item, index) => {
-
                 let qty = document.getElementById(`qty-${index}`).value;
-
                 if(qty === "") qty = 0;
-
                 let subtotal = item.price * qty;
-
                 document.getElementById(`sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
-
                 grandTotal += subtotal;
-
             });
-
-
 
             // Frais de zone
-
             const zoneFee = parseFloat(document.getElementById("delivery-zone").value) || 0;
-
             grandTotal += zoneFee;
 
-
-
             document.getElementById("grand-total").innerText = grandTotal.toFixed(2) + " $";
-
             return grandTotal;
-
         }
 
-
-
-        function sendToDiscord() {
-
+        function submitOrder() {
             const total = calculateTotal();
-
             
-
             const firstname = document.getElementById("client-firstname").value;
-
             const lastname = document.getElementById("client-lastname").value;
-
             const phone = document.getElementById("client-phone").value;
-
             const date = document.getElementById("delivery-date").value;
-
             const time = document.getElementById("delivery-time").value;
 
-            const infos = document.getElementById("other-info").value;
-
-            
-
-            const zoneSelect = document.getElementById("delivery-zone");
-
-            const zoneText = zoneSelect.options[zoneSelect.selectedIndex].text;
-
-            const zoneFee = zoneSelect.value;
-
-
-
             if(total <= 0) {
-
                 alert("Erreur : La commande est vide !");
-
                 return;
-
             }
-
             if(phone === "") {
-
                 alert("Attention : Le numéro de téléphone est obligatoire.");
-
                 return;
-
             }
-
-
-
-            let description = "";
-
-            inventory.forEach((item, index) => {
-
-                let qty = document.getElementById(`qty-${index}`).value;
-
-                if(qty > 0) {
-
-                    let sub = item.price * qty;
-
-                    description += `• **${qty}x ${item.name}** (${sub.toFixed(2)} $)\n`;
-
-                }
-
-            });
-
-
-
-            if(zoneFee > 0) {
-
-                description += `\n🚛 **Frais de livraison (${zoneText}) : ${zoneFee} $**\n`;
-
-            }
-
-
-
-            description += `\n💰 **TOTAL FACTURE : ${total.toFixed(2)} $**`;
-
-
-
-            let deliveryString = "Non spécifiée";
-
-            if(date) {
-
-                deliveryString = date;
-
-                if(time) {
-
-                    deliveryString += ` à ${time}`;
-
-                }
-
-            }
-
-            
 
             let clientName = "Non renseigné";
-
             if(firstname || lastname) {
-
                 clientName = `${firstname} ${lastname}`;
-
             }
 
-
-
-            const payload = {
-
-                username: "LTD Roxwood - Commandes",
-
-                avatar_url: "",
-
-                embeds: [
-
-                    {
-
-                        title: "📦 Nouvelle Commande Client",
-
-                        color: 16750592, // Orange
-
-                        fields: [
-
-                            { name: "👤 Vendeur", value: currentUser, inline: true },
-
-                            { name: "👤 Client", value: clientName, inline: true },
-
-                            { name: "📞 Téléphone Client", value: phone, inline: true },
-
-                            { name: "📅 Date & Heure", value: deliveryString, inline: true },
-
-                            { name: "📍 Zone Livraison", value: zoneText, inline: true },
-
-                            { name: "🛒 Détails de la commande", value: description },
-
-                            { name: "📝 Autres Infos / Instructions", value: infos ? infos : "Aucune instruction particulière." }
-
-                        ],
-
-                        footer: { text: "Gestion LTD Roxwood • " + new Date().toLocaleTimeString() },
-
-                        timestamp: new Date().toISOString()
-
-                    }
-
-                ]
-
+            // --- ENREGISTREMENT DE LA COMMANDE SUR FIREBASE ---
+            const newOrder = {
+                dateCreation: new Date().toLocaleString('fr-FR'),
+                vendeur: currentUser,
+                client: clientName,
+                total: total.toFixed(2),
+                status: "En attente de préparation",
+                timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
-
-
-            fetch(webhookURL, {
-
-                method: 'POST',
-
-                headers: { 'Content-Type': 'application/json' },
-
-                body: JSON.stringify(payload)
-
-            }).then(response => {
-
-                if(response.ok) {
-
-
-
-                    // --- ENREGISTREMENT DE LA COMMANDE SUR FIREBASE ---
-
-                    const newOrder = {
-
-                        dateCreation: new Date().toLocaleString('fr-FR'),
-
-                        vendeur: currentUser,
-
-                        client: clientName,
-
-                        total: total.toFixed(2),
-
-                        status: "En attente de préparation",
-
-                        timestamp: firebase.database.ServerValue.TIMESTAMP
-
-                    };
-
-                    db.ref('orders').push(newOrder); // On envoie les infos au serveur Firebase
-
-                    // --------------------------------------------------
-
-
-
-                    switchTab('success-screen'); // On affiche l'écran de succès
-
+            db.ref('orders').push(newOrder)
+                .then(() => {
+                    showSuccessScreen();
                     resetForm();
-
-                } else {
-
-                    alert("❌ Erreur lors de l'envoi.");
-
-                }
-
-            }).catch(error => {
-
-                console.error('Error:', error);
-
-                alert("❌ Erreur technique.");
-
-            });
-
+                })
+                .catch((error) => {
+                    console.error('Erreur Firebase:', error);
+                    alert("❌ Erreur de connexion à la base de données : " + error.message);
+                });
         }
-
-
 
         // ================= FONCTIONS FIREBASE =================
-
         function syncDatabase() {
-
             // Se déclenche automatiquement à chaque modification sur le serveur
-
             db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
-
                 ordersHistory = [];
-
                 snapshot.forEach((child) => {
-
                     ordersHistory.unshift({
-
                         id: child.key,
-
                         ...child.val()
-
                     });
-
                 });
-
                 renderHistory(); // Met à jour le tableau
-
             });
-
         }
-
-
 
         function updateOrderStatus(id, selectElement) {
-
             const newStatus = selectElement.value;
-
             // Met à jour uniquement le statut de la commande concernée
-
             db.ref('orders/' + id).update({ status: newStatus });
-
         }
-
-
 
         function deleteOrder(id) {
-
             if(confirm("Veux-tu vraiment supprimer cette commande pour tous les employés ?")) {
-
                 db.ref('orders/' + id).remove();
-
             }
-
         }
-
-
 
         function renderHistory() {
-
             const tbody = document.getElementById('history-body');
-
             tbody.innerHTML = '';
 
-
-
             if(ordersHistory.length === 0) {
-
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Aucune commande en cours.</td></tr>';
-
                 return;
-
             }
 
-
-
             ordersHistory.forEach(order => {
-
                 const tr = document.createElement('tr');
-
                 
-
                 // Préparer le menu déroulant avec la bonne option sélectionnée
-
                 const options = [
-
                     "En attente de préparation",
-
                     "Disponible à la livraison",
-
                     "Livraison en cours",
-
                     "Livré"
-
                 ].map(opt => `<option value="${opt}" ${order.status === opt ? 'selected' : ''}>${opt}</option>`).join('');
 
-
-
                 tr.innerHTML = `
-
                     <td>${order.dateCreation}</td>
-
                     <td style="color: #ff9800;">${order.vendeur}</td>
-
                     <td><strong>${order.client}</strong></td>
-
                     <td style="color:#4caf50; font-weight:bold;">${order.total} $</td>
-
                     <td>
-
                         <select class="status-select" onchange="updateOrderStatus('${order.id}', this)">
-
                             ${options}
-
                         </select>
-
                     </td>
-
                     <td>
-
                         <button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">Supprimer</button>
-
                     </td>
-
                 `;
-
                 tbody.appendChild(tr);
-
             });
-
         }
-
         // =======================================================
 
+        function showSuccessScreen() {
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("success-screen").style.display = "block";
+        }
 
+        function returnToDashboard() {
+            document.getElementById("success-screen").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+        }
 
         function resetForm() {
-
             const inputs = document.querySelectorAll(".qty-input");
-
             inputs.forEach(input => input.value = "");
-
             
-
             document.getElementById("client-firstname").value = "";
-
             document.getElementById("client-lastname").value = "";
-
             document.getElementById("client-phone").value = "";
-
             document.getElementById("delivery-date").value = "";
-
             document.getElementById("delivery-time").value = "";
-
             document.getElementById("other-info").value = "";
-
             
-
             document.getElementById("delivery-zone").selectedIndex = 0;
-
             
-
             calculateTotal();
-
         }
-
         
-
         function logout() {
-
             location.reload();
-
         }
-
     </script>
-
 </body>
-
 </html>
