@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LTD Roxwood - Commande</title>
-    <!-- Ligne pour éviter l'erreur favicon 404 dans la console -->
     <link rel="icon" href="data:,">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
@@ -36,7 +35,7 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            width: 1000px; 
+            width: 1100px; /* Élargi pour bien voir les détails des commandes */
             text-align: center;
             border: 1px solid #555;
             backdrop-filter: blur(5px);
@@ -87,7 +86,7 @@
 
         /* --- HISTORIQUE --- */
         .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
-        .history-table th, .history-table td { padding: 12px; border-bottom: 1px solid #444; }
+        .history-table th, .history-table td { padding: 10px; border-bottom: 1px solid #444; font-size: 0.95em; vertical-align: middle; }
         .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #555; padding: 5px; border-radius: 4px; width: 100%; }
         
@@ -184,8 +183,9 @@
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Prise par</th>
+                            <th>Vendeur</th>
                             <th>Client</th>
+                            <th>Détails de la commande</th>
                             <th>Total</th>
                             <th>Statut</th>
                             <th>Action</th>
@@ -210,15 +210,16 @@
     </div>
 
     <script>
-        // ================= CONFIGURATION FIREBASE =================
+        // ================= CONFIGURATION FIREBASE EXACTE =================
         const firebaseConfig = {
-            apiKey: "TON_API_KEY", // <-- À REMPLIR
-            authDomain: "TON_PROJET.firebaseapp.com", // <-- À REMPLIR
-            databaseURL: "https://TON_PROJET.europe-west1.firebasedatabase.app", // <-- À REMPLIR (n'oublie pas de retirer le slash à la fin)
-            projectId: "TON_PROJET", // <-- À REMPLIR
-            storageBucket: "TON_PROJET.appspot.com", // <-- À REMPLIR
-            messagingSenderId: "TON_ID", // <-- À REMPLIR
-            appId: "TON_APP_ID" // <-- À REMPLIR
+            apiKey: "AIzaSyBxqUR8EtJw6gnUCUVQ5DTvbOnpvpPqZ3E",
+            authDomain: "ltd-roxwood-afe8b.firebaseapp.com",
+            databaseURL: "https://ltd-roxwood-afe8b-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ltd-roxwood-afe8b",
+            storageBucket: "ltd-roxwood-afe8b.firebasestorage.app",
+            messagingSenderId: "901585175041",
+            appId: "1:901585175041:web:55fb39c9d5074934bc3600",
+            measurementId: "G-RCXJN0813L"
         };
         
         firebase.initializeApp(firebaseConfig);
@@ -380,11 +381,30 @@
                 return;
             }
 
+            // Récupérer la liste des articles sélectionnés
+            let articlesList = [];
+            inventory.forEach((item, index) => {
+                let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
+                if(qty > 0) {
+                    articlesList.push(`<b>${qty}x</b> ${item.name}`);
+                }
+            });
+
+            const zoneSelect = document.getElementById("delivery-zone");
+            const zoneText = zoneSelect.options[zoneSelect.selectedIndex].text;
+            const dateLivraison = document.getElementById("delivery-date").value;
+            const heureLivraison = document.getElementById("delivery-time").value;
+            const autresInfos = document.getElementById("other-info").value.trim();
+
             const newOrder = {
                 dateCreation: new Date().toLocaleString('fr-FR'),
-                vendeur: currentUser, // Sera soit le nom de l'employé, soit "Commande en ligne"
+                vendeur: currentUser, 
                 client: `${firstname} ${lastname}`,
                 phone: phone,
+                articles: articlesList.join(' | '),
+                zone: zoneText,
+                dateLivraison: dateLivraison ? `${dateLivraison} à ${heureLivraison}` : "Dès que possible",
+                infos: autresInfos || "Aucune note",
                 total: total.toFixed(2),
                 status: "En attente de préparation",
                 timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -403,7 +423,7 @@
 
         // ================= FONCTIONS FIREBASE EMPLOYÉ =================
         function syncDatabase() {
-            if(!isEmployeeMode) return; // Sécurité : Seuls les employés synchronisent le tableau
+            if(!isEmployeeMode) return; 
 
             db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
                 ordersHistory = [];
@@ -432,7 +452,7 @@
             tbody.innerHTML = '';
 
             if(ordersHistory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Aucune commande en cours.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune commande en cours.</td></tr>';
                 return;
             }
 
@@ -446,19 +466,27 @@
                     "Livré"
                 ].map(opt => `<option value="${opt}" ${order.status === opt ? 'selected' : ''}>${opt}</option>`).join('');
 
-                // Mettre un badge visuel si la commande a été faite en ligne
+                // Badge spécial si c'est une commande client
                 let vendeurAffiche = order.vendeur;
                 if(order.vendeur === "Commande en ligne") {
-                    vendeurAffiche = `<span style="background-color:#4caf50; color:white; padding:2px 5px; border-radius:3px; font-size:0.8em;">Site Web</span>`;
+                    vendeurAffiche = `<span style="background-color:#4caf50; color:white; padding:4px 8px; border-radius:4px; font-weight:bold;">🌐 Site Web</span>`;
                 }
 
                 tr.innerHTML = `
-                    <td style="font-size: 0.9em;">${order.dateCreation}</td>
+                    <td style="color:#aaa;">${order.dateCreation}</td>
                     <td>${vendeurAffiche}</td>
-                    <td><strong>${order.client}</strong><br><span style="font-size:0.8em; color:#aaa;">📞 ${order.phone}</span></td>
-                    <td style="color:#4caf50; font-weight:bold;">${order.total} $</td>
+                    <td>
+                        <strong style="color:#fff;">${order.client}</strong><br>
+                        <span style="color:#ff9800;">📞 ${order.phone}</span>
+                    </td>
+                    <td style="text-align: left; line-height: 1.4;">
+                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
+                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
+                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
+                    </td>
+                    <td style="color:#4caf50; font-weight:bold; font-size:1.1em;">${order.total} $</td>
                     <td><select class="status-select" onchange="updateOrderStatus('${order.id}', this)">${options}</select></td>
-                    <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">Supprimer</button></td>
+                    <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">X</button></td>
                 `;
                 tbody.appendChild(tr);
             });
