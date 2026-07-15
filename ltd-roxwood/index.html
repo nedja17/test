@@ -35,12 +35,12 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            width: 1200px; 
-            max-width: 95%
+            width: 1400px; 
+            max-width: 98%;
             text-align: center;
             border: 1px solid #555;
             backdrop-filter: blur(5px);
-            margin: 20px auto
+            margin: 20px auto;
         }
 
         h1 { color: #ff9800; letter-spacing: 1px; margin-bottom: 15px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
@@ -86,26 +86,47 @@
         .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; }
         .delivery-info-row .info-input { margin: 0; }
 
-        /* --- HISTORIQUE --- */
-        .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
-        .history-table th, .history-table td { padding: 15px; border-bottom: 1px solid #444; font-size: 1em; vertical-align: middle; }
+        /* --- HISTORIQUE - TABLEAU ÉLARGI --- */
+        .history-table {
+            width: 100%;
+            table-layout: fixed; /* Force le respect des largeurs */
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: left;
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .history-table th, .history-table td {
+            padding: 15px;
+            border-bottom: 1px solid #444;
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Largeurs fixes par colonne */
+        .history-table th:nth-child(1), .history-table td:nth-child(1) { width: 12%; } /* Date */
+        .history-table th:nth-child(2), .history-table td:nth-child(2) { width: 10%; } /* Vendeur */
+        .history-table th:nth-child(3), .history-table td:nth-child(3) { width: 15%; } /* Client */
+        .history-table th:nth-child(4), .history-table td:nth-child(4) { width: 30%; white-space: normal; } /* Détails */
+        .history-table th:nth-child(5), .history-table td:nth-child(5) { width: 10%; } /* Total */
+        .history-table th:nth-child(6), .history-table td:nth-child(6) { width: 15%; white-space: normal; } /* Statut */
+        .history-table th:nth-child(7), .history-table td:nth-child(7) { width: 8%; }  /* Action */
+
         .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
-        .status-select { background-color: #1a1a1a; color: white; border: 1px solid #555; padding: 5px; border-radius: 4px; width: 100%; }
+        .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
         
-        /* Cacher les sections au départ */
         #login-screen, #main-app, #dashboard, #success-screen, #history-screen { display: none; }
-        
-        /* Succès */
         #success-screen h1 { color: #43a047; }
         .success-icon { font-size: 4em; margin-bottom: 20px; display: block; }
-
     </style>
 </head>
 <body>
 
     <div class="container">
-        
-        <!-- ================= ÉCRAN D'ACCUEIL (CHOIX) ================= -->
         <div id="welcome-screen">
             <h1>LTD Roxwood</h1>
             <p>Bienvenue sur le portail de commande de Roxwood.</p>
@@ -115,7 +136,6 @@
             <button class="btn" style="background: #333; color: white; width: 50%; padding: 10px;" onclick="showEmployeeLogin()">🔒 Accès Employé</button>
         </div>
 
-        <!-- ================= ÉCRAN DE CONNEXION EMPLOYÉ ================= -->
         <div id="login-screen">
             <h1>Espace Employé</h1>
             <p>Veuillez vous identifier</p>
@@ -126,16 +146,13 @@
             <p id="error" style="color:red; display:none; margin-top:10px; font-weight: bold;">Identifiants incorrects.</p>
         </div>
 
-        <!-- ================= APPLICATION PRINCIPALE ================= -->
         <div id="main-app">
-            
             <div class="navbar">
                 <button class="nav-btn active" id="btn-dashboard" onclick="switchTab('dashboard')">📝 Nouvelle Commande</button>
                 <button class="nav-btn" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi des Commandes</button>
                 <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
             </div>
 
-            <!-- ONGLET 1 : NOUVELLE COMMANDE -->
             <div id="dashboard">
                 <h1>Nouvelle Commande</h1>
                 <p id="user-info-text">Utilisateur : <span id="user-display" style="color:#ff9800; font-weight: bold;"></span></p>
@@ -176,43 +193,34 @@
                 <button class="btn btn-red" onclick="resetForm()">REMISE À ZÉRO</button>
             </div>
 
-            <!-- ONGLET 2 : HISTORIQUE (Uniquement pour les employés) -->
             <div id="history-screen">
                 <h2>Suivi Global des Commandes</h2>
-                <p style="font-size: 0.9em; color: #aaa;">Synchronisation en temps réel (Base de données).</p>
-                
                 <table class="history-table">
                     <thead>
                         <tr>
                             <th>Date</th>
                             <th>Vendeur</th>
                             <th>Client</th>
-                            <th>Détails de la commande</th>
+                            <th>Détails</th>
                             <th>Total</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="history-body">
-                        <!-- Généré par Firebase -->
-                    </tbody>
+                    <tbody id="history-body"></tbody>
                 </table>
             </div>
 
-            <!-- ONGLET 3 : SUCCÈS -->
             <div id="success-screen">
                 <span class="success-icon">✅</span>
                 <h1>Commande Validée !</h1>
-                <p>La commande a bien été transmise aux équipes du LTD Roxwood.</p>
-                <p>Nous vous contacterons rapidement pour la livraison.</p>
+                <p>La commande a bien été transmise.</p>
                 <button class="btn" onclick="returnToDashboard()">NOUVELLE COMMANDE</button>
             </div>
-
         </div> 
     </div>
 
     <script>
-        // ================= CONFIGURATION FIREBASE EXACTE =================
         const firebaseConfig = {
             apiKey: "AIzaSyBxqUR8EtJw6gnUCUVQ5DTvbOnpvpPqZ3E",
             authDomain: "ltd-roxwood-afe8b.firebaseapp.com",
@@ -223,10 +231,8 @@
             appId: "1:901585175041:web:55fb39c9d5074934bc3600",
             measurementId: "G-RCXJN0813L"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        // =========================================================
 
         const authorizedUsers = [
             { name: "admin", pass: "admin" },
@@ -237,36 +243,29 @@
             { name: "Issa Wekesa", pass: "17082003" }
         ];
 
-        // INVENTAIRE SANS LA PARTIE CONTRAT
         const inventory = [
             { name: "Caoutchouc", price: 5.0 },
-            { name: "Appât",      price: 10.0 },
+            { name: "Appât", price: 10.0 },
             { name: "Bouteille d'eau", price: 8.0 },
             { name: "Fertilisant", price: 8.0 },
             { name: "Pot de fleur", price: 8.0 },
             { name: "Lumière Violette", price: 36.0 },
             { name: "Sachet Vide", price: 5.0 },
             { name: "Foret de perceuse", price: 600.0 },
-            { name: "Pack Jardinage (300 Bouteille d'eau, 100 Fertilisant, 100 Pot de fleur, 10 Lumière Violette)", price: 4000.0 }
+            { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
         ];
 
         let currentUser = "";
         let isEmployeeMode = false;
         let ordersHistory = []; 
 
-        // --- GESTION DES INTERFACES ---
-        
         function showClientSpace() {
             isEmployeeMode = false;
             currentUser = "Commande en ligne";
-            
             document.getElementById("welcome-screen").style.display = "none";
             document.getElementById("main-app").style.display = "block";
-            
-            // Cacher le bouton historique pour les clients
             document.getElementById("btn-history").style.display = "none"; 
             document.getElementById("user-display").innerText = "Client Internet";
-            
             initTable();
             switchTab('dashboard');
         }
@@ -280,57 +279,40 @@
             const u = document.getElementById("username").value;
             const p = document.getElementById("password").value;
             const foundUser = authorizedUsers.find(user => user.name === u && user.pass === p);
-
             if(foundUser) {
                 isEmployeeMode = true;
                 currentUser = foundUser.name;
-                
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("main-app").style.display = "block";
-                
-                // Afficher le bouton historique pour les employés
                 document.getElementById("btn-history").style.display = "block"; 
                 document.getElementById("user-display").innerText = currentUser;
-                
                 initTable();
-                syncDatabase(); // On lance la synchro uniquement pour les employés
-                switchTab('history-screen'); // Les employés arrivent directement sur le suivi
+                syncDatabase(); 
+                switchTab('history-screen'); 
             } else {
                 document.getElementById("error").style.display = "block";
             }
         }
 
-        // --- GESTION DES ONGLETS ---
         function switchTab(tabId) {
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('history-screen').style.display = 'none';
             document.getElementById('success-screen').style.display = 'none';
-            
             document.getElementById('btn-dashboard').classList.remove('active');
             document.getElementById('btn-history').classList.remove('active');
-
             document.getElementById(tabId).style.display = 'block';
-            
-            if(tabId === 'dashboard') {
-                document.getElementById('btn-dashboard').classList.add('active');
-            } else if(tabId === 'history-screen') {
-                document.getElementById('btn-history').classList.add('active');
-            }
+            if(tabId === 'dashboard') document.getElementById('btn-dashboard').classList.add('active');
+            else if(tabId === 'history-screen') document.getElementById('btn-history').classList.add('active');
         }
 
         function initTable() {
             const gridStandard = document.getElementById("product-grid-standard");
             const gridPack = document.getElementById("product-grid-pack");
-            
             gridStandard.innerHTML = ""; 
             gridPack.innerHTML = "";
-            
             inventory.forEach((item, index) => {
                 const isPack = item.name.toLowerCase().includes("pack");
-                
-                let cardClass = "product-card";
-                if(isPack) cardClass += " pack-card";
-
+                let cardClass = "product-card " + (isPack ? "pack-card" : "");
                 let card = `
                 <div class="${cardClass}">
                     <div class="prod-name">${item.name}</div>
@@ -338,28 +320,21 @@
                     <input type="number" min="0" class="qty-input" oninput="calculateTotal()" id="qty-${index}" placeholder="0">
                     <div class="prod-subtotal" id="sub-${index}">Total : 0.00 $</div>
                 </div>`;
-                
-                if (isPack) {
-                    gridPack.innerHTML += card;
-                } else {
-                    gridStandard.innerHTML += card;
-                }
+                if (isPack) gridPack.innerHTML += card;
+                else gridStandard.innerHTML += card;
             });
         }
 
         function calculateTotal() {
             let grandTotal = 0;
             inventory.forEach((item, index) => {
-                let qty = document.getElementById(`qty-${index}`).value;
-                if(qty === "") qty = 0;
+                let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
                 let subtotal = item.price * qty;
                 document.getElementById(`sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
                 grandTotal += subtotal;
             });
-
             const zoneFee = parseFloat(document.getElementById("delivery-zone").value) || 0;
             grandTotal += zoneFee;
-
             document.getElementById("grand-total").innerText = grandTotal.toFixed(2) + " $";
             return grandTotal;
         }
@@ -370,43 +345,26 @@
             const lastname = document.getElementById("client-lastname").value.trim();
             const phone = document.getElementById("client-phone").value.trim();
 
-            if(total <= 0) {
-                alert("Erreur : La commande est vide ! Sélectionnez au moins un article.");
-                return;
-            }
-            if(firstname === "" || lastname === "") {
-                alert("Attention : Le prénom et le nom sont obligatoires.");
-                return;
-            }
-            if(phone === "") {
-                alert("Attention : Le numéro de téléphone de contact est obligatoire.");
-                return;
-            }
+            if(total <= 0) { alert("Erreur : La commande est vide !"); return; }
+            if(firstname === "" || lastname === "") { alert("Attention : Nom et Prénom obligatoires."); return; }
+            if(phone === "") { alert("Attention : Téléphone obligatoire."); return; }
 
-            // Récupérer la liste des articles sélectionnés
             let articlesList = [];
             inventory.forEach((item, index) => {
                 let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
-                if(qty > 0) {
-                    articlesList.push(`<b>${qty}x</b> ${item.name}`);
-                }
+                if(qty > 0) articlesList.push(`${qty}x ${item.name}`);
             });
 
             const zoneSelect = document.getElementById("delivery-zone");
-            const zoneText = zoneSelect.options[zoneSelect.selectedIndex].text;
-            const dateLivraison = document.getElementById("delivery-date").value;
-            const heureLivraison = document.getElementById("delivery-time").value;
-            const autresInfos = document.getElementById("other-info").value.trim();
-
             const newOrder = {
                 dateCreation: new Date().toLocaleString('fr-FR'),
                 vendeur: currentUser, 
                 client: `${firstname} ${lastname}`,
                 phone: phone,
                 articles: articlesList.join(' | '),
-                zone: zoneText,
-                dateLivraison: dateLivraison ? `${dateLivraison} à ${heureLivraison}` : "Dès que possible",
-                infos: autresInfos || "Aucune note",
+                zone: zoneSelect.options[zoneSelect.selectedIndex].text,
+                dateLivraison: document.getElementById("delivery-date").value ? `${document.getElementById("delivery-date").value} à ${document.getElementById("delivery-time").value}` : "Dès que possible",
+                infos: document.getElementById("other-info").value.trim() || "Aucune note",
                 total: total.toFixed(2),
                 status: "En attente de préparation",
                 timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -414,95 +372,45 @@
 
             db.ref('orders').push(newOrder)
                 .then(() => {
-                    showSuccessScreen();
+                    document.getElementById("dashboard").style.display = "none";
+                    document.getElementById("success-screen").style.display = "block";
                     resetForm();
                 })
-                .catch((error) => {
-                    console.error('Erreur Firebase:', error);
-                    alert("❌ Erreur de connexion à la base de données : " + error.message);
-                });
+                .catch((e) => alert("Erreur : " + e.message));
         }
 
-        // ================= FONCTIONS FIREBASE EMPLOYÉ =================
         function syncDatabase() {
-            if(!isEmployeeMode) return; 
-
+            if(!isEmployeeMode) return;
             db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
                 ordersHistory = [];
-                snapshot.forEach((child) => {
-                    ordersHistory.unshift({
-                        id: child.key,
-                        ...child.val()
-                    });
-                });
+                snapshot.forEach((child) => { ordersHistory.unshift({ id: child.key, ...child.val() }); });
                 renderHistory();
             });
         }
 
-        function updateOrderStatus(id, selectElement) {
-            db.ref('orders/' + id).update({ status: selectElement.value });
-        }
+        function updateOrderStatus(id, selectElement) { db.ref('orders/' + id).update({ status: selectElement.value }); }
 
-        function deleteOrder(id) {
-            if(confirm("Veux-tu vraiment supprimer cette commande ?")) {
-                db.ref('orders/' + id).remove();
-            }
-        }
+        function deleteOrder(id) { if(confirm("Supprimer cette commande ?")) db.ref('orders/' + id).remove(); }
 
         function renderHistory() {
             const tbody = document.getElementById('history-body');
             tbody.innerHTML = '';
-
-            if(ordersHistory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune commande en cours.</td></tr>';
-                return;
-            }
-
+            if(ordersHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune commande.</td></tr>'; return; }
             ordersHistory.forEach(order => {
                 const tr = document.createElement('tr');
-                
-                const options = [
-                    "En attente de préparation",
-                    "Disponible à la livraison",
-                    "Livraison en cours",
-                    "Livré"
-                ].map(opt => `<option value="${opt}" ${order.status === opt ? 'selected' : ''}>${opt}</option>`).join('');
-
-                // Badge spécial si c'est une commande client
-                let vendeurAffiche = order.vendeur;
-                if(order.vendeur === "Commande en ligne") {
-                    vendeurAffiche = `<span style="background-color:#4caf50; color:white; padding:4px 8px; border-radius:4px; font-weight:bold;">🌐 Site Web</span>`;
-                }
-
                 tr.innerHTML = `
                     <td style="color:#aaa;">${order.dateCreation}</td>
-                    <td>${vendeurAffiche}</td>
-                    <td>
-                        <strong style="color:#fff;">${order.client}</strong><br>
-                        <span style="color:#ff9800;">📞 ${order.phone}</span>
-                    </td>
-                    <td style="text-align: left; line-height: 1.4;">
-                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
-                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
-                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
-                    </td>
-                    <td style="color:#4caf50; font-weight:bold; font-size:1.1em;">${order.total} $</td>
-                    <td><select class="status-select" onchange="updateOrderStatus('${order.id}', this)">${options}</select></td>
+                    <td>${order.vendeur === "Commande en ligne" ? "🌐 Site" : order.vendeur}</td>
+                    <td><strong>${order.client}</strong><br><small>${order.phone}</small></td>
+                    <td>${order.articles}<br><small>📍 ${order.zone} (${order.dateLivraison})<br>📝 ${order.infos}</small></td>
+                    <td style="color:#4caf50; font-weight:bold;">${order.total} $</td>
+                    <td><select class="status-select" onchange="updateOrderStatus('${order.id}', this)">
+                        ${["En attente de préparation", "Disponible à la livraison", "Livraison en cours", "Livré"].map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('')}
+                    </select></td>
                     <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">X</button></td>
                 `;
                 tbody.appendChild(tr);
             });
-        }
-
-        // ================= DIVERS =================
-        function showSuccessScreen() {
-            document.getElementById("dashboard").style.display = "none";
-            document.getElementById("success-screen").style.display = "block";
-        }
-
-        function returnToDashboard() {
-            document.getElementById("success-screen").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
         }
 
         function resetForm() {
@@ -515,6 +423,11 @@
             document.getElementById("other-info").value = "";
             document.getElementById("delivery-zone").selectedIndex = 0;
             calculateTotal();
+        }
+
+        function returnToDashboard() {
+            document.getElementById("success-screen").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
         }
     </script>
 </body>
