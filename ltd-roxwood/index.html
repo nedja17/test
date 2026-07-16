@@ -14,7 +14,7 @@
     <style>
         /* --- DESIGN GLOBAL --- */
         *, *::before, *::after {
-            box-sizing: border-box; /* aligne les largeurs */
+            box-sizing: border-box; 
         }
 
         body {
@@ -103,17 +103,15 @@
         .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); color: white; }
         .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
 
-        /* --- BOUTONS ACTIONS (CANDIDATURES) RÉDUITS --- */
+        /* --- BOUTONS ACTIONS --- */
         .btn-action { cursor: pointer; padding: 4px 6px; border-radius: 4px; border: none; margin: 2px; font-size: 0.9em; transition: 0.2s; vertical-align: middle; }
         .btn-action:hover { transform: scale(1.1); filter: brightness(1.2); }
         .btn-accept { background-color: #43a047; color: white; }
         .btn-reject { background-color: #d32f2f; color: white; }
         .btn-delete { background-color: #555; color: white; }
         
-        /* Petite barre verticale grise */
         .separator-bar { display: inline-block; width: 2px; height: 18px; background-color: #555; vertical-align: middle; margin: 0 4px; border-radius: 2px; }
 
-        /* Petit bouton icon rond pour les notes */
         .btn-icon-round {
             background-color: #1976d2; 
             color: white; 
@@ -165,8 +163,10 @@
         #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 14%; } 
         #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 5%; text-align: center; }  
 
+        /* Largeurs fixes par colonne (Tableau Logs) */
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
-        #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 75%; } 
+        #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 65%; } 
+        #logs-screen .history-table th:nth-child(3), #logs-screen .history-table td:nth-child(3) { width: 10%; text-align: center; } 
 
         #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 13%; } 
         #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 12%; } 
@@ -183,6 +183,38 @@
         .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
         .charge-select { border: 1px solid #64b5f6; } 
+
+        /* PAGINATION UI */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            color: #ccc;
+        }
+        .page-input {
+            width: 60px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff9800;
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            font-family: 'Roboto Slab', serif;
+        }
+        .page-btn {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 1px solid #64b5f6;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .page-btn:hover { background-color: #64b5f6; color: #1a1a1a; }
         
         #login-screen, #step2-login-screen, #main-app, #dashboard, #success-screen, #history-screen, #logs-screen, #candidature-form-screen, #success-cv-screen, #candidatures-screen { display: none; }
         .success-icon { font-size: 4em; margin-bottom: 20px; display: block; color: #43a047; }
@@ -201,7 +233,6 @@
             <h1>LTD Roxwood</h1>
             <p>Bienvenue sur le site du LTD Roxwood.</p>
             <br>
-            <!-- force la même largeur partout -->
             <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
                 <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
@@ -228,7 +259,6 @@
                 <textarea id="cv-motivation" class="info-input" placeholder="🔥 Vos motivations pour nous rejoindre" style="height: 120px;"></textarea>
             </div>
             
-            <!-- Boutons candidature alignés -->
             <div style="width: 50%; margin: 20px auto 0; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-blue" onclick="submitCV()">ENVOYER MA CANDIDATURE</button>
                 <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
@@ -258,7 +288,7 @@
             </div>
         </div>
 
-        <!-- LOGIN EMPLOYE 2 -->
+        <!-- LOGIN EMPLOYES 2 -->
         <div id="step2-login-screen">
             <h1 style="color: #1976d2;">Vérification d'identité</h1>
             <p>Veuillez décliner votre identité et votre grade au sein de l'entreprise.</p>
@@ -356,18 +386,31 @@
                 </table>
             </div>
 
+            <!-- tableau log avec possibilité de supp par admin -->
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette.</p>
-                <table class="history-table" style="width: 70%; margin: 20px auto;">
+                
+                <div style="width: 70%; margin: 20px auto 0; text-align: left;">
+                    <input type="text" id="search-logs" class="info-input" placeholder="🔍 Rechercher par nom, prénom, heure ou date..." onkeyup="filterLogs()" style="border-color: #64b5f6; margin-bottom: 5px;">
+                </div>
+
+                <table class="history-table" style="width: 70%; margin: 10px auto 0;">
                     <thead>
                         <tr>
                             <th>Date & Heure</th>
                             <th>Employé Connecté</th>
+                            <th id="th-log-action" style="display:none; width: 10%; text-align: center;">Action</th>
                         </tr>
                     </thead>
                     <tbody id="logs-body"></tbody>
                 </table>
+                
+                <div class="pagination-container" style="width: 70%; margin: 15px auto;">
+                    <button class="page-btn" onclick="changeLogPage(-1)">⬅️ Précédent</button>
+                    <span>Page <input type="number" id="log-page-input" class="page-input" value="1" min="1" onchange="goToLogPage()"> sur <span id="log-total-pages">1</span></span>
+                    <button class="page-btn" onclick="changeLogPage(1)">Suivant ➡️</button>
+                </div>
             </div>
 
             <div id="success-screen">
@@ -427,13 +470,18 @@
 
         let isEmployeeMode = false;
         let ordersHistory = []; 
-        let logsHistory = [];
         let candidaturesHistory = [];
 
         let pendingUser = null;
         let currentAccountId = ""; 
         let currentSessionName = ""; 
         let currentSessionGrade = ""; 
+
+        // Variables pour logs
+        let logsHistory = [];
+        let filteredLogs = [];
+        let currentLogPage = 1;
+        const logsPerPage = 20;
 
         function showClientSpace() {
             isEmployeeMode = false;
@@ -521,12 +569,15 @@
             currentSessionName = displayFullName;
             currentSessionGrade = grade;
             
-            db.ref('logs').push({
-                employe: displayFullName,
-                grade: grade,
-                date: new Date().toLocaleString('fr-FR'),
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            });
+            // L'admin n'est pas dans les logs
+            if (accountId !== "admin") {
+                db.ref('logs').push({
+                    employe: displayFullName,
+                    grade: grade,
+                    date: new Date().toLocaleString('fr-FR'),
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
             
             document.getElementById("login-screen").style.display = "none";
             document.getElementById("step2-login-screen").style.display = "none";
@@ -701,13 +752,90 @@
             });
         }
 
+        // --- GESTION DES LOGS ---
         function syncLogs() {
-            db.ref('logs').orderByChild('timestamp').limitToLast(50).on('value', (snapshot) => {
+            db.ref('logs').orderByChild('timestamp').on('value', (snapshot) => {
                 logsHistory = [];
                 snapshot.forEach((child) => { logsHistory.unshift({ id: child.key, ...child.val() }); });
-                renderLogs();
+                filterLogs(); 
             });
         }
+
+        function filterLogs() {
+            const query = document.getElementById('search-logs').value.toLowerCase();
+            filteredLogs = logsHistory.filter(log => {
+                const searchString = `${log.employe} ${log.date} ${log.grade}`.toLowerCase();
+                return searchString.includes(query);
+            });
+            currentLogPage = 1; 
+            renderLogs();
+        }
+
+        function changeLogPage(delta) {
+            const totalPages = Math.max(1, Math.ceil(filteredLogs.length / logsPerPage));
+            currentLogPage += delta;
+            if (currentLogPage < 1) currentLogPage = 1;
+            if (currentLogPage > totalPages) currentLogPage = totalPages;
+            renderLogs();
+        }
+
+        function goToLogPage() {
+            const inputVal = parseInt(document.getElementById('log-page-input').value);
+            const totalPages = Math.max(1, Math.ceil(filteredLogs.length / logsPerPage));
+            if (!isNaN(inputVal)) {
+                currentLogPage = inputVal;
+                if (currentLogPage < 1) currentLogPage = 1;
+                if (currentLogPage > totalPages) currentLogPage = totalPages;
+            }
+            renderLogs();
+        }
+
+        function deleteLog(id) {
+            if(confirm("Supprimer ce log définitivement de la base de données ?")) {
+                db.ref('logs/' + id).remove();
+            }
+        }
+
+        function renderLogs() {
+            const tbody = document.getElementById('logs-body');
+            tbody.innerHTML = '';
+            
+            const totalPages = Math.max(1, Math.ceil(filteredLogs.length / logsPerPage));
+            document.getElementById('log-total-pages').innerText = totalPages;
+            document.getElementById('log-page-input').value = currentLogPage;
+
+            // Affiche la colonne "Action" uniquement pour l'admin
+            const thAction = document.getElementById('th-log-action');
+            if (currentAccountId === "admin") {
+                if(thAction) thAction.style.display = "table-cell";
+            } else {
+                if(thAction) thAction.style.display = "none";
+            }
+
+            if(filteredLogs.length === 0) { 
+                const colspan = currentAccountId === 'admin' ? 3 : 2;
+                tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center;">Aucun résultat.</td></tr>`; 
+                return; 
+            }
+
+            const startIndex = (currentLogPage - 1) * logsPerPage;
+            const endIndex = startIndex + logsPerPage;
+            const logsToDisplay = filteredLogs.slice(startIndex, endIndex);
+
+            logsToDisplay.forEach(log => {
+                const tr = document.createElement('tr');
+                const gradeBadge = log.grade ? ` <span style="color:#ff9800; font-size:0.85em;">(${log.grade})</span>` : '';
+                
+                let actionTd = '';
+                if (currentAccountId === "admin") {
+                    actionTd = `<td style="text-align:center;"><button class="btn-action btn-delete" onclick="deleteLog('${log.id}')" title="Supprimer">🗑️</button></td>`;
+                }
+
+                tr.innerHTML = `<td style="color:#aaa;">${log.date}</td><td><strong style="color:#64b5f6;">${log.employe}</strong>${gradeBadge}</td>${actionTd}`;
+                tbody.appendChild(tr);
+            });
+        }
+        // ------------------------------------------
 
         function syncCandidatures() {
             db.ref('candidatures').orderByChild('timestamp').on('value', (snapshot) => {
@@ -756,12 +884,16 @@
 
                 let employeOptions = `<option value="">-- Non assigné --</option>`;
                 
-                // -- Fusion deux tableaux ---
-                const knownNames = authorizedUsers.filter(u => !u.needsDetails).map(u => u.name);
+                // L'admin n'apparait pas dans la liste des chargés de commandes
+                const knownNames = authorizedUsers.filter(u => !u.needsDetails && u.name !== "admin").map(u => u.name);
                 validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
 
-                if(!knownNames.includes(currentSessionName) && isEmployeeMode) knownNames.push(currentSessionName);
-                if(order.enCharge && !knownNames.includes(order.enCharge)) knownNames.push(order.enCharge);
+                if(!knownNames.includes(currentSessionName) && isEmployeeMode && currentAccountId !== "admin") {
+                    knownNames.push(currentSessionName);
+                }
+                if(order.enCharge && !knownNames.includes(order.enCharge) && order.enCharge !== "admin") {
+                    knownNames.push(order.enCharge);
+                }
 
                 const uniqueNames = [...new Set(knownNames)];
 
@@ -785,18 +917,6 @@
                     <td><select class="status-select" onchange="updateOrderStatus('${order.id}', this)">${statusOptions}</select></td>
                     <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">X</button></td>
                 `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderLogs() {
-            const tbody = document.getElementById('logs-body');
-            tbody.innerHTML = '';
-            if(logsHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">Aucun log récent.</td></tr>'; return; }
-            logsHistory.forEach(log => {
-                const tr = document.createElement('tr');
-                const gradeBadge = log.grade ? ` <span style="color:#ff9800; font-size:0.85em;">(${log.grade})</span>` : '';
-                tr.innerHTML = `<td style="color:#aaa;">${log.date}</td><td><strong style="color:#64b5f6;">${log.employe}</strong>${gradeBadge}</td>`;
                 tbody.appendChild(tr);
             });
         }
