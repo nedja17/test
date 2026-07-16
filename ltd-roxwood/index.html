@@ -99,6 +99,13 @@
         .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); width: 100%; margin-top: 15px; color: white; }
         .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
 
+        /* Boutons Actions (Candidatures) */
+        .btn-action { cursor: pointer; padding: 5px 8px; border-radius: 5px; border: none; margin: 2px; font-size: 1.1em; transition: 0.2s; }
+        .btn-action:hover { transform: scale(1.1); }
+        .btn-accept { background-color: #43a047; color: white; }
+        .btn-reject { background-color: #d32f2f; color: white; }
+        .btn-delete { background-color: #555; color: white; }
+
         /* --- ZONES --- */
         .delivery-info-section { margin-top: 30px; text-align: left; background-color: rgba(34, 34, 34, 0.6); padding: 20px; border-radius: 10px; border: 1px solid #444; }
         .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; }
@@ -108,6 +115,7 @@
         .history-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 20px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
         .history-table th, .history-table td { padding: 15px; border-bottom: 1px solid #444; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+        /* Largeurs fixes par colonne (Tableau Commandes) */
         #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 12%; } 
         #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 15%; } 
         #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 30%; white-space: normal; } 
@@ -116,15 +124,23 @@
         #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 14%; white-space: normal; } 
         #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 5%; }  
 
+        /* Largeurs fixes par colonne (Tableau Logs) */
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 75%; } 
 
-        #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 12%; } 
-        #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 15%; } 
-        #candidatures-screen .history-table th:nth-child(3), #candidatures-screen .history-table td:nth-child(3) { width: 13%; white-space: normal; } 
-        #candidatures-screen .history-table th:nth-child(4), #candidatures-screen .history-table td:nth-child(4) { width: 27%; white-space: normal; font-size: 0.9em; } 
-        #candidatures-screen .history-table th:nth-child(5), #candidatures-screen .history-table td:nth-child(5) { width: 27%; white-space: normal; font-size: 0.9em; } 
-        #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 6%; } 
+        /* Largeurs fixes par colonne (Tableau Candidatures) */
+        #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 10%; } 
+        #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 12%; } 
+        #candidatures-screen .history-table th:nth-child(3), #candidatures-screen .history-table td:nth-child(3) { width: 12%; white-space: normal; } 
+        #candidatures-screen .history-table th:nth-child(4), #candidatures-screen .history-table td:nth-child(4) { width: 21%; white-space: normal; font-size: 0.85em; } 
+        #candidatures-screen .history-table th:nth-child(5), #candidatures-screen .history-table td:nth-child(5) { width: 21%; white-space: normal; font-size: 0.85em; } 
+        #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 16%; white-space: normal; } 
+        #candidatures-screen .history-table th:nth-child(7), #candidatures-screen .history-table td:nth-child(7) { width: 8%; text-align: center; } 
+
+        /* Couleurs des statuts de candidature */
+        .cand-accepted { background-color: rgba(76, 175, 80, 0.15) !important; border-left: 5px solid #4caf50; }
+        .cand-rejected { background-color: rgba(211, 47, 47, 0.15) !important; border-left: 5px solid #d32f2f; }
+        .appreciation-input { width: 100%; height: 50px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; }
 
         .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
@@ -257,7 +273,7 @@
 
             <div id="history-screen">
                 <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Bienvenue, <span id="welcome-name"></span> 👋</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons en direct.</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons.</p>
                 <table class="history-table">
                     <thead>
                         <tr>
@@ -276,7 +292,7 @@
 
             <div id="candidatures-screen">
                 <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures 📄</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements et des nouveaux CV (Réservé Direction).</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations.</p>
                 <table class="history-table" style="width: 98%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -285,7 +301,8 @@
                             <th>Âge & Tél</th>
                             <th>Expérience</th>
                             <th>Motivation</th>
-                            <th>Action</th>
+                            <th>Appréciation (suite à l'entretien)</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="candidatures-body"></tbody>
@@ -294,7 +311,7 @@
 
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette (Réservé Direction et Responsables).</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette.</p>
                 <table class="history-table" style="width: 70%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -340,13 +357,11 @@
         ];
 
         const validManagementUsers = [
-            
             { fname: "Léa", lname: "Castor", grade: "Patron", account: "Direction Roxwood" },
             { fname: "Ethan", lname: "Revers", grade: "Co-patron", account: "Direction Roxwood" },
             { fname: "Anna", lname: "Fox", grade: "DRH", account: "Direction Roxwood" },
-            
-            { fname: "Gabriela", lname: "Jimenez", grade: "Responsable", account: "responsable" },
-            { fname: "Luc", lname: "Bernard", grade: "Chef d'équipe", account: "responsable" }
+            { fname: "Gabriela", lname: "Jimenez", grade: "Responsable", account: "Responsable" },
+            { fname: "Luc", lname: "Bernard", grade: "Chef d'équipe", account: "Responsable" }
         ];
 
         const inventory = [
@@ -358,7 +373,7 @@
             { name: "Lumière Violette", price: 36.0 },
             { name: "Sachet Vide", price: 5.0 },
             { name: "Foret de perceuse", price: 600.0 },
-            { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
+            { name: "Pack Jardinage (300 Eau, 100 Ferti, 100 pot, 10 Lum.)", price: 4000.0 }
         ];
 
         let isEmployeeMode = false;
@@ -366,7 +381,6 @@
         let logsHistory = [];
         let candidaturesHistory = [];
 
-        // Variables de session
         let pendingUser = null;
         let currentAccountId = ""; 
         let currentSessionName = ""; 
@@ -414,7 +428,7 @@
                         gradeSelect.innerHTML += `<option value="DRH">DRH</option>`;
                         gradeSelect.innerHTML += `<option value="Co-patron">Co-patron</option>`;
                         gradeSelect.innerHTML += `<option value="Patron">Patron</option>`;
-                    } else if (foundUser.name === "responsable") {
+                    } else if (foundUser.name === "Responsable") {
                         gradeSelect.innerHTML += `<option value="Chef d'équipe">Chef d'équipe</option>`;
                         gradeSelect.innerHTML += `<option value="Responsable">Responsable</option>`;
                     }
@@ -436,7 +450,6 @@
                 return;
             }
 
-            // VÉRIFICATION STRICTE DANS LA LISTE
             const isValid = validManagementUsers.find(u => 
                 u.fname.toLowerCase() === fnameInput.toLowerCase() &&
                 u.lname.toLowerCase() === lnameInput.toLowerCase() &&
@@ -445,12 +458,10 @@
             );
 
             if (isValid) {
-                // Formater proprement avec les majuscules de la base
                 const fullName = isValid.fname + " " + isValid.lname;
                 document.getElementById("error-step2").style.display = "none";
                 finalizeLogin(pendingUser.name, gradeSelect, fullName);
             } else {
-                // Bloquer et afficher l'erreur
                 document.getElementById("error-step2").style.display = "block";
             }
         }
@@ -461,7 +472,6 @@
             currentSessionName = displayFullName;
             currentSessionGrade = grade;
             
-            // Enregistrement du log de connexion
             db.ref('logs').push({
                 employe: displayFullName,
                 grade: grade,
@@ -476,7 +486,6 @@
             document.getElementById("btn-dashboard").style.display = "none"; 
             document.getElementById("btn-history").style.display = "block"; 
             
-            // PERMISSIONS
             if (accountId === "admin" || accountId === "Direction Roxwood") {
                 document.getElementById("btn-candidatures").style.display = "block";
                 syncCandidatures();
@@ -484,14 +493,13 @@
                 document.getElementById("btn-candidatures").style.display = "none";
             }
 
-            if (accountId === "admin" || accountId === "Direction Roxwood" || accountId === "responsable") {
+            if (accountId === "admin" || accountId === "Direction Roxwood" || accountId === "Responsable") {
                 document.getElementById("btn-logs").style.display = "block";
                 syncLogs(); 
             } else {
                 document.getElementById("btn-logs").style.display = "none";
             }
 
-            // Interface
             document.getElementById("top-user-badge").style.display = "block";
             document.getElementById("top-user-name").innerText = `${displayFullName} (${grade})`;
             document.getElementById("welcome-name").innerText = displayFullName;
@@ -616,6 +624,8 @@
                 phone: phone,
                 experience: experience,
                 motivation: motivation,
+                appreciation: "",       // Appréciation
+                status: "en attente",   // Statut 
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
@@ -661,7 +671,18 @@
         function updateOrderStatus(id, selectElement) { db.ref('orders/' + id).update({ status: selectElement.value }); }
         function updatePersonInCharge(id, selectElement) { db.ref('orders/' + id).update({ enCharge: selectElement.value }); }
         function deleteOrder(id) { if(confirm("Supprimer définitivement cette commande ?")) db.ref('orders/' + id).remove(); }
-        function deleteCandidature(id) { if(confirm("Supprimer cette candidature ? Action irréversible.")) db.ref('candidatures/' + id).remove(); }
+        
+        // --- FONCTIONS CANDIDATURE ---
+        function updateCandStatus(id, newStatus) { 
+            db.ref('candidatures/' + id).update({ status: newStatus }); 
+        }
+        function saveAppreciation(id) { 
+            const text = document.getElementById('appreciation-' + id).value;
+            db.ref('candidatures/' + id).update({ appreciation: text }); 
+        }
+        function deleteCandidature(id) { 
+            if(confirm("Supprimer cette candidature ? Action irréversible.")) db.ref('candidatures/' + id).remove(); 
+        }
 
         function renderHistory() {
             const tbody = document.getElementById('history-body');
@@ -718,17 +739,36 @@
         function renderCandidatures() {
             const tbody = document.getElementById('candidatures-body');
             tbody.innerHTML = '';
-            if(candidaturesHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Aucune candidature actuellement.</td></tr>'; return; }
+            if(candidaturesHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune candidature actuellement.</td></tr>'; return; }
             
             candidaturesHistory.forEach(cand => {
                 const tr = document.createElement('tr');
+                
+                // Coloration dynamique selon le statut
+                if(cand.status === "accepté") tr.classList.add("cand-accepted");
+                else if(cand.status === "refusé") tr.classList.add("cand-rejected");
+
+                const notes = cand.appreciation ? cand.appreciation : "";
+
                 tr.innerHTML = `
                     <td style="color:#aaa;">${cand.dateCreation}</td>
                     <td><strong style="color:#fff; font-size:1.1em;">${cand.prenom} ${cand.nom}</strong></td>
                     <td>🎂 ${cand.age} ans<br><span style="color:#ff9800;">📞 ${cand.phone}</span></td>
                     <td style="text-align: left; line-height: 1.4; color: #ddd;"><i>"${cand.experience}"</i></td>
                     <td style="text-align: left; line-height: 1.4; color: #b3e5fc;"><i>"${cand.motivation}"</i></td>
-                    <td><button class="btn btn-red btn-small" onclick="deleteCandidature('${cand.id}')">X</button></td>
+                    
+                    <!-- Colonne Appréciation -->
+                    <td style="text-align: center;">
+                        <textarea id="appreciation-${cand.id}" class="appreciation-input" placeholder="Notes d'entretien...">${notes}</textarea>
+                        <button class="btn btn-blue btn-small" style="width: 100%;" onclick="saveAppreciation('${cand.id}')">Enregistrer</button>
+                    </td>
+
+                    <!-- Colonne Actions avec boutons Valider/Refuser -->
+                    <td style="text-align: center;">
+                        <button class="btn-action btn-accept" onclick="updateCandStatus('${cand.id}', 'accepté')" title="Accepter">✅</button>
+                        <button class="btn-action btn-reject" onclick="updateCandStatus('${cand.id}', 'refusé')" title="Refuser">❌</button>
+                        <button class="btn-action btn-delete" onclick="deleteCandidature('${cand.id}')" title="Supprimer">🗑️</button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
