@@ -14,7 +14,7 @@
     <style>
         /* --- DESIGN GLOBAL --- */
         *, *::before, *::after {
-            box-sizing: border-box; /* Règle magique pour aligner parfaitement les largeurs */
+            box-sizing: border-box; /* aligne les largeurs */
         }
 
         body {
@@ -201,7 +201,7 @@
             <h1>LTD Roxwood</h1>
             <p>Bienvenue sur le portail en ligne de Roxwood.</p>
             <br>
-            <!-- Colonne flexible pour forcer la même largeur partout -->
+            <!-- force la même largeur partout -->
             <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
                 <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
@@ -210,7 +210,7 @@
             </div>
         </div>
 
-        <!-- FORMULAIRE CANDIDATURE (CIVIL) -->
+        <!-- FORMULAIRE CANDIDATURE -->
         <div id="candidature-form-screen">
             <h1 style="color: #1976d2;">Déposer une candidature</h1>
             <p>Rejoignez l'équipe du LTD Roxwood ! Remplissez ce formulaire avec soin.</p>
@@ -245,7 +245,7 @@
             </div>
         </div>
 
-        <!-- LOGIN EMPLOYÉ (ETAPE 1) -->
+        <!-- LOGIN EMPLOYES 1-->
         <div id="login-screen">
             <h1>Espace Employé</h1>
             <p>Veuillez vous identifier</p>
@@ -258,7 +258,7 @@
             </div>
         </div>
 
-        <!-- LOGIN EMPLOYÉ (ETAPE 2 - VERIFICATION STRICTE) -->
+        <!-- LOGIN EMPLOYE 2 -->
         <div id="step2-login-screen">
             <h1 style="color: #1976d2;">Vérification d'identité</h1>
             <p>Veuillez décliner votre identité et votre grade au sein de l'entreprise.</p>
@@ -266,7 +266,7 @@
                 <input type="text" id="step2-firstname" class="login-input" placeholder="Votre Prénom">
                 <input type="text" id="step2-lastname" class="login-input" placeholder="Votre Nom">
                 <select id="step2-grade" class="info-input">
-                    <!-- Les options se remplissent automatiquement -->
+                    <!-- Les options auto -->
                 </select>
                 <button class="btn btn-blue" onclick="submitStep2()">VALIDER MON ACCÈS</button>
                 <button class="btn btn-red" onclick="location.reload()">ANNULER</button>
