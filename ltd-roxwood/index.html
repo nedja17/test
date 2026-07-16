@@ -12,7 +12,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* --- DESIGN (CSS) --- */
+        /* --- DESIGN GLOBAL --- */
+        *, *::before, *::after {
+            box-sizing: border-box; /* Règle magique pour aligner parfaitement les largeurs */
+        }
+
         body {
             font-family: 'Roboto Slab', serif;
             background-color: #1a1a1a;
@@ -81,7 +85,7 @@
         .prod-subtotal { margin-top: 10px; font-weight: bold; color: #4caf50; }
 
         /* --- INPUTS --- */
-        .login-input, .info-input, select.info-input { width: 80%; padding: 12px; margin: 10px 0; background-color: rgba(26, 26, 26, 0.8); border: 1px solid #ff9800; color: white; border-radius: 8px; text-align: center; font-family: 'Roboto Slab', serif; font-size: 1em; }
+        .login-input, .info-input, select.info-input { width: 100%; padding: 12px; background-color: rgba(26, 26, 26, 0.8); border: 1px solid #ff9800; color: white; border-radius: 8px; text-align: center; font-family: 'Roboto Slab', serif; font-size: 1em; }
         select.info-input option { background-color: #1a1a1a; color: white; }
         .qty-input { width: 80px; padding: 8px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: white; border-radius: 5px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; font-size: 1.2em; }
         textarea.info-input { height: 80px; text-align: left; resize: vertical; }
@@ -92,11 +96,11 @@
         .total-amount { font-size: 1.8em; font-weight: bold; color: #4caf50; }
 
         /* --- BOUTONS --- */
-        .btn { width: 85%; padding: 15px; background: linear-gradient(45deg, #ff9800, #e68900); border: none; color: #1a1a1a; font-weight: bold; cursor: pointer; border-radius: 8px; margin-top: 20px; font-size: 1.1em; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); transition: 0.2s; }
+        .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #ff9800, #e68900); border: none; color: #1a1a1a; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.1em; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); transition: 0.2s; }
         .btn:hover { filter: brightness(1.1); transform: scale(1.02); }
-        .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; width: 100%; }
-        .btn-blue { background: linear-gradient(45deg, #1976d2, #1565c0); color: white; width: 100%; margin-top: 10px; }
-        .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); width: 100%; margin-top: 15px; color: white; }
+        .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; }
+        .btn-blue { background: linear-gradient(45deg, #1976d2, #1565c0); color: white; }
+        .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); color: white; }
         .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
 
         /* --- BOUTONS ACTIONS (CANDIDATURES) RÉDUITS --- */
@@ -153,7 +157,6 @@
             word-wrap: break-word; 
         }
 
-        /* Largeurs fixes par colonne (Tableau Commandes) */
         #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 12%; } 
         #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 15%; } 
         #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 30%; } 
@@ -162,11 +165,9 @@
         #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 14%; } 
         #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 5%; text-align: center; }  
 
-        /* Largeurs fixes par colonne (Tableau Logs) */
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 75%; } 
 
-        /* Largeurs fixes par colonne (Tableau Candidatures) */
         #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 13%; } 
         #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 12%; } 
         #candidatures-screen .history-table th:nth-child(3), #candidatures-screen .history-table td:nth-child(3) { width: 10%; } 
@@ -175,10 +176,9 @@
         #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 12%; text-align: center; } 
         #candidatures-screen .history-table th:nth-child(7), #candidatures-screen .history-table td:nth-child(7) { width: 13%; text-align: center; white-space: nowrap; } 
 
-        /* Couleurs des statuts de candidature */
         .cand-accepted { background-color: rgba(76, 175, 80, 0.15) !important; border-left: 5px solid #4caf50; }
         .cand-rejected { background-color: rgba(211, 47, 47, 0.15) !important; border-left: 5px solid #d32f2f; }
-        .appreciation-input { width: 100%; height: 60px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #1976d2; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; box-sizing: border-box; }
+        .appreciation-input { width: 100%; height: 60px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #1976d2; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; }
 
         .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
@@ -201,11 +201,12 @@
             <h1>LTD Roxwood</h1>
             <p>Bienvenue sur le portail en ligne de Roxwood.</p>
             <br>
-            <div style="width: 50%; margin: 0 auto;">
+            <!-- Colonne flexible pour forcer la même largeur partout -->
+            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
                 <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
-                <br><br><br>
-                <button class="btn" style="background: #333; color: white; width: 100%; padding: 10px;" onclick="showEmployeeLogin()">🔒 Accès Employé</button>
+                <div style="height: 20px;"></div> <!-- Espace -->
+                <button class="btn" style="background: #333; color: white;" onclick="showEmployeeLogin()">🔒 Accès Employé</button>
             </div>
         </div>
 
@@ -223,12 +224,15 @@
                     <input type="number" id="cv-age" class="info-input" placeholder="Âge" style="width: 25%;">
                     <input type="text" id="cv-phone" class="info-input" placeholder="📞 Tél. de contact" style="width: 70%;">
                 </div>
-                <textarea id="cv-experience" class="info-input" placeholder="💼 Vos expériences précédentes" style="width: 100%; height: 100px; margin-bottom: 15px; box-sizing: border-box;"></textarea>
-                <textarea id="cv-motivation" class="info-input" placeholder="🔥 Vos motivations pour nous rejoindre" style="width: 100%; height: 120px; box-sizing: border-box;"></textarea>
+                <textarea id="cv-experience" class="info-input" placeholder="💼 Vos expériences précédentes" style="height: 100px; margin-bottom: 15px;"></textarea>
+                <textarea id="cv-motivation" class="info-input" placeholder="🔥 Vos motivations pour nous rejoindre" style="height: 120px;"></textarea>
             </div>
-            <br>
-            <button class="btn btn-blue" style="width: 50%;" onclick="submitCV()">ENVOYER MA CANDIDATURE</button><br>
-            <button class="btn btn-red" style="width: 50%;" onclick="location.reload()">RETOUR</button>
+            
+            <!-- Boutons candidature alignés -->
+            <div style="width: 50%; margin: 20px auto 0; display: flex; flex-direction: column; gap: 15px;">
+                <button class="btn btn-blue" onclick="submitCV()">ENVOYER MA CANDIDATURE</button>
+                <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
+            </div>
         </div>
 
         <div id="success-cv-screen">
@@ -236,34 +240,37 @@
             <h1 style="color: #43a047;">Candidature Envoyée !</h1>
             <p>Votre CV a bien été transmis à la direction du LTD Roxwood.</p>
             <p>Nous examinerons votre profil et vous recontacterons rapidement.</p>
-            <button class="btn" style="width: 50%;" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+            <div style="width: 50%; margin: 20px auto 0;">
+                <button class="btn" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+            </div>
         </div>
 
         <!-- LOGIN EMPLOYÉ (ETAPE 1) -->
         <div id="login-screen">
             <h1>Espace Employé</h1>
             <p>Veuillez vous identifier</p>
-            <input type="text" id="username" class="login-input" placeholder="Identifiant">
-            <input type="password" id="password" class="login-input" placeholder="Mot de passe">
-            <button class="btn" onclick="checkLogin()">CONNEXION</button>
-            <button class="btn btn-red" style="width: 50%; padding: 10px;" onclick="location.reload()">RETOUR</button>
-            <p id="error" style="color:red; display:none; margin-top:10px; font-weight: bold;">Identifiants incorrects.</p>
+            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+                <input type="text" id="username" class="login-input" placeholder="Identifiant">
+                <input type="password" id="password" class="login-input" placeholder="Mot de passe">
+                <button class="btn" onclick="checkLogin()">CONNEXION</button>
+                <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
+                <p id="error" style="color:red; display:none; margin: 0; font-weight: bold;">Identifiants incorrects.</p>
+            </div>
         </div>
 
         <!-- LOGIN EMPLOYÉ (ETAPE 2 - VERIFICATION STRICTE) -->
         <div id="step2-login-screen">
             <h1 style="color: #1976d2;">Vérification d'identité</h1>
             <p>Veuillez décliner votre identité et votre grade au sein de l'entreprise.</p>
-            <div style="width: 50%; margin: 0 auto;">
-                <input type="text" id="step2-firstname" class="login-input" placeholder="Votre Prénom" style="width: 100%;">
-                <input type="text" id="step2-lastname" class="login-input" placeholder="Votre Nom" style="width: 100%;">
-                <select id="step2-grade" class="info-input" style="width: 100%;">
+            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+                <input type="text" id="step2-firstname" class="login-input" placeholder="Votre Prénom">
+                <input type="text" id="step2-lastname" class="login-input" placeholder="Votre Nom">
+                <select id="step2-grade" class="info-input">
                     <!-- Les options se remplissent automatiquement -->
                 </select>
                 <button class="btn btn-blue" onclick="submitStep2()">VALIDER MON ACCÈS</button>
-                <button class="btn btn-red" style="padding: 10px;" onclick="location.reload()">ANNULER</button>
-                <!-- Message d'erreur de sécurité -->
-                <p id="error-step2" style="color:red; display:none; margin-top:15px; font-weight: bold;">Accès refusé : Identité ou grade non reconnu.</p>
+                <button class="btn btn-red" onclick="location.reload()">ANNULER</button>
+                <p id="error-step2" style="color:red; display:none; margin: 0; font-weight: bold;">Accès refusé : Identité ou grade non reconnu.</p>
             </div>
         </div>
 
@@ -303,10 +310,12 @@
                             <option value="300">Sud (À Partir Du Péage) (300$)</option>
                         </select>
                     </div>
-                    <textarea id="other-info" class="info-input" placeholder="📝 Informations supplémentaires / Instructions de livraison" style="width: 100%; box-sizing: border-box;"></textarea>
+                    <textarea id="other-info" class="info-input" placeholder="📝 Informations supplémentaires / Instructions de livraison" style="margin-bottom: 0;"></textarea>
                 </div>
-                <button class="btn btn-green" onclick="submitOrder()">VALIDER LA COMMANDE</button>
-                <button class="btn btn-red" onclick="resetForm()">REMISE À ZÉRO</button>
+                <div style="width: 100%; display: flex; gap: 15px; margin-top: 20px;">
+                    <button class="btn btn-green" onclick="submitOrder()">VALIDER LA COMMANDE</button>
+                    <button class="btn btn-red" onclick="resetForm()">REMISE À ZÉRO</button>
+                </div>
             </div>
 
             <div id="history-screen">
@@ -365,7 +374,9 @@
                 <span class="success-icon">✅</span>
                 <h1 style="color: #43a047;">Commande Validée !</h1>
                 <p>La commande a bien été transmise.</p>
-                <button class="btn" style="width: 50%;" onclick="returnToDashboard()">NOUVELLE COMMANDE</button>
+                <div style="width: 50%; margin: 20px auto 0;">
+                    <button class="btn" onclick="returnToDashboard()">NOUVELLE COMMANDE</button>
+                </div>
             </div>
         </div> 
     </div>
@@ -744,12 +755,18 @@
                     .map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('');
 
                 let employeOptions = `<option value="">-- Non assigné --</option>`;
-                const knownNames = authorizedUsers.filter(u => !u.needsDetails).map(u => u.name);
                 
+                // --- MODIFICATION ICI : On fusionne les deux tableaux ---
+                const knownNames = authorizedUsers.filter(u => !u.needsDetails).map(u => u.name);
+                validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
+
                 if(!knownNames.includes(currentSessionName) && isEmployeeMode) knownNames.push(currentSessionName);
                 if(order.enCharge && !knownNames.includes(order.enCharge)) knownNames.push(order.enCharge);
 
-                knownNames.forEach(name => {
+                // On s'assure qu'il n'y a pas de doublons
+                const uniqueNames = [...new Set(knownNames)];
+
+                uniqueNames.forEach(name => {
                     employeOptions += `<option value="${name}" ${order.enCharge === name ? 'selected' : ''}>${name}</option>`;
                 });
 
