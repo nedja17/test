@@ -99,12 +99,15 @@
         .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); width: 100%; margin-top: 15px; color: white; }
         .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
 
-        /* Boutons Actions (Candidatures) */
-        .btn-action { cursor: pointer; padding: 6px 10px; border-radius: 5px; border: none; margin: 2px; font-size: 1.2em; transition: 0.2s; }
+        /* --- BOUTONS ACTIONS (CANDIDATURES) RÉDUITS --- */
+        .btn-action { cursor: pointer; padding: 4px 6px; border-radius: 4px; border: none; margin: 2px; font-size: 0.9em; transition: 0.2s; vertical-align: middle; }
         .btn-action:hover { transform: scale(1.1); filter: brightness(1.2); }
         .btn-accept { background-color: #43a047; color: white; }
         .btn-reject { background-color: #d32f2f; color: white; }
         .btn-delete { background-color: #555; color: white; }
+        
+        /* Petite barre verticale grise */
+        .separator-bar { display: inline-block; width: 2px; height: 18px; background-color: #555; vertical-align: middle; margin: 0 4px; border-radius: 2px; }
 
         /* Petit bouton icon rond pour les notes */
         .btn-icon-round {
@@ -143,12 +146,11 @@
             overflow: hidden; 
         }
         
-        /* CORRECTION MAJEURE ICI : on retire l'overflow caché pour permettre au texte et boutons de prendre leur place */
         .history-table th, .history-table td { 
             padding: 15px; 
             border-bottom: 1px solid #444; 
             vertical-align: middle; 
-            word-wrap: break-word; /* Force le texte trop long à aller à la ligne plutôt que de déborder */
+            word-wrap: break-word; 
         }
 
         /* Largeurs fixes par colonne (Tableau Commandes) */
@@ -164,14 +166,14 @@
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 75%; } 
 
-        /* Largeurs fixes par colonne (Tableau Candidatures) - Ajustées pour tout afficher proprement */
-        #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 13%; } /* Date plus large */
-        #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 12%; } /* Candidat */
-        #candidatures-screen .history-table th:nth-child(3), #candidatures-screen .history-table td:nth-child(3) { width: 10%; } /* Âge & Tél */
-        #candidatures-screen .history-table th:nth-child(4), #candidatures-screen .history-table td:nth-child(4) { width: 20%; font-size: 0.9em; } /* Expérience */
-        #candidatures-screen .history-table th:nth-child(5), #candidatures-screen .history-table td:nth-child(5) { width: 20%; font-size: 0.9em; } /* Motivation */
-        #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 15%; text-align: center; } /* Notes avec plus de place */
-        #candidatures-screen .history-table th:nth-child(7), #candidatures-screen .history-table td:nth-child(7) { width: 10%; text-align: center; white-space: nowrap; } /* Actions alignées */
+        /* Largeurs fixes par colonne (Tableau Candidatures) */
+        #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 13%; } 
+        #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 12%; } 
+        #candidatures-screen .history-table th:nth-child(3), #candidatures-screen .history-table td:nth-child(3) { width: 10%; } 
+        #candidatures-screen .history-table th:nth-child(4), #candidatures-screen .history-table td:nth-child(4) { width: 20%; font-size: 0.9em; } 
+        #candidatures-screen .history-table th:nth-child(5), #candidatures-screen .history-table td:nth-child(5) { width: 20%; font-size: 0.9em; } 
+        #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 12%; text-align: center; } 
+        #candidatures-screen .history-table th:nth-child(7), #candidatures-screen .history-table td:nth-child(7) { width: 13%; text-align: center; white-space: nowrap; } 
 
         /* Couleurs des statuts de candidature */
         .cand-accepted { background-color: rgba(76, 175, 80, 0.15) !important; border-left: 5px solid #4caf50; }
@@ -724,7 +726,7 @@
         function saveAppreciation(id) { 
             const text = document.getElementById('appreciation-' + id).value;
             db.ref('candidatures/' + id).update({ appreciation: text }); 
-            document.getElementById('app-container-' + id).style.display = 'none'; // Ferme la bulle après sauvegarde
+            document.getElementById('app-container-' + id).style.display = 'none'; 
         }
 
         function deleteCandidature(id) { 
@@ -815,9 +817,10 @@
                         </div>
                     </td>
 
-                    <td style="text-align: center;">
+                    <td style="text-align: center; white-space: nowrap;">
                         <button class="btn-action btn-accept" onclick="updateCandStatus('${cand.id}', 'accepté')" title="Accepter">✅</button>
                         <button class="btn-action btn-reject" onclick="updateCandStatus('${cand.id}', 'refusé')" title="Refuser">❌</button>
+                        <span class="separator-bar"></span>
                         <button class="btn-action btn-delete" onclick="deleteCandidature('${cand.id}')" title="Supprimer">🗑️</button>
                     </td>
                 `;
