@@ -207,6 +207,8 @@
                 
                 <!-- Réservé Direction/Admin -->
                 <button class="nav-btn" id="btn-candidatures" style="display:none; border-color: #1976d2;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
+                
+                <!-- Réservé Direction/Admin/Responsable -->
                 <button class="nav-btn" id="btn-logs" style="display:none; border-color: #64b5f6;" onclick="switchTab('logs-screen')">📊 Logs</button>
                 
                 <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
@@ -285,10 +287,10 @@
                 </table>
             </div>
 
-            <!-- TAB 4 : LOGS (DIRECTION ONLY) -->
+            <!-- TAB 4 : LOGS (DIRECTION/RESPONSABLE ONLY) -->
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette (Réservé Direction).</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette (Réservé Direction et Responsables).</p>
                 <table class="history-table" style="width: 70%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -326,6 +328,7 @@
         const authorizedUsers = [
             { name: "admin", pass: "admin" },
             { name: "Direction Roxwood", pass: "@dmin!5" },
+            { name: "responsable", pass: "responsable" }, // <-- NOUVEAU COMPTE RESPONSABLE
             { name: "Hibiscus Evergreen", pass: "06122003" },
             { name: "Kayla Mayers", pass: "09031999" },
             { name: "Oliver Campbell", pass: "03092002" },
@@ -395,13 +398,19 @@
                 document.getElementById("btn-dashboard").style.display = "none"; 
                 document.getElementById("btn-history").style.display = "block"; 
                 
+                // GESTION DES PERMISSIONS : Candidatures
                 if (currentUser === "admin" || currentUser === "Direction Roxwood") {
                     document.getElementById("btn-candidatures").style.display = "block";
-                    document.getElementById("btn-logs").style.display = "block";
-                    syncLogs(); 
                     syncCandidatures();
                 } else {
                     document.getElementById("btn-candidatures").style.display = "none";
+                }
+
+                // GESTION DES PERMISSIONS : Logs de connexion
+                if (currentUser === "admin" || currentUser === "Direction Roxwood" || currentUser === "responsable") {
+                    document.getElementById("btn-logs").style.display = "block";
+                    syncLogs(); 
+                } else {
                     document.getElementById("btn-logs").style.display = "none";
                 }
 
