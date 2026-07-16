@@ -106,6 +106,26 @@
         .btn-reject { background-color: #d32f2f; color: white; }
         .btn-delete { background-color: #555; color: white; }
 
+        /* Petit bouton icon rond pour les notes */
+        .btn-icon-round {
+            background-color: #1976d2; 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 35px; 
+            height: 35px; 
+            cursor: pointer; 
+            font-size: 1.1em; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .btn-icon-round:hover { transform: scale(1.1); filter: brightness(1.2); }
+        .btn-icon-round.has-notes { background-color: #ff9800; color: #1a1a1a; }
+
         /* --- ZONES --- */
         .delivery-info-section { margin-top: 30px; text-align: left; background-color: rgba(34, 34, 34, 0.6); padding: 20px; border-radius: 10px; border: 1px solid #444; }
         .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; }
@@ -115,7 +135,6 @@
         .history-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 20px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
         .history-table th, .history-table td { padding: 15px; border-bottom: 1px solid #444; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Largeurs fixes par colonne (Tableau Commandes) */
         #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 12%; } 
         #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 15%; } 
         #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 30%; white-space: normal; } 
@@ -124,23 +143,21 @@
         #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 14%; white-space: normal; } 
         #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 5%; }  
 
-        /* Largeurs fixes par colonne (Tableau Logs) */
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 75%; } 
 
-        /* Largeurs fixes par colonne (Tableau Candidatures) */
         #candidatures-screen .history-table th:nth-child(1), #candidatures-screen .history-table td:nth-child(1) { width: 10%; } 
         #candidatures-screen .history-table th:nth-child(2), #candidatures-screen .history-table td:nth-child(2) { width: 12%; } 
         #candidatures-screen .history-table th:nth-child(3), #candidatures-screen .history-table td:nth-child(3) { width: 12%; white-space: normal; } 
-        #candidatures-screen .history-table th:nth-child(4), #candidatures-screen .history-table td:nth-child(4) { width: 21%; white-space: normal; font-size: 0.85em; } 
-        #candidatures-screen .history-table th:nth-child(5), #candidatures-screen .history-table td:nth-child(5) { width: 21%; white-space: normal; font-size: 0.85em; } 
-        #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 16%; white-space: normal; } 
-        #candidatures-screen .history-table th:nth-child(7), #candidatures-screen .history-table td:nth-child(7) { width: 8%; text-align: center; } 
+        #candidatures-screen .history-table th:nth-child(4), #candidatures-screen .history-table td:nth-child(4) { width: 23%; white-space: normal; font-size: 0.85em; } 
+        #candidatures-screen .history-table th:nth-child(5), #candidatures-screen .history-table td:nth-child(5) { width: 23%; white-space: normal; font-size: 0.85em; } 
+        #candidatures-screen .history-table th:nth-child(6), #candidatures-screen .history-table td:nth-child(6) { width: 10%; text-align: center; } 
+        #candidatures-screen .history-table th:nth-child(7), #candidatures-screen .history-table td:nth-child(7) { width: 10%; text-align: center; } 
 
         /* Couleurs des statuts de candidature */
         .cand-accepted { background-color: rgba(76, 175, 80, 0.15) !important; border-left: 5px solid #4caf50; }
         .cand-rejected { background-color: rgba(211, 47, 47, 0.15) !important; border-left: 5px solid #d32f2f; }
-        .appreciation-input { width: 100%; height: 50px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; }
+        .appreciation-input { width: 100%; height: 60px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #1976d2; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; box-sizing: border-box; }
 
         .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
@@ -273,7 +290,7 @@
 
             <div id="history-screen">
                 <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Bienvenue, <span id="welcome-name"></span> 👋</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons.</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons en direct.</p>
                 <table class="history-table">
                     <thead>
                         <tr>
@@ -292,7 +309,7 @@
 
             <div id="candidatures-screen">
                 <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures 📄</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations.</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations (Réservé Direction).</p>
                 <table class="history-table" style="width: 98%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -301,7 +318,7 @@
                             <th>Âge & Tél</th>
                             <th>Expérience</th>
                             <th>Motivation</th>
-                            <th>Appréciation (suite à l'entretien)</th>
+                            <th>Notes</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -311,7 +328,7 @@
 
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette.</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette (Réservé Direction et Responsables).</p>
                 <table class="history-table" style="width: 70%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -373,7 +390,7 @@
             { name: "Lumière Violette", price: 36.0 },
             { name: "Sachet Vide", price: 5.0 },
             { name: "Foret de perceuse", price: 600.0 },
-            { name: "Pack Jardinage (300 Eau, 100 Ferti, 100 pot, 10 Lum.)", price: 4000.0 }
+            { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
         ];
 
         let isEmployeeMode = false;
@@ -624,8 +641,8 @@
                 phone: phone,
                 experience: experience,
                 motivation: motivation,
-                appreciation: "",       // Appréciation
-                status: "en attente",   // Statut 
+                appreciation: "",       
+                status: "en attente",   
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
@@ -672,14 +689,25 @@
         function updatePersonInCharge(id, selectElement) { db.ref('orders/' + id).update({ enCharge: selectElement.value }); }
         function deleteOrder(id) { if(confirm("Supprimer définitivement cette commande ?")) db.ref('orders/' + id).remove(); }
         
-        // --- FONCTIONS CANDIDATURE ---
+        // --- NOUVELLES FONCTIONS CANDIDATURE ---
         function updateCandStatus(id, newStatus) { 
             db.ref('candidatures/' + id).update({ status: newStatus }); 
         }
+        
+        function toggleAppreciation(id) {
+            const container = document.getElementById('app-container-' + id);
+            if(container.style.display === 'none') {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
         function saveAppreciation(id) { 
             const text = document.getElementById('appreciation-' + id).value;
             db.ref('candidatures/' + id).update({ appreciation: text }); 
         }
+
         function deleteCandidature(id) { 
             if(confirm("Supprimer cette candidature ? Action irréversible.")) db.ref('candidatures/' + id).remove(); 
         }
@@ -744,11 +772,12 @@
             candidaturesHistory.forEach(cand => {
                 const tr = document.createElement('tr');
                 
-                // Coloration dynamique selon le statut
                 if(cand.status === "accepté") tr.classList.add("cand-accepted");
                 else if(cand.status === "refusé") tr.classList.add("cand-rejected");
 
                 const notes = cand.appreciation ? cand.appreciation : "";
+                const btnClass = cand.appreciation ? "has-notes" : "";
+                const btnIcon = cand.appreciation ? "📝" : "➕";
 
                 tr.innerHTML = `
                     <td style="color:#aaa;">${cand.dateCreation}</td>
@@ -757,13 +786,18 @@
                     <td style="text-align: left; line-height: 1.4; color: #ddd;"><i>"${cand.experience}"</i></td>
                     <td style="text-align: left; line-height: 1.4; color: #b3e5fc;"><i>"${cand.motivation}"</i></td>
                     
-                    <!-- Colonne Appréciation -->
-                    <td style="text-align: center;">
-                        <textarea id="appreciation-${cand.id}" class="appreciation-input" placeholder="Notes d'entretien...">${notes}</textarea>
-                        <button class="btn btn-blue btn-small" style="width: 100%;" onclick="saveAppreciation('${cand.id}')">Enregistrer</button>
+                    <!-- Colonne Bouton Appréciation -->
+                    <td style="text-align: center; vertical-align: middle;">
+                        <button class="btn-icon-round ${btnClass}" onclick="toggleAppreciation('${cand.id}')" title="Écrire une note">
+                            ${btnIcon}
+                        </button>
+                        <div id="app-container-${cand.id}" style="display: none; margin-top: 10px;">
+                            <textarea id="appreciation-${cand.id}" class="appreciation-input" placeholder="Notes d'entretien...">${notes}</textarea>
+                            <button class="btn btn-blue btn-small" style="width: 100%; margin-top: 2px;" onclick="saveAppreciation('${cand.id}')">Sauvegarder</button>
+                        </div>
                     </td>
 
-                    <!-- Colonne Actions avec boutons Valider/Refuser -->
+                    <!-- Colonne Actions -->
                     <td style="text-align: center;">
                         <button class="btn-action btn-accept" onclick="updateCandStatus('${cand.id}', 'accepté')" title="Accepter">✅</button>
                         <button class="btn-action btn-reject" onclick="updateCandStatus('${cand.id}', 'refusé')" title="Refuser">❌</button>
