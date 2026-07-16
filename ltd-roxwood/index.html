@@ -199,13 +199,13 @@
         <!-- ACCUEIL -->
         <div id="welcome-screen">
             <h1>LTD Roxwood</h1>
-            <p>Bienvenue sur le portail en ligne de Roxwood.</p>
+            <p>Bienvenue sur le site du LTD Roxwood.</p>
             <br>
             <!-- force la même largeur partout -->
             <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
                 <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
-                <div style="height: 20px;"></div> <!-- Espace -->
+                <div style="height: 20px;"></div> 
                 <button class="btn" style="background: #333; color: white;" onclick="showEmployeeLogin()">🔒 Accès Employé</button>
             </div>
         </div>
@@ -320,7 +320,7 @@
 
             <div id="history-screen">
                 <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Bienvenue, <span id="welcome-name"></span> 👋</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons en direct.</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons.</p>
                 <table class="history-table">
                     <thead>
                         <tr>
@@ -339,7 +339,7 @@
 
             <div id="candidatures-screen">
                 <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures 📄</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations (Réservé Direction).</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations.</p>
                 <table class="history-table" style="width: 98%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -358,7 +358,7 @@
 
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette (Réservé Direction et Responsables).</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette.</p>
                 <table class="history-table" style="width: 70%; margin: 20px auto;">
                     <thead>
                         <tr>
@@ -756,14 +756,13 @@
 
                 let employeOptions = `<option value="">-- Non assigné --</option>`;
                 
-                // --- MODIFICATION ICI : On fusionne les deux tableaux ---
+                // -- Fusion deux tableaux ---
                 const knownNames = authorizedUsers.filter(u => !u.needsDetails).map(u => u.name);
                 validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
 
                 if(!knownNames.includes(currentSessionName) && isEmployeeMode) knownNames.push(currentSessionName);
                 if(order.enCharge && !knownNames.includes(order.enCharge)) knownNames.push(order.enCharge);
 
-                // On s'assure qu'il n'y a pas de doublons
                 const uniqueNames = [...new Set(knownNames)];
 
                 uniqueNames.forEach(name => {
