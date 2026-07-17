@@ -158,12 +158,12 @@
             word-wrap: break-word; 
         }
 
-        /* NOUVELLES LARGEURS DE COLONNES (Plus de place pour Statut, Action et En Charge) */
+        /* NOUVELLES LARGEURS DE COLONNES (En charge réduit) */
         #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 10%; } /* Date */
         #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 13%; } /* Client */
-        #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 28%; } /* Détails */
+        #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 32%; } /* Détails (+ large) */
         #history-screen .history-table th:nth-child(4), #history-screen .history-table td:nth-child(4) { width: 8%; }  /* Total */
-        #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 16%; } /* En charge */
+        #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 12%; } /* En charge (réduit) */
         #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 17%; } /* Statut */
         #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 8%; text-align: center; }  /* Action */
 
@@ -352,9 +352,11 @@
                 </div>
             </div>
 
+            <!-- SUIVI DES COMMANDES -->
             <div id="history-screen">
                 <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Bienvenue, <span id="welcome-name"></span> 👋</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons.</p>
+                
                 <table class="history-table">
                     <thead>
                         <tr>
@@ -369,12 +371,20 @@
                     </thead>
                     <tbody id="history-body"></tbody>
                 </table>
+
+                <div class="pagination-container" style="width: 100%;">
+                    <button class="page-btn" onclick="changeOrderPage(-1)">⬅️ Précédent</button>
+                    <span>Page <input type="number" id="order-page-input" class="page-input" value="1" min="1" onchange="goToOrderPage()"> sur <span id="order-total-pages">1</span></span>
+                    <button class="page-btn" onclick="changeOrderPage(1)">Suivant ➡️</button>
+                </div>
             </div>
 
+            <!-- CANDIDATURES -->
             <div id="candidatures-screen">
                 <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures 📄</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations.</p>
-                <table class="history-table" style="width: 98%; margin: 20px auto;">
+                
+                <table class="history-table" style="width: 98%; margin: 20px auto 0;">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -388,8 +398,15 @@
                     </thead>
                     <tbody id="candidatures-body"></tbody>
                 </table>
+
+                <div class="pagination-container" style="width: 98%; margin: 15px auto;">
+                    <button class="page-btn" onclick="changeCandPage(-1)">⬅️ Précédent</button>
+                    <span>Page <input type="number" id="cand-page-input" class="page-input" value="1" min="1" onchange="goToCandPage()"> sur <span id="cand-total-pages">1</span></span>
+                    <button class="page-btn" onclick="changeCandPage(1)">Suivant ➡️</button>
+                </div>
             </div>
 
+            <!-- LOGS -->
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette.</p>
@@ -485,6 +502,14 @@
         let filteredLogs = [];
         let currentLogPage = 1;
         const logsPerPage = 20;
+
+        // Variables pour Suivi Commandes
+        let currentOrderPage = 1;
+        const ordersPerPage = 20;
+
+        // Variables pour Candidatures
+        let currentCandPage = 1;
+        const candsPerPage = 20;
 
         function showClientSpace() {
             isEmployeeMode = false;
@@ -747,12 +772,197 @@
                 .catch((e) => alert("Erreur : " + e.message));
         }
 
+        // --- GESTION DES COMMANDES (AVEC PAGINATION) ---
         function syncDatabase() {
             if(!isEmployeeMode) return;
             db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
                 ordersHistory = [];
                 snapshot.forEach((child) => { ordersHistory.unshift({ id: child.key, ...child.val() }); });
                 renderHistory();
+            });
+        }
+
+        function changeOrderPage(delta) {
+            const totalPages = Math.max(1, Math.ceil(ordersHistory.length / ordersPerPage));
+            currentOrderPage += delta;
+            if (currentOrderPage < 1) currentOrderPage = 1;
+            if (currentOrderPage > totalPages) currentOrderPage = totalPages;
+            renderHistory();
+        }
+
+        function goToOrderPage() {
+            const inputVal = parseInt(document.getElementById('order-page-input').value);
+            const totalPages = Math.max(1, Math.ceil(ordersHistory.length / ordersPerPage));
+            if (!isNaN(inputVal)) {
+                currentOrderPage = inputVal;
+                if (currentOrderPage < 1) currentOrderPage = 1;
+                if (currentOrderPage > totalPages) currentOrderPage = totalPages;
+            }
+            renderHistory();
+        }
+
+        function updateOrderStatus(id, selectElement) { db.ref('orders/' + id).update({ status: selectElement.value }); }
+        function updatePersonInCharge(id, selectElement) { db.ref('orders/' + id).update({ enCharge: selectElement.value }); }
+        function deleteOrder(id) { if(confirm("Supprimer définitivement cette commande ?")) db.ref('orders/' + id).remove(); }
+
+        function renderHistory() {
+            const tbody = document.getElementById('history-body');
+            tbody.innerHTML = '';
+            
+            const totalPages = Math.max(1, Math.ceil(ordersHistory.length / ordersPerPage));
+            document.getElementById('order-total-pages').innerText = totalPages;
+            document.getElementById('order-page-input').value = currentOrderPage;
+
+            if(ordersHistory.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune commande.</td></tr>'; 
+                return; 
+            }
+
+            const startIndex = (currentOrderPage - 1) * ordersPerPage;
+            const endIndex = startIndex + ordersPerPage;
+            const ordersToDisplay = ordersHistory.slice(startIndex, endIndex);
+            
+            ordersToDisplay.forEach(order => {
+                const tr = document.createElement('tr');
+                const statusOptions = ["En attente de préparation", "Disponible à la livraison", "Livraison en cours", "Livré"]
+                    .map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('');
+
+                let employeOptions = `<option value="">-- Non assigné --</option>`;
+                
+                // L'admin n'apparait pas dans la liste des chargés de commandes
+                const knownNames = authorizedUsers.filter(u => !u.needsDetails && u.name !== "admin").map(u => u.name);
+                validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
+
+                if(!knownNames.includes(currentSessionName) && isEmployeeMode && currentAccountId !== "admin") {
+                    knownNames.push(currentSessionName);
+                }
+                if(order.enCharge && !knownNames.includes(order.enCharge) && order.enCharge !== "admin") {
+                    knownNames.push(order.enCharge);
+                }
+
+                const uniqueNames = [...new Set(knownNames)];
+
+                uniqueNames.forEach(name => {
+                    employeOptions += `<option value="${name}" ${order.enCharge === name ? 'selected' : ''}>${name}</option>`;
+                });
+
+                tr.innerHTML = `
+                    <td style="color:#aaa;">${order.dateCreation}</td>
+                    <td>
+                        <strong style="color:#fff;">${order.client}</strong><br>
+                        <span style="color:#ff9800;">📞 ${order.phone}</span>
+                    </td>
+                    <td style="text-align: left; line-height: 1.4;">
+                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
+                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
+                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
+                    </td>
+                    <td style="color:#4caf50; font-weight:bold; font-size:1.1em;">${order.total} $</td>
+                    <td><select class="status-select charge-select" onchange="updatePersonInCharge('${order.id}', this)">${employeOptions}</select></td>
+                    <td><select class="status-select" onchange="updateOrderStatus('${order.id}', this)">${statusOptions}</select></td>
+                    <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">X</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- GESTION DES CANDIDATURES (AVEC PAGINATION) ---
+        function syncCandidatures() {
+            db.ref('candidatures').orderByChild('timestamp').on('value', (snapshot) => {
+                candidaturesHistory = [];
+                snapshot.forEach((child) => { candidaturesHistory.unshift({ id: child.key, ...child.val() }); });
+                renderCandidatures();
+            });
+        }
+
+        function changeCandPage(delta) {
+            const totalPages = Math.max(1, Math.ceil(candidaturesHistory.length / candsPerPage));
+            currentCandPage += delta;
+            if (currentCandPage < 1) currentCandPage = 1;
+            if (currentCandPage > totalPages) currentCandPage = totalPages;
+            renderCandidatures();
+        }
+
+        function goToCandPage() {
+            const inputVal = parseInt(document.getElementById('cand-page-input').value);
+            const totalPages = Math.max(1, Math.ceil(candidaturesHistory.length / candsPerPage));
+            if (!isNaN(inputVal)) {
+                currentCandPage = inputVal;
+                if (currentCandPage < 1) currentCandPage = 1;
+                if (currentCandPage > totalPages) currentCandPage = totalPages;
+            }
+            renderCandidatures();
+        }
+
+        function updateCandStatus(id, newStatus) { db.ref('candidatures/' + id).update({ status: newStatus }); }
+        
+        function toggleAppreciation(id) {
+            const container = document.getElementById('app-container-' + id);
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function saveAppreciation(id) { 
+            const text = document.getElementById('appreciation-' + id).value;
+            db.ref('candidatures/' + id).update({ appreciation: text }); 
+            document.getElementById('app-container-' + id).style.display = 'none'; 
+        }
+
+        function deleteCandidature(id) { 
+            if(confirm("Supprimer cette candidature ? Action irréversible.")) db.ref('candidatures/' + id).remove(); 
+        }
+
+        function renderCandidatures() {
+            const tbody = document.getElementById('candidatures-body');
+            tbody.innerHTML = '';
+
+            const totalPages = Math.max(1, Math.ceil(candidaturesHistory.length / candsPerPage));
+            document.getElementById('cand-total-pages').innerText = totalPages;
+            document.getElementById('cand-page-input').value = currentCandPage;
+
+            if(candidaturesHistory.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune candidature actuellement.</td></tr>'; 
+                return; 
+            }
+
+            const startIndex = (currentCandPage - 1) * candsPerPage;
+            const endIndex = startIndex + candsPerPage;
+            const candsToDisplay = candidaturesHistory.slice(startIndex, endIndex);
+            
+            candsToDisplay.forEach(cand => {
+                const tr = document.createElement('tr');
+                
+                if(cand.status === "accepté") tr.classList.add("cand-accepted");
+                else if(cand.status === "refusé") tr.classList.add("cand-rejected");
+
+                const notes = cand.appreciation ? cand.appreciation : "";
+                const btnClass = cand.appreciation ? "has-notes" : "";
+                const btnIcon = cand.appreciation ? "📝" : "➕";
+
+                tr.innerHTML = `
+                    <td style="color:#aaa;">${cand.dateCreation}</td>
+                    <td><strong style="color:#fff; font-size:1.1em;">${cand.prenom} ${cand.nom}</strong></td>
+                    <td>🎂 ${cand.age} ans<br><span style="color:#ff9800;">📞 ${cand.phone}</span></td>
+                    <td style="text-align: left; line-height: 1.4; color: #ddd;"><i>"${cand.experience}"</i></td>
+                    <td style="text-align: left; line-height: 1.4; color: #b3e5fc;"><i>"${cand.motivation}"</i></td>
+                    
+                    <td style="text-align: center; vertical-align: middle;">
+                        <button class="btn-icon-round ${btnClass}" onclick="toggleAppreciation('${cand.id}')" title="Écrire une note">
+                            ${btnIcon}
+                        </button>
+                        <div id="app-container-${cand.id}" style="display: none; margin-top: 10px;">
+                            <textarea id="appreciation-${cand.id}" class="appreciation-input" placeholder="Notes d'entretien...">${notes}</textarea>
+                            <button class="btn btn-blue btn-small" style="width: 100%; margin-top: 2px;" onclick="saveAppreciation('${cand.id}')">Sauvegarder</button>
+                        </div>
+                    </td>
+
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button class="btn-action btn-accept" onclick="updateCandStatus('${cand.id}', 'accepté')" title="Accepter">✅</button>
+                        <button class="btn-action btn-reject" onclick="updateCandStatus('${cand.id}', 'refusé')" title="Refuser">❌</button>
+                        <span class="separator-bar"></span>
+                        <button class="btn-action btn-delete" onclick="deleteCandidature('${cand.id}')" title="Supprimer">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
@@ -808,7 +1018,6 @@
             document.getElementById('log-total-pages').innerText = totalPages;
             document.getElementById('log-page-input').value = currentLogPage;
 
-            // Affiche la colonne "Action" uniquement pour l'admin
             const thAction = document.getElementById('th-log-action');
             if (currentAccountId === "admin") {
                 if(thAction) thAction.style.display = "table-cell";
@@ -836,134 +1045,6 @@
                 }
 
                 tr.innerHTML = `<td style="color:#aaa;">${log.date}</td><td><strong style="color:#64b5f6;">${log.employe}</strong>${gradeBadge}</td>${actionTd}`;
-                tbody.appendChild(tr);
-            });
-        }
-        // ------------------------------------------
-
-        function syncCandidatures() {
-            db.ref('candidatures').orderByChild('timestamp').on('value', (snapshot) => {
-                candidaturesHistory = [];
-                snapshot.forEach((child) => { candidaturesHistory.unshift({ id: child.key, ...child.val() }); });
-                renderCandidatures();
-            });
-        }
-
-        function updateOrderStatus(id, selectElement) { db.ref('orders/' + id).update({ status: selectElement.value }); }
-        function updatePersonInCharge(id, selectElement) { db.ref('orders/' + id).update({ enCharge: selectElement.value }); }
-        function deleteOrder(id) { if(confirm("Supprimer définitivement cette commande ?")) db.ref('orders/' + id).remove(); }
-        
-        function updateCandStatus(id, newStatus) { 
-            db.ref('candidatures/' + id).update({ status: newStatus }); 
-        }
-        
-        function toggleAppreciation(id) {
-            const container = document.getElementById('app-container-' + id);
-            if(container.style.display === 'none') {
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
-        }
-
-        function saveAppreciation(id) { 
-            const text = document.getElementById('appreciation-' + id).value;
-            db.ref('candidatures/' + id).update({ appreciation: text }); 
-            document.getElementById('app-container-' + id).style.display = 'none'; 
-        }
-
-        function deleteCandidature(id) { 
-            if(confirm("Supprimer cette candidature ? Action irréversible.")) db.ref('candidatures/' + id).remove(); 
-        }
-
-        function renderHistory() {
-            const tbody = document.getElementById('history-body');
-            tbody.innerHTML = '';
-            if(ordersHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune commande.</td></tr>'; return; }
-            
-            ordersHistory.forEach(order => {
-                const tr = document.createElement('tr');
-                const statusOptions = ["En attente de préparation", "Disponible à la livraison", "Livraison en cours", "Livré"]
-                    .map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('');
-
-                let employeOptions = `<option value="">-- Non assigné --</option>`;
-                
-                // L'admin n'apparait pas dans la liste des chargés de commandes
-                const knownNames = authorizedUsers.filter(u => !u.needsDetails && u.name !== "admin").map(u => u.name);
-                validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
-
-                if(!knownNames.includes(currentSessionName) && isEmployeeMode && currentAccountId !== "admin") {
-                    knownNames.push(currentSessionName);
-                }
-                if(order.enCharge && !knownNames.includes(order.enCharge) && order.enCharge !== "admin") {
-                    knownNames.push(order.enCharge);
-                }
-
-                const uniqueNames = [...new Set(knownNames)];
-
-                uniqueNames.forEach(name => {
-                    employeOptions += `<option value="${name}" ${order.enCharge === name ? 'selected' : ''}>${name}</option>`;
-                });
-
-                tr.innerHTML = `
-                    <td style="color:#aaa;">${order.dateCreation}</td>
-                    <td>
-                        <strong style="color:#fff;">${order.client}</strong><br>
-                        <span style="color:#ff9800;">📞 ${order.phone}</span>
-                    </td>
-                    <td style="text-align: left; line-height: 1.4;">
-                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
-                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
-                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
-                    </td>
-                    <td style="color:#4caf50; font-weight:bold; font-size:1.1em;">${order.total} $</td>
-                    <td><select class="status-select charge-select" onchange="updatePersonInCharge('${order.id}', this)">${employeOptions}</select></td>
-                    <td><select class="status-select" onchange="updateOrderStatus('${order.id}', this)">${statusOptions}</select></td>
-                    <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">X</button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderCandidatures() {
-            const tbody = document.getElementById('candidatures-body');
-            tbody.innerHTML = '';
-            if(candidaturesHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune candidature actuellement.</td></tr>'; return; }
-            
-            candidaturesHistory.forEach(cand => {
-                const tr = document.createElement('tr');
-                
-                if(cand.status === "accepté") tr.classList.add("cand-accepted");
-                else if(cand.status === "refusé") tr.classList.add("cand-rejected");
-
-                const notes = cand.appreciation ? cand.appreciation : "";
-                const btnClass = cand.appreciation ? "has-notes" : "";
-                const btnIcon = cand.appreciation ? "📝" : "➕";
-
-                tr.innerHTML = `
-                    <td style="color:#aaa;">${cand.dateCreation}</td>
-                    <td><strong style="color:#fff; font-size:1.1em;">${cand.prenom} ${cand.nom}</strong></td>
-                    <td>🎂 ${cand.age} ans<br><span style="color:#ff9800;">📞 ${cand.phone}</span></td>
-                    <td style="text-align: left; line-height: 1.4; color: #ddd;"><i>"${cand.experience}"</i></td>
-                    <td style="text-align: left; line-height: 1.4; color: #b3e5fc;"><i>"${cand.motivation}"</i></td>
-                    
-                    <td style="text-align: center; vertical-align: middle;">
-                        <button class="btn-icon-round ${btnClass}" onclick="toggleAppreciation('${cand.id}')" title="Écrire une note">
-                            ${btnIcon}
-                        </button>
-                        <div id="app-container-${cand.id}" style="display: none; margin-top: 10px;">
-                            <textarea id="appreciation-${cand.id}" class="appreciation-input" placeholder="Notes d'entretien...">${notes}</textarea>
-                            <button class="btn btn-blue btn-small" style="width: 100%; margin-top: 2px;" onclick="saveAppreciation('${cand.id}')">Sauvegarder</button>
-                        </div>
-                    </td>
-
-                    <td style="text-align: center; white-space: nowrap;">
-                        <button class="btn-action btn-accept" onclick="updateCandStatus('${cand.id}', 'accepté')" title="Accepter">✅</button>
-                        <button class="btn-action btn-reject" onclick="updateCandStatus('${cand.id}', 'refusé')" title="Refuser">❌</button>
-                        <span class="separator-bar"></span>
-                        <button class="btn-action btn-delete" onclick="deleteCandidature('${cand.id}')" title="Supprimer">🗑️</button>
-                    </td>
-                `;
                 tbody.appendChild(tr);
             });
         }
