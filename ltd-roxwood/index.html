@@ -59,9 +59,11 @@
             font-size: 0.95em;
             display: none; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-align: left;
+            text-align: center;
             line-height: 1.5;
             color: #e0e0e0;
+            min-width: 230px; /* Taille fixe pour éviter le tremblement */
+            font-variant-numeric: tabular-nums; /* Chiffres de même largeur */
         }
         .top-left-clock span { color: #64b5f6; font-weight: bold; }
 
@@ -1152,7 +1154,7 @@
             if(clockEl) clockEl.innerText = dateStr + " - " + timeStr;
         }
         setInterval(updateClock, 1000);
-        updateClock(); // Initialisation au chargement de la page
+        updateClock();
     </script>
 </body>
 </html>
