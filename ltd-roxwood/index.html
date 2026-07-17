@@ -13,9 +13,7 @@
 
     <style>
         /* --- DESIGN GLOBAL --- */
-        *, *::before, *::after {
-            box-sizing: border-box; 
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: 'Roboto Slab', serif;
@@ -32,7 +30,7 @@
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            overflow-x: hidden; /* pas possible de scroll à l'horizontal */
+            overflow-x: hidden; 
         }
 
         .container {
@@ -41,15 +39,15 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            width: 98%; /* s'adapte à l'écran */
-            max-width: 1500px; /* dépasse jamais 1500px */
+            width: 98%; 
+            max-width: 1500px; 
             text-align: center;
             border: 1px solid #555;
             backdrop-filter: blur(5px);
             margin: 20px auto;
         }
 
-        /* apparition utilisateur/grade en haut à droite */
+        /* BADGE UTILISATEUR HAUT DROITE */
         .top-right-user {
             position: absolute;
             top: 25px;
@@ -71,12 +69,12 @@
         h3.pack-title { color: #4caf50; border-bottom: 2px solid #4caf50; margin-top: 40px; }
         p { font-size: 1.1em; margin-bottom: 20px; }
 
-        /* --- navigation --- */
+        /* --- NAVIGATION --- */
         .navbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid #555; padding-bottom: 20px; }
         .nav-btn { padding: 10px 20px; background-color: rgba(30, 30, 30, 0.8); border: 1px solid #ff9800; color: white; font-family: 'Roboto Slab', serif; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.2s; }
         .nav-btn:hover, .nav-btn.active { background-color: #ff9800; color: #1a1a1a; }
 
-        /* --- grille produits --- */
+        /* --- GRILLE DE PRODUITS --- */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 20px; }
         .product-card { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #ff9800; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
         .product-card.pack-card { border: 1px solid #4caf50; }
@@ -87,18 +85,18 @@
         .prod-price { color: #ccc; font-size: 0.9em; margin-bottom: 10px; }
         .prod-subtotal { margin-top: 10px; font-weight: bold; color: #4caf50; }
 
-        /* --- tout les inputs --- */
+        /* --- INPUTS --- */
         .login-input, .info-input, select.info-input { width: 100%; padding: 12px; background-color: rgba(26, 26, 26, 0.8); border: 1px solid #ff9800; color: white; border-radius: 8px; text-align: center; font-family: 'Roboto Slab', serif; font-size: 1em; }
         select.info-input option { background-color: #1a1a1a; color: white; }
         .qty-input { width: 80px; padding: 8px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: white; border-radius: 5px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; font-size: 1.2em; }
         textarea.info-input { height: 80px; text-align: left; resize: vertical; }
 
-        /* --- la barre pour le total --- */
+        /* --- BARRE DE TOTAL --- */
         .total-bar { background-color: rgba(51, 51, 51, 0.9); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #4caf50; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .total-label { font-size: 1.2em; font-weight: bold; color: white; }
         .total-amount { font-size: 1.8em; font-weight: bold; color: #4caf50; }
 
-        /* --- boutons --- */
+        /* --- BOUTONS --- */
         .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #ff9800, #e68900); border: none; color: #1a1a1a; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.1em; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); transition: 0.2s; }
         .btn:hover { filter: brightness(1.1); transform: scale(1.02); }
         .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; }
@@ -106,7 +104,7 @@
         .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); color: white; }
         .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
 
-        /* --- le bouton pour la partie action --- */
+        /* --- BOUTONS ACTIONS --- */
         .btn-action { cursor: pointer; padding: 4px 6px; border-radius: 4px; border: none; margin: 2px; font-size: 0.9em; transition: 0.2s; vertical-align: middle; }
         .btn-action:hover { transform: scale(1.1); filter: brightness(1.2); }
         .btn-accept { background-color: #43a047; color: white; }
@@ -134,17 +132,17 @@
         .btn-icon-round:hover { transform: scale(1.1); filter: brightness(1.2); }
         .btn-icon-round.has-notes { background-color: #ff9800; color: #1a1a1a; }
 
-        /* --- les zones de livraison --- */
+        /* --- ZONES --- */
         .delivery-info-section { margin-top: 30px; text-align: left; background-color: rgba(34, 34, 34, 0.6); padding: 20px; border-radius: 10px; border: 1px solid #444; }
         .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; }
         .delivery-info-row .info-input { margin: 0; }
 
-        /* --- historique logs et tableaux --- */
+        /* --- HISTORIQUES & LOGS - TABLEAUX --- */
         .history-table { 
             width: 100%; 
             table-layout: fixed; 
             border-collapse: collapse; 
-            margin-top: 20px; 
+            margin-top: 10px; 
             text-align: left; 
             background-color: rgba(30, 30, 30, 0.8); 
             border-radius: 8px; 
@@ -158,13 +156,13 @@
             word-wrap: break-word; 
         }
 
-        #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 10%; } /* Date */
-        #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 13%; } /* Client */
-        #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 32%; } /* Détails (+ large) */
-        #history-screen .history-table th:nth-child(4), #history-screen .history-table td:nth-child(4) { width: 8%; }  /* Total */
-        #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 12%; } /* En charge (réduit) */
-        #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 17%; } /* Statut */
-        #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 8%; text-align: center; }  /* Action */
+        #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 10%; } 
+        #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 13%; } 
+        #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 32%; } 
+        #history-screen .history-table th:nth-child(4), #history-screen .history-table td:nth-child(4) { width: 8%; }  
+        #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 12%; } 
+        #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 17%; } 
+        #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 8%; text-align: center; }  
 
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 65%; } 
@@ -186,7 +184,7 @@
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
         .charge-select { border: 1px solid #64b5f6; } 
 
-        /* pagination ui */
+        /* PAGINATION UI */
         .pagination-container {
             display: flex;
             justify-content: center;
@@ -221,7 +219,7 @@
         #login-screen, #step2-login-screen, #main-app, #dashboard, #success-screen, #history-screen, #logs-screen, #candidature-form-screen, #success-cv-screen, #candidatures-screen { display: none; }
         .success-icon { font-size: 4em; margin-bottom: 20px; display: block; color: #43a047; }
 
-        /* --- adaptation écrans --- */
+        /* --- ADAPTATION DYNAMIQUE POUR FENÊTRES RÉDUITES (SPLIT-SCREEN PC) --- */
         @media (max-width: 1400px) {
             .history-table th, .history-table td { padding: 10px; font-size: 0.95em; }
         }
@@ -251,7 +249,7 @@
             <div style="color: #e0e0e0;">🏅 Grade : <span id="top-user-grade"></span></div>
         </div>
 
-        <!-- acceuil -->
+        <!-- ACCUEIL -->
         <div id="welcome-screen">
             <h1>LTD Roxwood</h1>
             <p>Bienvenue sur le site du LTD Roxwood.</p>
@@ -264,7 +262,7 @@
             </div>
         </div>
 
-        <!-- partie formulaire candidature -->
+        <!-- FORMULAIRE CANDIDATURE -->
         <div id="candidature-form-screen">
             <h1 style="color: #1976d2;">Déposer une candidature</h1>
             <p>Rejoignez l'équipe du LTD Roxwood ! Remplissez ce formulaire avec soin.</p>
@@ -376,6 +374,11 @@
                 <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Bienvenue, <span id="welcome-name"></span> 👋</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons.</p>
                 
+                <!-- BARRE DE RECHERCHE COMMANDES -->
+                <div style="width: 100%; margin: 20px auto 10px; text-align: left;">
+                    <input type="text" id="search-orders" class="info-input" placeholder="🔍 Rechercher par client, téléphone, statut, zone, en charge..." onkeyup="filterOrders()" style="border-color: #4caf50; margin-bottom: 5px;">
+                </div>
+
                 <table class="history-table">
                     <thead>
                         <tr>
@@ -403,7 +406,12 @@
                 <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures 📄</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations.</p>
                 
-                <table class="history-table" style="width: 98%; margin: 20px auto 0;">
+                <!-- BARRE DE RECHERCHE CANDIDATURES -->
+                <div style="width: 98%; margin: 20px auto 10px; text-align: left;">
+                    <input type="text" id="search-cands" class="info-input" placeholder="🔍 Rechercher par candidat, téléphone, expérience, motivation..." onkeyup="filterCandidatures()" style="border-color: #1976d2; margin-bottom: 5px;">
+                </div>
+
+                <table class="history-table" style="width: 98%; margin: 0 auto;">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -508,8 +516,12 @@
         ];
 
         let isEmployeeMode = false;
+        
         let ordersHistory = []; 
+        let filteredOrders = [];
+
         let candidaturesHistory = [];
+        let filteredCandidatures = [];
 
         let pendingUser = null;
         let currentAccountId = ""; 
@@ -616,7 +628,6 @@
             currentSessionName = displayFullName;
             currentSessionGrade = grade;
             
-            // L'admin n'est pas dans les logs
             if (accountId !== "admin") {
                 db.ref('logs').push({
                     employe: displayFullName,
@@ -791,18 +802,28 @@
                 .catch((e) => alert("Erreur : " + e.message));
         }
 
-        // --- GESTION DES COMMANDES (AVEC PAGINATION) ---
+        // --- GESTION DES COMMANDES (RECHERCHE ET PAGINATION) ---
         function syncDatabase() {
             if(!isEmployeeMode) return;
             db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
                 ordersHistory = [];
                 snapshot.forEach((child) => { ordersHistory.unshift({ id: child.key, ...child.val() }); });
-                renderHistory();
+                filterOrders();
             });
         }
 
+        function filterOrders() {
+            const query = document.getElementById('search-orders').value.toLowerCase();
+            filteredOrders = ordersHistory.filter(order => {
+                const searchString = `${order.client} ${order.phone} ${order.articles} ${order.zone} ${order.status} ${order.enCharge}`.toLowerCase();
+                return searchString.includes(query);
+            });
+            currentOrderPage = 1; 
+            renderHistory();
+        }
+
         function changeOrderPage(delta) {
-            const totalPages = Math.max(1, Math.ceil(ordersHistory.length / ordersPerPage));
+            const totalPages = Math.max(1, Math.ceil(filteredOrders.length / ordersPerPage));
             currentOrderPage += delta;
             if (currentOrderPage < 1) currentOrderPage = 1;
             if (currentOrderPage > totalPages) currentOrderPage = totalPages;
@@ -811,7 +832,7 @@
 
         function goToOrderPage() {
             const inputVal = parseInt(document.getElementById('order-page-input').value);
-            const totalPages = Math.max(1, Math.ceil(ordersHistory.length / ordersPerPage));
+            const totalPages = Math.max(1, Math.ceil(filteredOrders.length / ordersPerPage));
             if (!isNaN(inputVal)) {
                 currentOrderPage = inputVal;
                 if (currentOrderPage < 1) currentOrderPage = 1;
@@ -828,18 +849,18 @@
             const tbody = document.getElementById('history-body');
             tbody.innerHTML = '';
             
-            const totalPages = Math.max(1, Math.ceil(ordersHistory.length / ordersPerPage));
+            const totalPages = Math.max(1, Math.ceil(filteredOrders.length / ordersPerPage));
             document.getElementById('order-total-pages').innerText = totalPages;
             document.getElementById('order-page-input').value = currentOrderPage;
 
-            if(ordersHistory.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune commande.</td></tr>'; 
+            if(filteredOrders.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucun résultat.</td></tr>'; 
                 return; 
             }
 
             const startIndex = (currentOrderPage - 1) * ordersPerPage;
             const endIndex = startIndex + ordersPerPage;
-            const ordersToDisplay = ordersHistory.slice(startIndex, endIndex);
+            const ordersToDisplay = filteredOrders.slice(startIndex, endIndex);
             
             ordersToDisplay.forEach(order => {
                 const tr = document.createElement('tr');
@@ -848,7 +869,6 @@
 
                 let employeOptions = `<option value="">-- Non assigné --</option>`;
                 
-                // L'admin n'apparait pas dans la liste des chargés de commandes
                 const knownNames = authorizedUsers.filter(u => !u.needsDetails && u.name !== "admin").map(u => u.name);
                 validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
 
@@ -885,17 +905,27 @@
             });
         }
 
-        // --- GESTION DES CANDIDATURES (AVEC PAGINATION) ---
+        // --- GESTION DES CANDIDATURES (RECHERCHE ET PAGINATION) ---
         function syncCandidatures() {
             db.ref('candidatures').orderByChild('timestamp').on('value', (snapshot) => {
                 candidaturesHistory = [];
                 snapshot.forEach((child) => { candidaturesHistory.unshift({ id: child.key, ...child.val() }); });
-                renderCandidatures();
+                filterCandidatures();
             });
         }
 
+        function filterCandidatures() {
+            const query = document.getElementById('search-cands').value.toLowerCase();
+            filteredCandidatures = candidaturesHistory.filter(cand => {
+                const searchString = `${cand.prenom} ${cand.nom} ${cand.experience} ${cand.motivation} ${cand.status}`.toLowerCase();
+                return searchString.includes(query);
+            });
+            currentCandPage = 1; 
+            renderCandidatures();
+        }
+
         function changeCandPage(delta) {
-            const totalPages = Math.max(1, Math.ceil(candidaturesHistory.length / candsPerPage));
+            const totalPages = Math.max(1, Math.ceil(filteredCandidatures.length / candsPerPage));
             currentCandPage += delta;
             if (currentCandPage < 1) currentCandPage = 1;
             if (currentCandPage > totalPages) currentCandPage = totalPages;
@@ -904,7 +934,7 @@
 
         function goToCandPage() {
             const inputVal = parseInt(document.getElementById('cand-page-input').value);
-            const totalPages = Math.max(1, Math.ceil(candidaturesHistory.length / candsPerPage));
+            const totalPages = Math.max(1, Math.ceil(filteredCandidatures.length / candsPerPage));
             if (!isNaN(inputVal)) {
                 currentCandPage = inputVal;
                 if (currentCandPage < 1) currentCandPage = 1;
@@ -934,18 +964,18 @@
             const tbody = document.getElementById('candidatures-body');
             tbody.innerHTML = '';
 
-            const totalPages = Math.max(1, Math.ceil(candidaturesHistory.length / candsPerPage));
+            const totalPages = Math.max(1, Math.ceil(filteredCandidatures.length / candsPerPage));
             document.getElementById('cand-total-pages').innerText = totalPages;
             document.getElementById('cand-page-input').value = currentCandPage;
 
-            if(candidaturesHistory.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucune candidature actuellement.</td></tr>'; 
+            if(filteredCandidatures.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucun résultat.</td></tr>'; 
                 return; 
             }
 
             const startIndex = (currentCandPage - 1) * candsPerPage;
             const endIndex = startIndex + candsPerPage;
-            const candsToDisplay = candidaturesHistory.slice(startIndex, endIndex);
+            const candsToDisplay = filteredCandidatures.slice(startIndex, endIndex);
             
             candsToDisplay.forEach(cand => {
                 const tr = document.createElement('tr');
