@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1500">
     <title>LTD Roxwood - Portail</title>
     <link rel="icon" href="data:,">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
@@ -25,6 +25,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            min-width: 1500px;
             margin: 0;
             padding: 20px;
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('ltd.png');
@@ -40,8 +41,8 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            width: 1400px; 
-            max-width: 98%;
+            width: 1500px; 
+            min-width: 1500px;
             text-align: center;
             border: 1px solid #555;
             backdrop-filter: blur(5px);
@@ -60,6 +61,8 @@
             font-size: 0.95em;
             display: none; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-align: left;
+            line-height: 1.5;
         }
         .top-right-user span { color: #ff9800; font-weight: bold; }
 
@@ -155,15 +158,15 @@
             word-wrap: break-word; 
         }
 
-        #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 12%; } 
-        #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 15%; } 
-        #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 30%; } 
-        #history-screen .history-table th:nth-child(4), #history-screen .history-table td:nth-child(4) { width: 10%; } 
-        #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 14%; } 
-        #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 14%; } 
-        #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 5%; text-align: center; }  
+        /* NOUVELLES LARGEURS DE COLONNES (Plus de place pour Statut, Action et En Charge) */
+        #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 10%; } /* Date */
+        #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 13%; } /* Client */
+        #history-screen .history-table th:nth-child(3), #history-screen .history-table td:nth-child(3) { width: 28%; } /* Détails */
+        #history-screen .history-table th:nth-child(4), #history-screen .history-table td:nth-child(4) { width: 8%; }  /* Total */
+        #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 16%; } /* En charge */
+        #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 17%; } /* Statut */
+        #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 8%; text-align: center; }  /* Action */
 
-        /* Largeurs fixes par colonne (Tableau Logs) */
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 65%; } 
         #logs-screen .history-table th:nth-child(3), #logs-screen .history-table td:nth-child(3) { width: 10%; text-align: center; } 
@@ -225,7 +228,8 @@
     <div class="container">
         
         <div id="top-user-badge" class="top-right-user">
-            👤 Session : <span id="top-user-name"></span>
+            <div style="color: #e0e0e0; margin-bottom: 2px;">👤 Session : <span id="top-user-name"></span></div>
+            <div style="color: #e0e0e0;">🏅 Grade : <span id="top-user-grade"></span></div>
         </div>
 
         <!-- ACCUEIL -->
@@ -386,7 +390,6 @@
                 </table>
             </div>
 
-            <!-- tableau log avec possibilité de supp par admin -->
             <div id="logs-screen">
                 <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs de Connexion 🕵️‍♂️</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Historique des connexions des employés sur la tablette.</p>
@@ -601,7 +604,8 @@
             }
 
             document.getElementById("top-user-badge").style.display = "block";
-            document.getElementById("top-user-name").innerText = `${displayFullName} (${grade})`;
+            document.getElementById("top-user-name").innerText = displayFullName;
+            document.getElementById("top-user-grade").innerText = grade || "Non défini";
             document.getElementById("welcome-name").innerText = displayFullName;
             
             initTable();
