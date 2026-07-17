@@ -47,6 +47,24 @@
             margin: 20px auto;
         }
 
+        /* HORLOGE HAUT GAUCHE */
+        .top-left-clock {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            background-color: rgba(26, 26, 26, 0.9);
+            border: 1px solid #64b5f6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            display: none; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-align: left;
+            line-height: 1.5;
+            color: #e0e0e0;
+        }
+        .top-left-clock span { color: #64b5f6; font-weight: bold; }
+
         /* BADGE UTILISATEUR HAUT DROITE */
         .top-right-user {
             position: absolute;
@@ -228,6 +246,7 @@
             .history-table th, .history-table td { padding: 8px; font-size: 0.85em; }
             .status-select { font-size: 0.85em; padding: 5px; }
             .top-right-user { font-size: 0.85em; padding: 8px 15px; right: 15px; top: 15px; }
+            .top-left-clock { font-size: 0.85em; padding: 8px 15px; left: 15px; top: 15px; }
             h1 { font-size: 2.2em; }
         }
         @media (max-width: 900px) {
@@ -244,6 +263,12 @@
 
     <div class="container">
         
+        <!-- HORLOGE TEMPS REEL -->
+        <div id="top-left-clock" class="top-left-clock">
+            📅 <span id="real-time-display"></span>
+        </div>
+
+        <!-- BADGE SESSION -->
         <div id="top-user-badge" class="top-right-user">
             <div style="color: #e0e0e0; margin-bottom: 2px;">👤 Session : <span id="top-user-name"></span></div>
             <div style="color: #e0e0e0;">🏅 Grade : <span id="top-user-grade"></span></div>
@@ -528,19 +553,19 @@
         let currentSessionName = ""; 
         let currentSessionGrade = ""; 
 
-        // Variables pour logs
+        // Variables pour logs - Passage à 10 par page
         let logsHistory = [];
         let filteredLogs = [];
         let currentLogPage = 1;
-        const logsPerPage = 20;
+        const logsPerPage = 10;
 
-        // Variables pour Suivi Commandes
+        // Variables pour Suivi Commandes - Passage à 10 par page
         let currentOrderPage = 1;
-        const ordersPerPage = 20;
+        const ordersPerPage = 10;
 
-        // Variables pour Candidatures
+        // Variables pour Candidatures - Passage à 10 par page
         let currentCandPage = 1;
-        const candsPerPage = 20;
+        const candsPerPage = 10;
 
         function showClientSpace() {
             isEmployeeMode = false;
@@ -551,7 +576,9 @@
             document.getElementById("btn-logs").style.display = "none"; 
             document.getElementById("btn-candidatures").style.display = "none"; 
             document.getElementById("btn-dashboard").style.display = "block"; 
+            
             document.getElementById("top-user-badge").style.display = "none"; 
+            document.getElementById("top-left-clock").style.display = "block"; // Affiche l'horloge
             
             initTable();
             switchTab('dashboard');
@@ -659,6 +686,7 @@
             }
 
             document.getElementById("top-user-badge").style.display = "block";
+            document.getElementById("top-left-clock").style.display = "block"; // Affiche l'horloge
             document.getElementById("top-user-name").innerText = displayFullName;
             document.getElementById("top-user-grade").innerText = grade || "Non défini";
             document.getElementById("welcome-name").innerText = displayFullName;
@@ -1114,6 +1142,17 @@
             document.getElementById("success-screen").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
         }
+
+        // --- GESTION DE L'HORLOGE TEMPS REEL ---
+        function updateClock() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const clockEl = document.getElementById("real-time-display");
+            if(clockEl) clockEl.innerText = dateStr + " - " + timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Initialisation au chargement de la page
     </script>
 </body>
 </html>
