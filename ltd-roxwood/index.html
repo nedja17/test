@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1500">
+    <meta name="viewport" content="width=1500">    
     <title>LTD Roxwood - Portail</title>
     <link rel="icon" href="data:,">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
@@ -322,7 +322,7 @@
             </div>
         </div>
 
-        <!-- login des employes 1-->
+        <!-- login des employes pt1-->
         <div id="login-screen">
             <h1>Espace Employé</h1>
             <p>Veuillez vous identifier</p>
@@ -335,7 +335,7 @@
             </div>
         </div>
 
-        <!-- login des employes 2 (si a partir du moment on est responsable et plus) -->
+        <!-- login des employes pt2 (partir du moment on est responsable et plus) -->
         <div id="step2-login-screen">
             <h1 style="color: #1976d2;">Vérification d'identité</h1>
             <p>Veuillez décliner votre identité et votre grade au sein de l'entreprise.</p>
@@ -774,7 +774,7 @@
                 phone: phone,
                 articles: articlesList.join(' | '),
                 zone: zoneSelect.options[zoneSelect.selectedIndex].text,
-                dateLivraison: document.getElementById("delivery-date").value ? `${document.getElementById("delivery-date").value} à ${document.getElementById("delivery-time").value}` : "Dès que possible",
+                dateLivraison: document.getElementById("delivery-date").value ? `${document.getElementById("delivery-date").value.split('-').reverse().join('/')} à ${document.getElementById("delivery-time").value}` : "Dès que possible",
                 infos: document.getElementById("other-info").value.trim() || "Aucune note",
                 total: total.toFixed(2),
                 enCharge: "", 
