@@ -136,18 +136,12 @@
         .btn-icon-round { background-color: #1976d2; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
         .btn-icon-round.has-notes { background-color: #ff9800; color: #1a1a1a; }
         .appreciation-input { width: 100%; height: 60px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #1976d2; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; }
-        
         .cand-accepted { background-color: rgba(76, 175, 80, 0.15) !important; border-left: 5px solid #4caf50; }
         .cand-rejected { background-color: rgba(211, 47, 47, 0.15) !important; border-left: 5px solid #d32f2f; }
 
         /* Hide screens */
-        #step2-login-screen, #main-app, #dashboard, #history-screen, #history-ent-screen, #logs-screen, #candidatures-screen, #success-screen { display: none; }
+        #step2-login-screen, #main-app, #history-screen, #history-ent-screen, #logs-screen, #candidatures-screen { display: none; }
         
-        /* Commande comptoir (simplifié) */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 10px; margin-bottom: 10px; }
-        .product-card { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #ff9800; border-radius: 10px; padding: 10px; text-align: center;}
-        .qty-input { width: 60px; padding: 5px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: white; border-radius: 5px; text-align: center; }
-        .total-bar { background-color: rgba(51, 51, 51, 0.9); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #4caf50; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -177,6 +171,7 @@
         <!-- Login Employé Pt 2 -->
         <div id="step2-login-screen">
             <h1 style="color: #1976d2;">Vérification d'identité</h1>
+            <p>Veuillez décliner votre identité et votre grade au sein de l'entreprise.</p>
             <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                 <input type="text" id="step2-firstname" class="login-input" placeholder="Votre Prénom">
                 <input type="text" id="step2-lastname" class="login-input" placeholder="Votre Nom">
@@ -192,33 +187,9 @@
             <div class="navbar">
                 <button class="nav-btn active" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi Civils</button>
                 <button class="nav-btn" id="btn-history-ent" style="border-color: #9c27b0;" onclick="switchTab('history-ent-screen')">🏢 Suivi Pros</button>
-                <button class="nav-btn" id="btn-dashboard" style="border-color: #4caf50;" onclick="switchTab('dashboard')">🛒 Comptoir</button>
                 <button class="nav-btn" id="btn-candidatures" style="display:none; border-color: #1976d2;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
                 <button class="nav-btn" id="btn-logs" style="display:none; border-color: #64b5f6;" onclick="switchTab('logs-screen')">📊 Logs</button>
                 <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
-            </div>
-
-            <!-- Dashboard Comptoir -->
-            <div id="dashboard">
-                <h1 style="color: #4caf50;">Prise de Commande Rapide</h1>
-                
-                <div id="product-grid-standard" class="product-grid"></div>
-                
-                <div class="total-bar">
-                    <span class="total-label" style="color: white; font-size: 1.2em;">TOTAL :</span>
-                    <span class="total-amount" id="grand-total" style="color: #4caf50; font-size: 1.8em;">0.00 $</span>
-                </div>
-                
-                <div style="display: flex; gap:10px; margin-top:20px;">
-                    <input type="text" id="client-name" class="info-input" placeholder="Client (Prénom Nom)" style="width: 40%; margin:0;">
-                    <input type="text" id="client-phone" class="info-input" placeholder="Tél" style="width: 30%; margin:0;">
-                    <button class="btn btn-green" style="width:30%; margin:0;" onclick="submitOrder()">ENCAISSER / AJOUTER</button>
-                </div>
-            </div>
-
-            <div id="success-screen">
-                <h1 style="color: #43a047;">✅ Commande ajoutée !</h1>
-                <button class="btn" style="width: 50%; margin-top: 20px;" onclick="switchTab('history-screen')">RETOUR AU SUIVI</button>
             </div>
 
             <!-- Suivi Civils -->
@@ -341,7 +312,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- MOTS DE PASSE EMPLOYÉS ---
         const authorizedUsers = [
             { name: "admin", pass: "ad!025489@ADM", grade: "Administrateur", needsDetails: false },
             { name: "Direction Roxwood", pass: "dr!456985@DIR", grade: "", needsDetails: true }, 
@@ -358,19 +328,6 @@
             { fname: "Anna", lname: "Fox", grade: "DRH", account: "Direction Roxwood" },
             { fname: "Gabriela", lname: "Jimenez", grade: "Responsable", account: "Responsable" },
             { fname: "Luc", lname: "Bernard", grade: "Chef d'équipe", account: "Responsable" }
-        ];
-
-        // --- CATALOGUE COMPTOIR ---
-        const inventory = [
-            { name: "Caoutchouc", price: 5.0 },
-            { name: "Appât", price: 10.0 },
-            { name: "Bouteille d'eau", price: 8.0 },
-            { name: "Fertilisant", price: 8.0 },
-            { name: "Pot de fleur", price: 8.0 },
-            { name: "Lumière Violette", price: 36.0 },
-            { name: "Sachet Vide", price: 5.0 },
-            { name: "Foret de perceuse", price: 600.0 },
-            { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
         ];
 
         let pendingUser = null;
@@ -475,13 +432,12 @@
             document.getElementById("top-user-name").innerText = displayFullName;
             document.getElementById("top-user-grade").innerText = grade || "Non défini";
             
-            initComptoir(); 
             syncDatabase(); 
             switchTab('history-screen'); 
         }
 
         function switchTab(tabId) {
-            const allTabs = ['dashboard', 'history-screen', 'history-ent-screen', 'candidatures-screen', 'logs-screen', 'success-screen'];
+            const allTabs = ['history-screen', 'history-ent-screen', 'candidatures-screen', 'logs-screen'];
             
             allTabs.forEach(id => {
                 document.getElementById(id).style.display = 'none';
@@ -495,69 +451,6 @@
             if(document.getElementById('btn-' + tabId)) {
                 document.getElementById('btn-' + tabId).classList.add('active');
             }
-        }
-
-        // --- COMPTOIR ---
-        function initComptoir() {
-            const grid = document.getElementById("product-grid-standard");
-            grid.innerHTML = ""; 
-            
-            inventory.forEach((item, index) => {
-                grid.innerHTML += `
-                <div class="product-card">
-                    <div style="font-size:0.8em; color:#ff9800; margin-bottom:5px;">${item.name}</div>
-                    <div style="font-size:0.8em; margin-bottom:5px;">${item.price.toFixed(2)} $</div>
-                    <input type="number" min="0" class="qty-input" oninput="calcComptoir()" id="qty-${index}">
-                </div>`;
-            });
-        }
-
-        function calcComptoir() {
-            let total = 0;
-            inventory.forEach((item, index) => { 
-                total += (parseInt(document.getElementById(`qty-${index}`).value) || 0) * item.price; 
-            });
-            document.getElementById("grand-total").innerText = total.toFixed(2) + " $";
-            return total;
-        }
-
-        function submitOrder() {
-            const total = calcComptoir();
-            if(total <= 0) {
-                alert("Erreur : Le panier du comptoir est vide !");
-                return;
-            }
-            
-            let articlesList = [];
-            inventory.forEach((item, index) => {
-                let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
-                if(qty > 0) {
-                    articlesList.push(`<b>${qty}x</b> ${item.name}`);
-                }
-            });
-            
-            const newOrder = {
-                type: "Civil", 
-                dateCreation: new Date().toLocaleString('fr-FR'),
-                client: document.getElementById("client-name").value.trim() || "Client Comptoir", 
-                phone: document.getElementById("client-phone").value.trim() || "N/A",
-                articles: articlesList.join(' | '), 
-                zone: "Sur Place", 
-                dateLivraison: "Immédiate", 
-                infos: "Prise au comptoir par " + currentSessionName,
-                total: total.toFixed(2), 
-                enCharge: currentSessionName, 
-                status: "Livré", 
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-            
-            db.ref('orders').push(newOrder).then(() => {
-                document.querySelectorAll(".qty-input").forEach(i => i.value = ""); 
-                document.getElementById("client-name").value = ""; 
-                document.getElementById("client-phone").value = ""; 
-                calcComptoir();
-                switchTab('success-screen');
-            });
         }
 
         // --- DATABASE SYNC ---
