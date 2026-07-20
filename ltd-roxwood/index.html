@@ -376,7 +376,7 @@
                     <option value="Rex Dinners">Rex Dinners</option>
                 </select>
                 <input type="password" id="ent-password" class="login-input input-entreprise" placeholder="Mot de passe spécifique">
-                <button class="btn btn-purple" onclick="checkEntrepriseLogin()">CONNEXION B2B</button>
+                <button class="btn btn-purple" onclick="checkEntrepriseLogin()">CONNEXION ENTREPRISE</button>
                 <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
                 <p id="error-ent" style="color:red; display:none; margin: 0; font-weight: bold;">Mot de passe ou entreprise incorrect.</p>
             </div>
@@ -445,8 +445,8 @@
 
             <!-- DASHBOARD ENTREPRISE -->
             <div id="entreprise-dashboard">
-                <h1 style="color: #9c27b0;">Commande Partenaire (B2B)</h1>
-                <h3 class="entreprise-title">CATALOGUE PROFESSIONNEL</h3>
+                <h1 style="color: #9c27b0;">Commande Entreprise</h1>
+                <h3 class="entreprise-title">VOTRE CATALOGUE PROFESSIONNEL</h3>
                 <div id="ent-product-grid" class="product-grid"></div>
                 
                 <div class="total-bar ent-total-bar">
@@ -465,15 +465,10 @@
                         <input type="text" id="ent-client-phone" class="info-input input-entreprise" placeholder="📞 Tél. de contact" style="width: 48%;">
                     </div>
                     <div class="delivery-info-row">
-                        <input type="date" id="ent-delivery-date" class="info-input input-entreprise" style="width: 30%;">
-                        <input type="time" id="ent-delivery-time" class="info-input input-entreprise" style="width: 30%;">
-                        <select id="ent-delivery-zone" class="info-input input-entreprise" style="width: 35%;" onchange="calculateEntrepriseTotal()">
-                            <option value="0">Roxwood / Paleto (0$)</option>
-                            <option value="150">Nord (Sandy et alentours) (150$)</option>
-                            <option value="300">Sud (À Partir Du Péage) (300$)</option>
-                        </select>
+                        <input type="date" id="ent-delivery-date" class="info-input input-entreprise" style="width: 48%;">
+                        <input type="time" id="ent-delivery-time" class="info-input input-entreprise" style="width: 48%;">
                     </div>
-                    <textarea id="ent-other-info" class="info-input input-entreprise" placeholder="📝 Notes de livraison (Accès garage, quai de chargement...)" style="margin-bottom: 0;"></textarea>
+                    <textarea id="ent-other-info" class="info-input input-entreprise" placeholder="📝 Notes complémentaires (ex: Heure de passage souhaitée, quai de chargement...)" style="margin-bottom: 0;"></textarea>
                 </div>
                 <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
                     <button class="btn btn-purple" onclick="submitEntrepriseOrder()">TRANSMETTRE LA COMMANDE PRO</button>
@@ -516,10 +511,10 @@
             <!-- le suivi de commandes ENTREPRISE -->
             <div id="history-ent-screen">
                 <h1 style="color: #ce93d8; font-size: 2.2em; margin-bottom: 0;">Commandes Professionnelles 🏢</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons B2B.</p>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons entreprises.</p>
                 
                 <div style="width: 100%; margin: 20px auto 10px; text-align: left;">
-                    <input type="text" id="search-ent-orders" class="info-input input-entreprise" placeholder="🔍 Rechercher par entreprise, contact, statut, zone, en charge..." onkeyup="filterEntOrders()" style="margin-bottom: 5px;">
+                    <input type="text" id="search-ent-orders" class="info-input input-entreprise" placeholder="🔍 Rechercher par entreprise, contact, statut, en charge..." onkeyup="filterEntOrders()" style="margin-bottom: 5px;">
                 </div>
 
                 <table class="history-table">
@@ -647,7 +642,7 @@
             { fname: "Luc", lname: "Bernard", grade: "Chef d'équipe", account: "Responsable" }
         ];
 
-        // --- MOTS DE PASSE PARTENAIRES (B2B) ---
+        // --- MOTS DE PASSE PARTENAIRES ---
         const authorizedEntreprises = [
             { name: "Flywheels", pass: "fw!852369@FLY" },
             { name: "Custom Motors", pass: "cm?741258@CUS" },
@@ -661,7 +656,7 @@
             { name: "Rex Dinners", pass: "rd*548947@REX" }
         ];
 
-        // --- CATALOGUES ---
+        // --- CATALOGUE CIVIL ---
         const inventory = [
             { name: "Caoutchouc", price: 5.0 },
             { name: "Appât", price: 10.0 },
@@ -674,24 +669,76 @@
             { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
         ];
 
-        const enterpriseInventory = [
-            { name: "Caoutchouc", price: 3.5 },
-            { name: "Barre de chocolat", price: 2.0 },
-            { name: "Pain burger", price: 2.0 },
-            { name: "Bagel", price: 2.0 },
-            { name: "Pain grillé", price: 2.0 },
-            { name: "Pâtes", price: 2.0 },
-            { name: "Nouille", price: 2.0 },
-            { name: "Tortilla", price: 2.0 },
-            { name: "Coquilles à Tacos", price: 2.0 },
-            { name: "Moutarde", price: 2.0 },
-            { name: "Caramel", price: 2.0 },
-            { name: "Crème fraîche", price: 2.0 },
-            { name: "Solvant", price: 20.0 },
-            { name: "Eau purifié", price: 2.0 },
-            { name: "Eponge", price: 2.0 },
-            { name: "Papier a rouler", price: 2.0 }
-        ];
+        // --- CATALOGUES PERSONNALISÉS PAR ENTREPRISE ---
+        const catalogsByEnterprise = {
+            "Flywheels": [
+                { name: "Caoutchouc", price: 3.5 },
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Custom Motors": [
+                { name: "Caoutchouc", price: 3.5 },
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Auto Exotic": [
+                { name: "Caoutchouc", price: 3.5 },
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Esthétique Vinewood": [
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Esthétique Vespucci": [
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Esthétique Paleto": [
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Esthétique Sandy": [
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Delight": [
+                { name: "Pain burger", price: 2.0 },
+                { name: "Bagel", price: 2.0 },
+                { name: "Pain grillé", price: 2.0 },
+                { name: "Pâtes", price: 2.0 },
+                { name: "Nouille", price: 2.0 },
+                { name: "Moutarde", price: 2.0 },
+                { name: "Caramel", price: 2.0 },
+                { name: "Crème fraîche", price: 2.0 },
+                { name: "Barre de chocolat", price: 2.0 },
+                { name: "Eau purifiée", price: 2.0 }
+            ],
+            "Rex Dinners": [
+                { name: "Pain burger", price: 2.0 },
+                { name: "Tortilla", price: 2.0 },
+                { name: "Coquilles à Tacos", price: 2.0 },
+                { name: "Moutarde", price: 2.0 },
+                { name: "Crème fraîche", price: 2.0 },
+                { name: "Barre de chocolat", price: 2.0 },
+                { name: "Eau purifiée", price: 2.0 }
+            ],
+            "Yellow Jack": [
+                { name: "Pain burger", price: 2.0 },
+                { name: "Tortilla", price: 2.0 },
+                { name: "Moutarde", price: 2.0 },
+                { name: "Barre de chocolat", price: 2.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Papier a rouler", price: 2.0 }
+            ]
+        };
 
         let isEmployeeMode = false;
         let lastActiveDashboard = "dashboard";
@@ -709,6 +756,9 @@
         let currentAccountId = ""; 
         let currentSessionName = ""; 
         let currentSessionGrade = ""; 
+
+        // Variable globale pour stocker l'inventaire de l'entreprise connectée
+        let currentEnterpriseInventory = [];
 
         // Variables logs (10 par pages)
         let logsHistory = [];
@@ -778,7 +828,10 @@
         function showEntrepriseSpace(companyName) {
             isEmployeeMode = false;
             lastActiveDashboard = "entreprise-dashboard";
-            currentSessionName = companyName; // On garde en mémoire le nom de l'entreprise connectée
+            currentSessionName = companyName; 
+            
+            // On charge le catalogue spécifique à l'entreprise
+            currentEnterpriseInventory = catalogsByEnterprise[companyName] || [];
 
             document.getElementById("main-app").style.display = "block";
             
@@ -789,17 +842,15 @@
             
             const btnDash = document.getElementById("btn-dashboard");
             btnDash.style.display = "block"; 
-            btnDash.innerText = "📦 Commande B2B";
+            btnDash.innerText = "📦 Commande Pro";
             btnDash.classList.add("nav-btn-entreprise");
             btnDash.onclick = () => switchTab('entreprise-dashboard');
             
-            // Affichage du nom de l'entreprise connectée en haut à droite
             document.getElementById("top-user-badge").style.display = "block";
             document.getElementById("top-user-name").innerText = companyName;
-            document.getElementById("top-user-grade").innerText = "Partenaire B2B";
+            document.getElementById("top-user-grade").innerText = "Entreprise";
             document.getElementById("top-left-clock").style.display = "block"; 
             
-            // On pré-remplit et fige le nom de l'entreprise sur le formulaire
             document.getElementById("ent-company-name").value = companyName;
 
             initEntrepriseTable();
@@ -968,12 +1019,17 @@
             inventory.forEach((item, index) => {
                 let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
                 let subtotal = item.price * qty;
-                document.getElementById(`sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
+                if(document.getElementById(`sub-${index}`)) {
+                    document.getElementById(`sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
+                }
                 grandTotal += subtotal;
             });
-            const zoneFee = parseFloat(document.getElementById("delivery-zone").value) || 0;
+            const zoneSelect = document.getElementById("delivery-zone");
+            const zoneFee = zoneSelect ? (parseFloat(zoneSelect.value) || 0) : 0;
             grandTotal += zoneFee;
-            document.getElementById("grand-total").innerText = grandTotal.toFixed(2) + " $";
+            if(document.getElementById("grand-total")) {
+                document.getElementById("grand-total").innerText = grandTotal.toFixed(2) + " $";
+            }
             return grandTotal;
         }
 
@@ -1021,7 +1077,9 @@
         function initEntrepriseTable() {
             const grid = document.getElementById("ent-product-grid");
             grid.innerHTML = ""; 
-            enterpriseInventory.forEach((item, index) => {
+            
+            // On génère uniquement les produits assignés à cette entreprise
+            currentEnterpriseInventory.forEach((item, index) => {
                 let card = `
                 <div class="product-card ent-card">
                     <div class="prod-name">${item.name}</div>
@@ -1035,24 +1093,21 @@
 
         function calculateEntrepriseTotal() {
             let grandTotal = 0;
-            enterpriseInventory.forEach((item, index) => {
+            currentEnterpriseInventory.forEach((item, index) => {
                 let qty = parseInt(document.getElementById(`ent-qty-${index}`).value) || 0;
                 let subtotal = item.price * qty;
-                document.getElementById(`ent-sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
+                if(document.getElementById(`ent-sub-${index}`)) {
+                    document.getElementById(`ent-sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
+                }
                 grandTotal += subtotal;
             });
-            const zoneFee = parseFloat(document.getElementById("ent-delivery-zone").value) || 0;
-            grandTotal += zoneFee;
             document.getElementById("ent-grand-total").innerText = grandTotal.toFixed(2) + " $";
             return grandTotal;
         }
 
         function submitEntrepriseOrder() {
             const total = calculateEntrepriseTotal();
-            
-            // Le nom de l'entreprise est figé et récupéré de la variable de session actuelle
             const companyName = currentSessionName; 
-            
             const contactName = document.getElementById("ent-client-contact").value.trim();
             const phone = document.getElementById("ent-client-phone").value.trim();
 
@@ -1062,19 +1117,18 @@
             if(phone === "") { alert("Attention : Téléphone obligatoire."); return; }
 
             let articlesList = [];
-            enterpriseInventory.forEach((item, index) => {
+            currentEnterpriseInventory.forEach((item, index) => {
                 let qty = parseInt(document.getElementById(`ent-qty-${index}`).value) || 0;
                 if(qty > 0) articlesList.push(`<b>${qty}x</b> ${item.name}`);
             });
 
-            const zoneSelect = document.getElementById("ent-delivery-zone");
             const newOrder = {
                 type: "Entreprise",
                 dateCreation: new Date().toLocaleString('fr-FR'),
                 client: `${companyName} (${contactName})`,
                 phone: phone,
                 articles: articlesList.join(' | '),
-                zone: zoneSelect.options[zoneSelect.selectedIndex].text,
+                zone: "Non applicable", 
                 dateLivraison: document.getElementById("ent-delivery-date").value ? `${document.getElementById("ent-delivery-date").value.split('-').reverse().join('/')} à ${document.getElementById("ent-delivery-time").value}` : "Dès que possible",
                 infos: document.getElementById("ent-other-info").value.trim() || "Aucune note",
                 total: total.toFixed(2),
@@ -1094,13 +1148,11 @@
 
         function resetEntrepriseForm() {
             document.querySelectorAll("#entreprise-dashboard .qty-input").forEach(i => i.value = "");
-            // On ne réinitialise PAS l'entreprise puisqu'elle est connectée !
             document.getElementById("ent-client-contact").value = "";
             document.getElementById("ent-client-phone").value = "";
             document.getElementById("ent-delivery-date").value = "";
             document.getElementById("ent-delivery-time").value = "";
             document.getElementById("ent-other-info").value = "";
-            document.getElementById("ent-delivery-zone").selectedIndex = 0;
             calculateEntrepriseTotal();
         }
 
@@ -1263,7 +1315,7 @@
         function filterEntOrders() {
             const query = document.getElementById('search-ent-orders').value.toLowerCase();
             filteredEntOrders = ordersEntHistory.filter(order => {
-                const searchString = `${order.client} ${order.phone} ${order.articles} ${order.zone} ${order.status} ${order.enCharge}`.toLowerCase();
+                const searchString = `${order.client} ${order.phone} ${order.articles} ${order.status} ${order.enCharge}`.toLowerCase();
                 return searchString.includes(query);
             });
             currentEntOrderPage = 1; 
@@ -1346,7 +1398,7 @@
                     </td>
                     <td style="text-align: left; line-height: 1.4;">
                         <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
-                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
+                        <span style="color:#64b5f6;">🗓️ <strong>Date prévue :</strong></span> ${order.dateLivraison}<br>
                         <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
                     </td>
                     <td style="color:#ab47bc; font-weight:bold; font-size:1.1em;">${order.total} $</td>
