@@ -61,11 +61,12 @@
             text-align: center;
             line-height: 1.5;
             color: #e0e0e0;
-            min-width: 230px; 
-            font-variant-numeric: tabular-nums; 
+            min-width: 230px; /* Taille fixe */
+            font-variant-numeric: tabular-nums; /* Chiffres de même largeur */
         }
         .top-left-clock span { color: #64b5f6; font-weight: bold; }
 
+        /* affichage de l'utilisateur / du grade en haut à droite */
         .top-right-user {
             position: absolute;
             top: 25px;
@@ -85,52 +86,40 @@
         h1 { color: #ff9800; letter-spacing: 1px; margin-bottom: 15px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
         h3 { color: #ff9800; border-bottom: 2px solid #ff9800; padding-bottom: 10px; margin-top: 30px; font-size: 1.5em; text-align: left; }
         h3.pack-title { color: #4caf50; border-bottom: 2px solid #4caf50; margin-top: 40px; }
-        h3.entreprise-title { color: #9c27b0; border-bottom: 2px solid #9c27b0; }
         p { font-size: 1.1em; margin-bottom: 20px; }
 
         /* --- navigation --- */
         .navbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid #555; padding-bottom: 20px; }
         .nav-btn { padding: 10px 20px; background-color: rgba(30, 30, 30, 0.8); border: 1px solid #ff9800; color: white; font-family: 'Roboto Slab', serif; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.2s; }
         .nav-btn:hover, .nav-btn.active { background-color: #ff9800; color: #1a1a1a; }
-        
-        .nav-btn-entreprise.active { background-color: #9c27b0 !important; color: white !important; border-color: #9c27b0 !important; }
 
         /* --- la grille des produits --- */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 20px; }
         .product-card { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #ff9800; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
         .product-card.pack-card { border: 1px solid #4caf50; }
         .product-card.pack-card .prod-name { color: #81c784; }
-        .product-card.ent-card { border: 1px solid #9c27b0; }
-        .product-card.ent-card .prod-name { color: #ce93d8; }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 152, 0, 0.2); background-color: rgba(40, 40, 40, 0.9); }
-        .product-card.ent-card:hover { box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3); }
         
         .prod-name { font-size: 0.9em; font-weight: bold; color: #ff9800; margin-bottom: 5px; height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; }
         .prod-price { color: #ccc; font-size: 0.9em; margin-bottom: 10px; }
         .prod-subtotal { margin-top: 10px; font-weight: bold; color: #4caf50; }
-        .product-card.ent-card .prod-subtotal { color: #ab47bc; }
 
         /* --- inputs --- */
         .login-input, .info-input, select.info-input { width: 100%; padding: 12px; background-color: rgba(26, 26, 26, 0.8); border: 1px solid #ff9800; color: white; border-radius: 8px; text-align: center; font-family: 'Roboto Slab', serif; font-size: 1em; }
         select.info-input option { background-color: #1a1a1a; color: white; }
         .qty-input { width: 80px; padding: 8px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: white; border-radius: 5px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; font-size: 1.2em; }
         textarea.info-input { height: 80px; text-align: left; resize: vertical; }
-        
-        .input-entreprise { border-color: #9c27b0; }
 
         /* --- barre de total pour les commandes --- */
         .total-bar { background-color: rgba(51, 51, 51, 0.9); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #4caf50; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .total-bar.ent-total-bar { border-color: #9c27b0; }
         .total-label { font-size: 1.2em; font-weight: bold; color: white; }
         .total-amount { font-size: 1.8em; font-weight: bold; color: #4caf50; }
-        .ent-total-bar .total-amount { color: #ab47bc; }
 
         /* --- boutons --- */
         .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #ff9800, #e68900); border: none; color: #1a1a1a; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.1em; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); transition: 0.2s; }
         .btn:hover { filter: brightness(1.1); transform: scale(1.02); }
         .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; }
         .btn-blue { background: linear-gradient(45deg, #1976d2, #1565c0); color: white; }
-        .btn-purple { background: linear-gradient(45deg, #8e24aa, #6a1b9a); color: white; }
         .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); color: white; }
         .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
 
@@ -143,19 +132,48 @@
         
         .separator-bar { display: inline-block; width: 2px; height: 18px; background-color: #555; vertical-align: middle; margin: 0 4px; border-radius: 2px; }
 
-        .btn-icon-round { background-color: #1976d2; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .btn-icon-round {
+            background-color: #1976d2; 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 35px; 
+            height: 35px; 
+            cursor: pointer; 
+            font-size: 1.1em; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
         .btn-icon-round:hover { transform: scale(1.1); filter: brightness(1.2); }
         .btn-icon-round.has-notes { background-color: #ff9800; color: #1a1a1a; }
 
         /* --- differente section / zone --- */
         .delivery-info-section { margin-top: 30px; text-align: left; background-color: rgba(34, 34, 34, 0.6); padding: 20px; border-radius: 10px; border: 1px solid #444; }
-        .delivery-info-section.ent-section { border-color: #9c27b0; }
         .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; }
         .delivery-info-row .info-input { margin: 0; }
 
         /* --- historique et logs des tableaux --- */
-        .history-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 10px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
-        .history-table th, .history-table td { padding: 15px; border-bottom: 1px solid #444; vertical-align: middle; word-wrap: break-word; }
+        .history-table { 
+            width: 100%; 
+            table-layout: fixed; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+            text-align: left; 
+            background-color: rgba(30, 30, 30, 0.8); 
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+        
+        .history-table th, .history-table td { 
+            padding: 15px; 
+            border-bottom: 1px solid #444; 
+            vertical-align: middle; 
+            word-wrap: break-word; 
+        }
 
         #history-screen .history-table th:nth-child(1), #history-screen .history-table td:nth-child(1) { width: 10%; } 
         #history-screen .history-table th:nth-child(2), #history-screen .history-table td:nth-child(2) { width: 13%; } 
@@ -164,16 +182,6 @@
         #history-screen .history-table th:nth-child(5), #history-screen .history-table td:nth-child(5) { width: 12%; } 
         #history-screen .history-table th:nth-child(6), #history-screen .history-table td:nth-child(6) { width: 17%; } 
         #history-screen .history-table th:nth-child(7), #history-screen .history-table td:nth-child(7) { width: 8%; text-align: center; }  
-
-        /* Tableau Entreprise Pro */
-        #history-ent-screen .history-table th:nth-child(1), #history-ent-screen .history-table td:nth-child(1) { width: 10%; } 
-        #history-ent-screen .history-table th:nth-child(2), #history-ent-screen .history-table td:nth-child(2) { width: 15%; } 
-        #history-ent-screen .history-table th:nth-child(3), #history-ent-screen .history-table td:nth-child(3) { width: 30%; } 
-        #history-ent-screen .history-table th:nth-child(4), #history-ent-screen .history-table td:nth-child(4) { width: 8%; }  
-        #history-ent-screen .history-table th:nth-child(5), #history-ent-screen .history-table td:nth-child(5) { width: 12%; } 
-        #history-ent-screen .history-table th:nth-child(6), #history-ent-screen .history-table td:nth-child(6) { width: 17%; } 
-        #history-ent-screen .history-table th:nth-child(7), #history-ent-screen .history-table td:nth-child(7) { width: 8%; text-align: center; }  
-        #history-ent-screen .history-table th { background-color: rgba(156, 39, 176, 0.2); color: #ce93d8; }
 
         #logs-screen .history-table th:nth-child(1), #logs-screen .history-table td:nth-child(1) { width: 25%; } 
         #logs-screen .history-table th:nth-child(2), #logs-screen .history-table td:nth-child(2) { width: 65%; } 
@@ -195,15 +203,45 @@
         .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
         .charge-select { border: 1px solid #64b5f6; } 
 
-        .pagination-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; color: #ccc; }
-        .page-input { width: 60px; padding: 5px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #ff9800; color: white; border-radius: 4px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; }
-        .page-btn { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #64b5f6; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: 0.2s; font-weight: bold; }
+        /* diviser le contenu du site web en pages distinctes */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            color: #ccc;
+        }
+        .page-input {
+            width: 60px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff9800;
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            font-family: 'Roboto Slab', serif;
+        }
+        .page-btn {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 1px solid #64b5f6;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
         .page-btn:hover { background-color: #64b5f6; color: #1a1a1a; }
         
-        #login-screen, #entreprise-login-screen, #step2-login-screen, #main-app, #dashboard, #entreprise-dashboard, #success-screen, #history-screen, #history-ent-screen, #logs-screen, #candidature-form-screen, #success-cv-screen, #candidatures-screen { display: none; }
+        #login-screen, #step2-login-screen, #main-app, #dashboard, #success-screen, #history-screen, #logs-screen, #candidature-form-screen, #success-cv-screen, #candidatures-screen { display: none; }
         .success-icon { font-size: 4em; margin-bottom: 20px; display: block; color: #43a047; }
 
-        @media (max-width: 1400px) { .history-table th, .history-table td { padding: 10px; font-size: 0.95em; } }
+        /* --- permet a la page de s'adapter selon l'écran/l'appareil sur le quel on est --- */
+        @media (max-width: 1400px) {
+            .history-table th, .history-table td { padding: 10px; font-size: 0.95em; }
+        }
         @media (max-width: 1100px) {
             .container { padding: 25px; }
             .history-table th, .history-table td { padding: 8px; font-size: 0.85em; }
@@ -226,10 +264,12 @@
 
     <div class="container">
         
+        <!-- horloge en temps reel en haut à gauche -->
         <div id="top-left-clock" class="top-left-clock">
             📅 <span id="real-time-display"></span>
         </div>
 
+        <!-- mise en place de l'utilisateur et du badge en haut a droite -->
         <div id="top-user-badge" class="top-right-user">
             <div style="color: #e0e0e0; margin-bottom: 2px;">👤 Session : <span id="top-user-name"></span></div>
             <div style="color: #e0e0e0;">🏅 Grade : <span id="top-user-grade"></span></div>
@@ -242,7 +282,6 @@
             <br>
             <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
-                <button class="btn btn-purple" onclick="showEntrepriseLogin()">💼 ACCÈS ENTREPRISE</button>
                 <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
                 <div style="height: 20px;"></div> 
                 <button class="btn" style="background: #333; color: white;" onclick="showEmployeeLogin()">🔒 Accès Employé</button>
@@ -296,18 +335,6 @@
             </div>
         </div>
 
-        <!-- login entreprise -->
-        <div id="entreprise-login-screen">
-            <h1 style="color: #9c27b0;">Espace Partenaire</h1>
-            <p>Veuillez saisir le mot de passe d'accès entreprise.</p>
-            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-                <input type="password" id="ent-password" class="login-input input-entreprise" placeholder="Mot de passe">
-                <button class="btn btn-purple" onclick="checkEntrepriseLogin()">CONNEXION B2B</button>
-                <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
-                <p id="error-ent" style="color:red; display:none; margin: 0; font-weight: bold;">Mot de passe incorrect.</p>
-            </div>
-        </div>
-
         <!-- login des employes pt2 (partir du moment on est responsable et plus) -->
         <div id="step2-login-screen">
             <h1 style="color: #1976d2;">Vérification d'identité</h1>
@@ -328,14 +355,12 @@
         <div id="main-app">
             <div class="navbar">
                 <button class="nav-btn active" id="btn-dashboard" onclick="switchTab('dashboard')">📝 Nouvelle Commande</button>
-                <button class="nav-btn" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi Civils</button>
-                <button class="nav-btn" id="btn-history-ent" style="display:none; border-color: #9c27b0;" onclick="switchTab('history-ent-screen')">🏢 Commandes Pro</button>
+                <button class="nav-btn" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi des Commandes</button>
                 <button class="nav-btn" id="btn-candidatures" style="display:none; border-color: #1976d2;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
                 <button class="nav-btn" id="btn-logs" style="display:none; border-color: #64b5f6;" onclick="switchTab('logs-screen')">📊 Logs</button>
                 <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
             </div>
 
-            <!-- DASHBOARD CIVIL -->
             <div id="dashboard">
                 <h1>Nouvelle Commande</h1>
                 <h3>PRODUITS STANDARDS</h3>
@@ -370,60 +395,12 @@
                 </div>
             </div>
 
-            <!-- DASHBOARD ENTREPRISE -->
-            <div id="entreprise-dashboard">
-                <h1 style="color: #9c27b0;">Commande Partenaire (B2B)</h1>
-                <h3 class="entreprise-title">CATALOGUE PROFESSIONNEL</h3>
-                <div id="ent-product-grid" class="product-grid"></div>
-                
-                <div class="total-bar ent-total-bar">
-                    <span class="total-label">TOTAL À PAYER :</span>
-                    <span class="total-amount" id="ent-grand-total">0.00 $</span>
-                </div>
-                
-                <div class="delivery-info-section ent-section">
-                    <h3 class="entreprise-title" style="border: none; margin-top: 0;">DÉTAILS DE L'ENTREPRISE</h3>
-                    <div class="delivery-info-row">
-                        <select id="ent-company-name" class="info-input input-entreprise" style="width: 100%;">
-                            <option value="" disabled selected>🏢 Sélectionnez votre entreprise</option>
-                            <option value="Flywheels">Flywheels</option>
-                            <option value="Custom Motors">Custom Motors</option>
-                            <option value="Auto Exotic">Auto Exotic</option>
-                            <option value="Esthétique Vinewood">Esthétique Vinewood</option>
-                            <option value="Esthétique Vespucci">Esthétique Vespucci</option>
-                            <option value="Esthétique Paleto">Esthétique Paleto</option>
-                            <option value="Esthétique Sandy">Esthétique Sandy</option>
-                            <option value="Delight">Delight</option>
-                            <option value="Yellow Jack">Yellow Jack</option>
-                            <option value="Rex Dinners">Rex Dinners</option>
-                        </select>
-                    </div>
-                    <div class="delivery-info-row">
-                        <input type="text" id="ent-client-contact" class="info-input input-entreprise" placeholder="👤 Nom du Contact (Prénom / Nom)" style="width: 48%;">
-                        <input type="text" id="ent-client-phone" class="info-input input-entreprise" placeholder="📞 Tél. de contact" style="width: 48%;">
-                    </div>
-                    <div class="delivery-info-row">
-                        <input type="date" id="ent-delivery-date" class="info-input input-entreprise" style="width: 30%;">
-                        <input type="time" id="ent-delivery-time" class="info-input input-entreprise" style="width: 30%;">
-                        <select id="ent-delivery-zone" class="info-input input-entreprise" style="width: 35%;" onchange="calculateEntrepriseTotal()">
-                            <option value="0">Roxwood / Paleto (0$)</option>
-                            <option value="150">Nord (Sandy et alentours) (150$)</option>
-                            <option value="300">Sud (À Partir Du Péage) (300$)</option>
-                        </select>
-                    </div>
-                    <textarea id="ent-other-info" class="info-input input-entreprise" placeholder="📝 Notes de livraison (Accès garage, quai de chargement...)" style="margin-bottom: 0;"></textarea>
-                </div>
-                <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
-                    <button class="btn btn-purple" onclick="submitEntrepriseOrder()">TRANSMETTRE LA COMMANDE PRO</button>
-                    <button class="btn btn-red" onclick="resetEntrepriseForm()">ANNULER</button>
-                </div>
-            </div>
-
-            <!-- le suivi de commandes CIVIL -->
+            <!-- le suivi de commandes -->
             <div id="history-screen">
-                <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Commandes Civils 👤</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons pour les particuliers.</p>
+                <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Bienvenue, <span id="welcome-name"></span> 👋</h1>
+                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons.</p>
                 
+                <!-- la barre de recherche pour les commandes -->
                 <div style="width: 100%; margin: 20px auto 10px; text-align: left;">
                     <input type="text" id="search-orders" class="info-input" placeholder="🔍 Rechercher par client, téléphone, statut, zone, en charge..." onkeyup="filterOrders()" style="border-color: #4caf50; margin-bottom: 5px;">
                 </div>
@@ -432,7 +409,7 @@
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Client Civil</th>
+                            <th>Client</th>
                             <th>Détails de la commande</th>
                             <th>Total</th>
                             <th>En charge</th>
@@ -450,42 +427,12 @@
                 </div>
             </div>
 
-            <!-- le suivi de commandes ENTREPRISE -->
-            <div id="history-ent-screen">
-                <h1 style="color: #ce93d8; font-size: 2.2em; margin-bottom: 0;">Commandes Professionnelles 🏢</h1>
-                <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Suivi et assignation des livraisons B2B.</p>
-                
-                <div style="width: 100%; margin: 20px auto 10px; text-align: left;">
-                    <input type="text" id="search-ent-orders" class="info-input input-entreprise" placeholder="🔍 Rechercher par entreprise, contact, statut, zone, en charge..." onkeyup="filterEntOrders()" style="margin-bottom: 5px;">
-                </div>
-
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Entreprise</th>
-                            <th>Détails de la commande</th>
-                            <th>Total</th>
-                            <th>En charge</th>
-                            <th>Statut</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-ent-body"></tbody>
-                </table>
-
-                <div class="pagination-container" style="width: 100%;">
-                    <button class="page-btn" style="border-color: #9c27b0;" onclick="changeEntOrderPage(-1)">⬅️ Précédent</button>
-                    <span>Page <input type="number" id="order-ent-page-input" class="page-input" style="border-color: #9c27b0;" value="1" min="1" onchange="goToEntOrderPage()"> sur <span id="order-ent-total-pages">1</span></span>
-                    <button class="page-btn" style="border-color: #9c27b0;" onclick="changeEntOrderPage(1)">Suivant ➡️</button>
-                </div>
-            </div>
-
             <!-- les candidatures -->
             <div id="candidatures-screen">
                 <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures 📄</h1>
                 <p style="font-size: 0.9em; color: #aaa; margin-top: 5px;">Gestion des recrutements, CV et appréciations.</p>
                 
+                <!-- la barre de recherche pour les candidatures -->
                 <div style="width: 98%; margin: 20px auto 10px; text-align: left;">
                     <input type="text" id="search-cands" class="info-input" placeholder="🔍 Rechercher par candidat, téléphone, expérience, motivation..." onkeyup="filterCandidatures()" style="border-color: #1976d2; margin-bottom: 5px;">
                 </div>
@@ -544,7 +491,7 @@
                 <h1 style="color: #43a047;">Commande Validée !</h1>
                 <p>La commande a bien été transmise.</p>
                 <div style="width: 50%; margin: 20px auto 0;">
-                    <button class="btn" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+                    <button class="btn" onclick="returnToDashboard()">NOUVELLE COMMANDE</button>
                 </div>
             </div>
         </div> 
@@ -594,36 +541,10 @@
             { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
         ];
 
-        const enterpriseInventory = [
-            { name: "Caoutchouc", price: 3.5 },
-            { name: "Barre de chocolat", price: 2.0 },
-            { name: "Pain burger", price: 2.0 },
-            { name: "Bagel", price: 2.0 },
-            { name: "Pain grillé", price: 2.0 },
-            { name: "Pâtes", price: 2.0 },
-            { name: "Nouille", price: 2.0 },
-            { name: "Tortilla", price: 2.0 },
-            { name: "Coquilles à Tacos", price: 2.0 },
-            { name: "Moutarde", price: 2.0 },
-            { name: "Caramel", price: 2.0 },
-            { name: "Crème fraîche", price: 2.0 },
-            { name: "Solvant", price: 20.0 },
-            { name: "Eau purifié", price: 2.0 },
-            { name: "Eponge", price: 2.0 },
-            { name: "Papier a rouler", price: 2.0 }
-        ];
-
         let isEmployeeMode = false;
         
-        // Commandes civils
         let ordersHistory = []; 
         let filteredOrders = [];
-        let currentOrderPage = 1;
-
-        // Commandes Entreprises
-        let ordersEntHistory = [];
-        let filteredEntOrders = [];
-        let currentEntOrderPage = 1;
 
         let candidaturesHistory = [];
         let filteredCandidatures = [];
@@ -633,11 +554,18 @@
         let currentSessionName = ""; 
         let currentSessionGrade = ""; 
 
+        // Variables logs (10 par pages)
         let logsHistory = [];
         let filteredLogs = [];
         let currentLogPage = 1;
         const logsPerPage = 10;
+
+        // Variables suivi commandes (10 par pages)
+        let currentOrderPage = 1;
         const ordersPerPage = 10;
+
+        // Variables candidatures (10 par pages)
+        let currentCandPage = 1;
         const candsPerPage = 10;
 
         function showClientSpace() {
@@ -646,56 +574,15 @@
             document.getElementById("main-app").style.display = "block";
             
             document.getElementById("btn-history").style.display = "none"; 
-            document.getElementById("btn-history-ent").style.display = "none"; 
             document.getElementById("btn-logs").style.display = "none"; 
             document.getElementById("btn-candidatures").style.display = "none"; 
             document.getElementById("btn-dashboard").style.display = "block"; 
-            document.getElementById("btn-dashboard").innerText = "📝 Nouvelle Commande";
             
             document.getElementById("top-user-badge").style.display = "none"; 
-            document.getElementById("top-left-clock").style.display = "block"; 
+            document.getElementById("top-left-clock").style.display = "block"; // permet l'affichage de l'horloge
             
             initTable();
             switchTab('dashboard');
-        }
-
-        function showEntrepriseLogin() {
-            document.getElementById("welcome-screen").style.display = "none";
-            document.getElementById("entreprise-login-screen").style.display = "block";
-        }
-
-        function checkEntrepriseLogin() {
-            const pwd = document.getElementById("ent-password").value;
-            if(pwd === "test") {
-                document.getElementById("entreprise-login-screen").style.display = "none";
-                showEntrepriseSpace();
-            } else {
-                document.getElementById("error-ent").style.display = "block";
-            }
-        }
-
-        function showEntrepriseSpace() {
-            isEmployeeMode = false;
-            document.getElementById("main-app").style.display = "block";
-            
-            document.getElementById("btn-history").style.display = "none"; 
-            document.getElementById("btn-history-ent").style.display = "none"; 
-            document.getElementById("btn-logs").style.display = "none"; 
-            document.getElementById("btn-candidatures").style.display = "none"; 
-            
-            const btnDash = document.getElementById("btn-dashboard");
-            btnDash.style.display = "block"; 
-            btnDash.innerText = "📦 Commande B2B";
-            btnDash.classList.add("nav-btn-entreprise");
-            btnDash.onclick = () => switchTab('entreprise-dashboard');
-            
-            document.getElementById("top-user-badge").style.display = "block";
-            document.getElementById("top-user-name").innerText = "Partenaire B2B";
-            document.getElementById("top-user-grade").innerText = "Entreprise";
-            document.getElementById("top-left-clock").style.display = "block"; 
-            
-            initEntrepriseTable();
-            switchTab('entreprise-dashboard');
         }
         
         function showCandidatureForm() {
@@ -784,7 +671,6 @@
             
             document.getElementById("btn-dashboard").style.display = "none"; 
             document.getElementById("btn-history").style.display = "block"; 
-            document.getElementById("btn-history-ent").style.display = "block"; 
             
             if (accountId === "admin" || accountId === "Direction Roxwood") {
                 document.getElementById("btn-candidatures").style.display = "block";
@@ -813,24 +699,20 @@
 
         function switchTab(tabId) {
             document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('entreprise-dashboard').style.display = 'none';
             document.getElementById('history-screen').style.display = 'none';
-            document.getElementById('history-ent-screen').style.display = 'none';
             document.getElementById('success-screen').style.display = 'none';
             document.getElementById('logs-screen').style.display = 'none';
             document.getElementById('candidatures-screen').style.display = 'none';
             
             document.getElementById('btn-dashboard').classList.remove('active');
             document.getElementById('btn-history').classList.remove('active');
-            document.getElementById('btn-history-ent').classList.remove('active');
             if (document.getElementById('btn-logs')) document.getElementById('btn-logs').classList.remove('active');
             if (document.getElementById('btn-candidatures')) document.getElementById('btn-candidatures').classList.remove('active');
             
             document.getElementById(tabId).style.display = 'block';
             
-            if(tabId === 'dashboard' || tabId === 'entreprise-dashboard') document.getElementById('btn-dashboard').classList.add('active');
+            if(tabId === 'dashboard') document.getElementById('btn-dashboard').classList.add('active');
             else if(tabId === 'history-screen') document.getElementById('btn-history').classList.add('active');
-            else if(tabId === 'history-ent-screen') document.getElementById('btn-history-ent').classList.add('active');
             else if(tabId === 'logs-screen') document.getElementById('btn-logs').classList.add('active');
             else if(tabId === 'candidatures-screen') document.getElementById('btn-candidatures').classList.add('active');
         }
@@ -886,16 +768,13 @@
             });
 
             const zoneSelect = document.getElementById("delivery-zone");
-            const formattedDate = document.getElementById("delivery-date").value ? document.getElementById("delivery-date").value.split('-').reverse().join('/') : "";
-            
             const newOrder = {
-                type: "Civil",
                 dateCreation: new Date().toLocaleString('fr-FR'),
                 client: `${firstname} ${lastname}`,
                 phone: phone,
                 articles: articlesList.join(' | '),
                 zone: zoneSelect.options[zoneSelect.selectedIndex].text,
-                dateLivraison: formattedDate ? `${formattedDate} à ${document.getElementById("delivery-time").value}` : "Dès que possible",
+                dateLivraison: document.getElementById("delivery-date").value ? `${document.getElementById("delivery-date").value.split('-').reverse().join('/')} à ${document.getElementById("delivery-time").value}` : "Dès que possible",
                 infos: document.getElementById("other-info").value.trim() || "Aucune note",
                 total: total.toFixed(2),
                 enCharge: "", 
@@ -910,92 +789,6 @@
                     resetForm();
                 })
                 .catch((e) => alert("Erreur : " + e.message));
-        }
-
-        function initEntrepriseTable() {
-            const grid = document.getElementById("ent-product-grid");
-            grid.innerHTML = ""; 
-            enterpriseInventory.forEach((item, index) => {
-                let card = `
-                <div class="product-card ent-card">
-                    <div class="prod-name">${item.name}</div>
-                    <div class="prod-price">Prix pro : ${item.price.toFixed(2)} $</div>
-                    <input type="number" min="0" class="qty-input" oninput="calculateEntrepriseTotal()" id="ent-qty-${index}" placeholder="0">
-                    <div class="prod-subtotal" id="ent-sub-${index}">Total : 0.00 $</div>
-                </div>`;
-                grid.innerHTML += card;
-            });
-        }
-
-        function calculateEntrepriseTotal() {
-            let grandTotal = 0;
-            enterpriseInventory.forEach((item, index) => {
-                let qty = parseInt(document.getElementById(`ent-qty-${index}`).value) || 0;
-                let subtotal = item.price * qty;
-                document.getElementById(`ent-sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
-                grandTotal += subtotal;
-            });
-            const zoneFee = parseFloat(document.getElementById("ent-delivery-zone").value) || 0;
-            grandTotal += zoneFee;
-            document.getElementById("ent-grand-total").innerText = grandTotal.toFixed(2) + " $";
-            return grandTotal;
-        }
-
-        function submitEntrepriseOrder() {
-            const total = calculateEntrepriseTotal();
-            const companySelect = document.getElementById("ent-company-name");
-            const companyName = companySelect.options[companySelect.selectedIndex].value;
-            const contactName = document.getElementById("ent-client-contact").value.trim();
-            const phone = document.getElementById("ent-client-phone").value.trim();
-
-            if(total <= 0) { alert("Erreur : La commande est vide !"); return; }
-            if(companyName === "") { alert("Attention : Veuillez sélectionner le nom de l'entreprise."); return; }
-            if(contactName === "") { alert("Attention : Le nom du contact est obligatoire."); return; }
-            if(phone === "") { alert("Attention : Téléphone obligatoire."); return; }
-
-            let articlesList = [];
-            enterpriseInventory.forEach((item, index) => {
-                let qty = parseInt(document.getElementById(`ent-qty-${index}`).value) || 0;
-                if(qty > 0) articlesList.push(`<b>${qty}x</b> ${item.name}`);
-            });
-
-            const zoneSelect = document.getElementById("ent-delivery-zone");
-            const formattedDate = document.getElementById("ent-delivery-date").value ? document.getElementById("ent-delivery-date").value.split('-').reverse().join('/') : "";
-
-            const newOrder = {
-                type: "Entreprise",
-                dateCreation: new Date().toLocaleString('fr-FR'),
-                client: `${companyName} (${contactName})`,
-                phone: phone,
-                articles: articlesList.join(' | '),
-                zone: zoneSelect.options[zoneSelect.selectedIndex].text,
-                dateLivraison: formattedDate ? `${formattedDate} à ${document.getElementById("ent-delivery-time").value}` : "Dès que possible",
-                infos: document.getElementById("ent-other-info").value.trim() || "Aucune note",
-                total: total.toFixed(2),
-                enCharge: "", 
-                status: "En attente de préparation",
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            db.ref('orders').push(newOrder)
-                .then(() => {
-                    document.getElementById("entreprise-dashboard").style.display = "none";
-                    document.getElementById("success-screen").style.display = "block";
-                    resetEntrepriseForm();
-                })
-                .catch((e) => alert("Erreur : " + e.message));
-        }
-
-        function resetEntrepriseForm() {
-            document.querySelectorAll("#entreprise-dashboard .qty-input").forEach(i => i.value = "");
-            document.getElementById("ent-company-name").selectedIndex = 0;
-            document.getElementById("ent-client-contact").value = "";
-            document.getElementById("ent-client-phone").value = "";
-            document.getElementById("ent-delivery-date").value = "";
-            document.getElementById("ent-delivery-time").value = "";
-            document.getElementById("ent-other-info").value = "";
-            document.getElementById("ent-delivery-zone").selectedIndex = 0;
-            calculateEntrepriseTotal();
         }
 
         function submitCV() {
@@ -1038,32 +831,16 @@
                 .catch((e) => alert("Erreur : " + e.message));
         }
 
-        // --- SYNCHRONISATION COMMUNE ---
+        // --- systeme de recherhces pour les commandes via la database ---
         function syncDatabase() {
             if(!isEmployeeMode) return;
             db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
                 ordersHistory = [];
-                ordersEntHistory = [];
-                
-                snapshot.forEach((child) => { 
-                    const order = { id: child.key, ...child.val() };
-                    if (order.type === "Entreprise") {
-                        ordersEntHistory.unshift(order);
-                    } else {
-                        ordersHistory.unshift(order);
-                    }
-                });
-                
+                snapshot.forEach((child) => { ordersHistory.unshift({ id: child.key, ...child.val() }); });
                 filterOrders();
-                filterEntOrders();
             });
         }
 
-        function updateOrderStatus(id, selectElement) { db.ref('orders/' + id).update({ status: selectElement.value }); }
-        function updatePersonInCharge(id, selectElement) { db.ref('orders/' + id).update({ enCharge: selectElement.value }); }
-        function deleteOrder(id) { if(confirm("Supprimer définitivement cette commande ?")) db.ref('orders/' + id).remove(); }
-
-        // --- GESTION COMMANDES CIVILS ---
         function filterOrders() {
             const query = document.getElementById('search-orders').value.toLowerCase();
             filteredOrders = ordersHistory.filter(order => {
@@ -1092,6 +869,10 @@
             }
             renderHistory();
         }
+
+        function updateOrderStatus(id, selectElement) { db.ref('orders/' + id).update({ status: selectElement.value }); }
+        function updatePersonInCharge(id, selectElement) { db.ref('orders/' + id).update({ enCharge: selectElement.value }); }
+        function deleteOrder(id) { if(confirm("Supprimer définitivement cette commande ?")) db.ref('orders/' + id).remove(); }
 
         function renderHistory() {
             const tbody = document.getElementById('history-body');
@@ -1153,98 +934,7 @@
             });
         }
 
-        // --- GESTION COMMANDES ENTREPRISES ---
-        function filterEntOrders() {
-            const query = document.getElementById('search-ent-orders').value.toLowerCase();
-            filteredEntOrders = ordersEntHistory.filter(order => {
-                const searchString = `${order.client} ${order.phone} ${order.articles} ${order.zone} ${order.status} ${order.enCharge}`.toLowerCase();
-                return searchString.includes(query);
-            });
-            currentEntOrderPage = 1; 
-            renderEntHistory();
-        }
-
-        function changeEntOrderPage(delta) {
-            const totalPages = Math.max(1, Math.ceil(filteredEntOrders.length / ordersPerPage));
-            currentEntOrderPage += delta;
-            if (currentEntOrderPage < 1) currentEntOrderPage = 1;
-            if (currentEntOrderPage > totalPages) currentEntOrderPage = totalPages;
-            renderEntHistory();
-        }
-
-        function goToEntOrderPage() {
-            const inputVal = parseInt(document.getElementById('order-ent-page-input').value);
-            const totalPages = Math.max(1, Math.ceil(filteredEntOrders.length / ordersPerPage));
-            if (!isNaN(inputVal)) {
-                currentEntOrderPage = inputVal;
-                if (currentEntOrderPage < 1) currentEntOrderPage = 1;
-                if (currentEntOrderPage > totalPages) currentEntOrderPage = totalPages;
-            }
-            renderEntHistory();
-        }
-
-        function renderEntHistory() {
-            const tbody = document.getElementById('history-ent-body');
-            tbody.innerHTML = '';
-            
-            const totalPages = Math.max(1, Math.ceil(filteredEntOrders.length / ordersPerPage));
-            document.getElementById('order-ent-total-pages').innerText = totalPages;
-            document.getElementById('order-ent-page-input').value = currentEntOrderPage;
-
-            if(filteredEntOrders.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Aucun résultat.</td></tr>'; 
-                return; 
-            }
-
-            const startIndex = (currentEntOrderPage - 1) * ordersPerPage;
-            const endIndex = startIndex + ordersPerPage;
-            const ordersToDisplay = filteredEntOrders.slice(startIndex, endIndex);
-            
-            ordersToDisplay.forEach(order => {
-                const tr = document.createElement('tr');
-                const statusOptions = ["En attente de préparation", "Disponible à la livraison", "Livraison en cours", "Livré"]
-                    .map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('');
-
-                let employeOptions = `<option value="">-- Non assigné --</option>`;
-                
-                const knownNames = authorizedUsers.filter(u => !u.needsDetails && u.name !== "admin").map(u => u.name);
-                validManagementUsers.forEach(u => knownNames.push(u.fname + " " + u.lname));
-
-                if(!knownNames.includes(currentSessionName) && isEmployeeMode && currentAccountId !== "admin") {
-                    knownNames.push(currentSessionName);
-                }
-                if(order.enCharge && !knownNames.includes(order.enCharge) && order.enCharge !== "admin") {
-                    knownNames.push(order.enCharge);
-                }
-
-                const uniqueNames = [...new Set(knownNames)];
-
-                uniqueNames.forEach(name => {
-                    employeOptions += `<option value="${name}" ${order.enCharge === name ? 'selected' : ''}>${name}</option>`;
-                });
-
-                tr.innerHTML = `
-                    <td style="color:#aaa;">${order.dateCreation}</td>
-                    <td>
-                        <strong style="color:#ce93d8; font-size: 1.1em;">${order.client.split(' (')[0]}</strong><br>
-                        <span style="color:#aaa; font-size: 0.9em;">👤 ${order.client.split('(')[1].replace(')', '')}</span><br>
-                        <span style="color:#ff9800; font-size: 0.9em;">📞 ${order.phone}</span>
-                    </td>
-                    <td style="text-align: left; line-height: 1.4;">
-                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
-                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
-                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
-                    </td>
-                    <td style="color:#ab47bc; font-weight:bold; font-size:1.1em;">${order.total} $</td>
-                    <td><select class="status-select charge-select" style="border-color: #ce93d8;" onchange="updatePersonInCharge('${order.id}', this)">${employeOptions}</select></td>
-                    <td><select class="status-select" style="border-color: #ce93d8;" onchange="updateOrderStatus('${order.id}', this)">${statusOptions}</select></td>
-                    <td><button class="btn btn-red btn-small" onclick="deleteOrder('${order.id}')">X</button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // --- GESTION CANDIDATURES ---
+        // --- gestion candidature via systeme de recherche ---
         function syncCandidatures() {
             db.ref('candidatures').orderByChild('timestamp').on('value', (snapshot) => {
                 candidaturesHistory = [];
@@ -1354,7 +1044,7 @@
             });
         }
 
-        // --- GESTION LOGS ---
+        // --- permet la syncro des logs ---
         function syncLogs() {
             db.ref('logs').orderByChild('timestamp').on('value', (snapshot) => {
                 logsHistory = [];
@@ -1438,7 +1128,7 @@
         }
 
         function resetForm() {
-            document.querySelectorAll("#dashboard .qty-input").forEach(i => i.value = "");
+            document.querySelectorAll(".qty-input").forEach(i => i.value = "");
             document.getElementById("client-firstname").value = "";
             document.getElementById("client-lastname").value = "";
             document.getElementById("client-phone").value = "";
@@ -1449,6 +1139,11 @@
             calculateTotal();
         }
 
+        function returnToDashboard() {
+            document.getElementById("success-screen").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+        }
+        
         function updateClock() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
