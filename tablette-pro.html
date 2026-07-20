@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1500">    
-    <title>LTD Roxwood - Espace Employé</title>
+    <title>LTD Roxwood - Espace Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* --- DESIGN GLOBAL --- */
         *, *::before, *::after { box-sizing: border-box; }
 
         body {
@@ -42,7 +41,7 @@
             backdrop-filter: blur(5px);
             margin: 20px auto;
         }
-        
+
         .top-left-clock, .top-right-user {
             position: absolute;
             top: 25px;
@@ -55,251 +54,112 @@
             color: #e0e0e0;
         }
         .top-left-clock { left: 30px; border: 1px solid #64b5f6; }
-        .top-right-user { right: 30px; border: 1px solid #ff9800; text-align: left; display: none; }
+        .top-right-user { right: 30px; border: 1px solid #9c27b0; text-align: left; display: none; }
         
-        h1 { color: #ff9800; letter-spacing: 1px; margin-bottom: 15px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        h1 { color: #9c27b0; letter-spacing: 1px; margin-bottom: 15px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        h3.entreprise-title { color: #9c27b0; border-bottom: 2px solid #9c27b0; padding-bottom: 10px; margin-top: 30px; font-size: 1.5em; text-align: left; }
         
-        /* NAVBAR */
-        .navbar {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #555;
-            padding-bottom: 20px;
-        }
-        .nav-btn {
-            padding: 10px 20px;
-            background-color: rgba(30, 30, 30, 0.8);
-            border: 1px solid #ff9800;
-            color: white;
-            font-family: 'Roboto Slab', serif;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .nav-btn:hover, .nav-btn.active { background-color: #ff9800; color: #1a1a1a; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 20px; }
+        .product-card.ent-card { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #9c27b0; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; transition: 0.2s; }
+        .product-card.ent-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3); background-color: rgba(40, 40, 40, 0.9); }
         
-        /* INPUTS & BTNS */
-        .login-input, .info-input, select.info-input {
-            width: 100%;
-            padding: 12px;
-            background-color: rgba(26, 26, 26, 0.8);
-            border: 1px solid #ff9800;
-            color: white;
-            border-radius: 8px;
-            text-align: center;
-            font-family: 'Roboto Slab', serif;
-            font-size: 1em;
-            margin-bottom: 15px;
-        }
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #ff9800, #e68900);
-            border: none;
-            color: #1a1a1a;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 1.1em;
-            transition: 0.2s;
-        }
+        .prod-name { font-size: 0.9em; font-weight: bold; color: #ce93d8; margin-bottom: 5px; height: 50px; display: flex; align-items: center; text-align: center; }
+        .prod-price { color: #ccc; font-size: 0.9em; margin-bottom: 10px; }
+        .prod-subtotal { margin-top: 10px; font-weight: bold; color: #ab47bc; }
+        
+        .login-input, .info-input { width: 100%; padding: 12px; background-color: rgba(26, 26, 26, 0.8); border: 1px solid #9c27b0; color: white; border-radius: 8px; text-align: center; font-family: 'Roboto Slab', serif; font-size: 1em; }
+        select.login-input option { background-color: #1a1a1a; }
+        .qty-input { width: 80px; padding: 8px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: white; border-radius: 5px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; font-size: 1.2em; }
+        
+        .total-bar { background-color: rgba(51, 51, 51, 0.9); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #9c27b0; display: flex; justify-content: space-between; align-items: center; }
+        .total-label { font-size: 1.2em; font-weight: bold; color: white; }
+        .total-amount { font-size: 1.8em; font-weight: bold; color: #ab47bc; }
+        
+        .btn { width: 100%; padding: 15px; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.1em; transition: 0.2s; }
         .btn:hover { filter: brightness(1.1); transform: scale(1.02); }
-        .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); color: white; }
-        .btn-blue { background: linear-gradient(45deg, #1976d2, #1565c0); color: white; }
-        .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; }
-        .btn-small { width: auto; padding: 8px 12px; margin-top: 0; font-size: 0.9em; }
+        .btn-purple { background: linear-gradient(45deg, #8e24aa, #6a1b9a); }
+        .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); }
         
-        .btn-action { cursor: pointer; padding: 4px 6px; border-radius: 4px; border: none; margin: 2px; font-size: 0.9em; transition: 0.2s; vertical-align: middle; }
-        .btn-action:hover { transform: scale(1.1); filter: brightness(1.2); }
-        .btn-accept { background-color: #43a047; color: white; }
-        .btn-reject { background-color: #d32f2f; color: white; }
-        .btn-delete { background-color: #555; color: white; }
-
-        /* TABLES */
-        .history-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 10px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
-        .history-table th, .history-table td { padding: 15px; border-bottom: 1px solid #444; vertical-align: middle; word-wrap: break-word; font-size: 0.9em;}
-        .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
-        #history-ent-screen .history-table th { background-color: rgba(156, 39, 176, 0.2); color: #ce93d8; }
+        .delivery-info-section { margin-top: 30px; text-align: left; background-color: rgba(34, 34, 34, 0.6); padding: 20px; border-radius: 10px; border: 1px solid #9c27b0; }
+        .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; }
+        textarea.info-input { height: 80px; text-align: left; resize: vertical; }
         
-        .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
-        .charge-select { border: 1px solid #64b5f6; } 
-
-        .pagination-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; color: #ccc; }
-        .page-input { width: 60px; padding: 5px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #ff9800; color: white; border-radius: 4px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; }
-        .page-btn { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #64b5f6; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: 0.2s; font-weight: bold; }
-
-        /* CV NOTES */
-        .btn-icon-round { background-color: #1976d2; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
-        .btn-icon-round.has-notes { background-color: #ff9800; color: #1a1a1a; }
-        .appreciation-input { width: 100%; height: 60px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid #1976d2; border-radius: 4px; padding: 5px; font-size: 0.9em; resize: vertical; margin-bottom: 5px; }
-        .cand-accepted { background-color: rgba(76, 175, 80, 0.15) !important; border-left: 5px solid #4caf50; }
-        .cand-rejected { background-color: rgba(211, 47, 47, 0.15) !important; border-left: 5px solid #d32f2f; }
-
-        /* Hide screens */
-        #step2-login-screen, #main-app, #history-screen, #history-ent-screen, #logs-screen, #candidatures-screen { display: none; }
-        
+        #entreprise-dashboard, #success-screen { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        
         <div id="top-left-clock" class="top-left-clock">
             📅 <span id="real-time-display"></span>
         </div>
-        
         <div id="top-user-badge" class="top-right-user">
-            <div style="color: #e0e0e0; margin-bottom: 2px;">👤 Session : <span id="top-user-name" style="color:#ff9800; font-weight:bold;"></span></div>
-            <div style="color: #e0e0e0;">🏅 Grade : <span id="top-user-grade" style="color:#ff9800; font-weight:bold;"></span></div>
+            <div style="color: #e0e0e0;">👤 Partenaire : <span id="top-user-name" style="color:#ce93d8; font-weight:bold;"></span></div>
         </div>
 
-        <!-- Login Employé Pt 1 -->
-        <div id="login-screen">
-            <h1>Accès Sécurisé LTD</h1>
-            <p>Veuillez vous identifier</p>
-            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-                <input type="text" id="username" class="login-input" placeholder="Identifiant">
-                <input type="password" id="password" class="login-input" placeholder="Mot de passe">
-                <button class="btn" onclick="checkLogin()">CONNEXION SÉCURISÉE</button>
-                <p id="error" style="color:red; display:none; margin: 0; font-weight: bold;">Identifiants incorrects.</p>
+        <!-- Login Entreprise -->
+        <div id="entreprise-login-screen">
+            <h1>Espace Partenaire</h1>
+            <p>Veuillez sélectionner votre entreprise et saisir votre mot de passe d'accès.</p>
+            <div style="width: 50%; margin: 20px auto; display: flex; flex-direction: column; gap: 15px;">
+                <select id="ent-login-name" class="login-input">
+                    <option value="" disabled selected>🏢 Sélectionnez votre entreprise</option>
+                    <option value="Flywheels">Flywheels</option>
+                    <option value="Custom Motors">Custom Motors</option>
+                    <option value="Auto Exotic">Auto Exotic</option>
+                    <option value="Esthétique Vinewood">Esthétique Vinewood</option>
+                    <option value="Esthétique Vespucci">Esthétique Vespucci</option>
+                    <option value="Esthétique Paleto">Esthétique Paleto</option>
+                    <option value="Esthétique Sandy">Esthétique Sandy</option>
+                    <option value="Delight">Delight</option>
+                    <option value="Yellow Jack">Yellow Jack</option>
+                    <option value="Rex Dinners">Rex Dinners</option>
+                </select>
+                <input type="password" id="ent-password" class="login-input" placeholder="Mot de passe spécifique">
+                <button class="btn btn-purple" onclick="checkEntrepriseLogin()">CONNEXION</button>
+                <p id="error-ent" style="color:red; display:none; margin: 0; font-weight: bold;">Mot de passe ou entreprise incorrect.</p>
             </div>
         </div>
 
-        <!-- Login Employé Pt 2 -->
-        <div id="step2-login-screen">
-            <h1 style="color: #1976d2;">Vérification d'identité</h1>
-            <p>Veuillez décliner votre identité et votre grade au sein de l'entreprise.</p>
-            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-                <input type="text" id="step2-firstname" class="login-input" placeholder="Votre Prénom">
-                <input type="text" id="step2-lastname" class="login-input" placeholder="Votre Nom">
-                <select id="step2-grade" class="info-input"></select>
-                <button class="btn btn-blue" onclick="submitStep2()">VALIDER MON ACCÈS</button>
-                <p id="error-step2" style="color:red; display:none; margin: 0; font-weight: bold;">Accès refusé.</p>
-            </div>
-        </div>
-
-        <!-- DASHBOARD EMPLOYES -->
-        <div id="main-app">
+        <!-- Dashboard Commande Entreprise -->
+        <div id="entreprise-dashboard">
+            <h1>Commande Entreprise</h1>
+            <h3 class="entreprise-title">VOTRE CATALOGUE PROFESSIONNEL</h3>
             
-            <div class="navbar">
-                <button class="nav-btn active" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi Civils</button>
-                <button class="nav-btn" id="btn-history-ent" style="border-color: #9c27b0;" onclick="switchTab('history-ent-screen')">🏢 Suivi Pros</button>
-                <button class="nav-btn" id="btn-candidatures" style="display:none; border-color: #1976d2;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
-                <button class="nav-btn" id="btn-logs" style="display:none; border-color: #64b5f6;" onclick="switchTab('logs-screen')">📊 Logs</button>
-                <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
-            </div>
-
-            <!-- Suivi Civils -->
-            <div id="history-screen">
-                <h1 style="color: #4caf50; font-size: 2.2em; margin-bottom: 0;">Commandes Civils</h1>
-                
-                <input type="text" id="search-orders" class="info-input" placeholder="🔍 Rechercher (Client, Statut, Zone...)" onkeyup="filterOrders()" style="border-color: #4caf50; margin-top: 20px;">
-                
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th style="width:10%;">Date</th>
-                            <th style="width:15%;">Client</th>
-                            <th style="width:30%;">Détails de la commande</th>
-                            <th style="width:10%;">Total</th>
-                            <th style="width:15%;">Assigné à</th>
-                            <th style="width:15%;">Statut</th>
-                            <th style="width:5%;">Act</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-body"></tbody>
-                </table>
-                
-                <div class="pagination-container">
-                    <button class="page-btn" onclick="changeOrderPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="order-page-input" class="page-input" value="1" onchange="goToOrderPage()"> / <span id="order-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeOrderPage(1)">➡️</button>
-                </div>
-            </div>
-
-            <!-- Suivi Pros -->
-            <div id="history-ent-screen">
-                <h1 style="color: #ce93d8; font-size: 2.2em; margin-bottom: 0;">Commandes Pros</h1>
-                
-                <input type="text" id="search-ent-orders" class="info-input" placeholder="🔍 Rechercher (Entreprise, Statut...)" onkeyup="filterEntOrders()" style="border-color: #9c27b0; margin-top: 20px;">
-                
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th style="width:10%;">Date</th>
-                            <th style="width:15%;">Entreprise</th>
-                            <th style="width:30%;">Détails de la commande</th>
-                            <th style="width:10%;">Total</th>
-                            <th style="width:15%;">Assigné à</th>
-                            <th style="width:15%;">Statut</th>
-                            <th style="width:5%;">Act</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-ent-body"></tbody>
-                </table>
-                
-                <div class="pagination-container">
-                    <button class="page-btn" onclick="changeEntOrderPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="order-ent-page-input" class="page-input" value="1" onchange="goToEntOrderPage()"> / <span id="order-ent-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeEntOrderPage(1)">➡️</button>
-                </div>
-            </div>
-
-            <!-- Candidatures -->
-            <div id="candidatures-screen">
-                <h1 style="color: #1976d2; font-size: 2.2em; margin-bottom: 0;">Candidatures</h1>
-                
-                <input type="text" id="search-cands" class="info-input" placeholder="🔍 Rechercher (Candidat, Mots clés...)" onkeyup="filterCandidatures()" style="border-color: #1976d2; margin-top: 20px;">
-                
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th style="width:10%;">Date</th>
-                            <th style="width:15%;">Candidat</th>
-                            <th style="width:15%;">Contact</th>
-                            <th style="width:25%;">Exp. / Moti.</th>
-                            <th style="width:10%;">Notes</th>
-                            <th style="width:15%;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="candidatures-body"></tbody>
-                </table>
-                
-                <div class="pagination-container">
-                    <button class="page-btn" onclick="changeCandPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="cand-page-input" class="page-input" value="1" onchange="goToCandPage()"> / <span id="cand-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeCandPage(1)">➡️</button>
-                </div>
-            </div>
-
-            <!-- Logs -->
-            <div id="logs-screen">
-                <h1 style="color: #64b5f6; font-size: 2.2em; margin-bottom: 0;">Logs Connexions</h1>
-                
-                <input type="text" id="search-logs" class="info-input" placeholder="🔍 Rechercher (Employé, Date...)" onkeyup="filterLogs()" style="border-color: #64b5f6; margin-top: 20px; width:70%;">
-                
-                <table class="history-table" style="width: 70%; margin: 10px auto 0;">
-                    <thead>
-                        <tr>
-                            <th>Date & Heure</th>
-                            <th>Employé Connecté</th>
-                            <th id="th-log-action" style="display:none; text-align:center;">Act</th>
-                        </tr>
-                    </thead>
-                    <tbody id="logs-body"></tbody>
-                </table>
-                
-                <div class="pagination-container" style="width: 70%; margin: 15px auto;">
-                    <button class="page-btn" onclick="changeLogPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="log-page-input" class="page-input" value="1" onchange="goToLogPage()"> / <span id="log-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeLogPage(1)">➡️</button>
-                </div>
+            <div id="ent-product-grid" class="product-grid"></div>
+            
+            <div class="total-bar">
+                <span class="total-label">TOTAL À PAYER :</span>
+                <span class="total-amount" id="ent-grand-total">0.00 $</span>
             </div>
             
-        </div> 
+            <div class="delivery-info-section">
+                <h3 class="entreprise-title" style="border: none; margin-top: 0;">DÉTAILS DE L'ENTREPRISE</h3>
+                <div class="delivery-info-row">
+                    <input type="text" id="ent-company-name" class="info-input" readonly style="width: 100%; background-color: rgba(0,0,0,0.5); cursor: not-allowed; color: #ce93d8; font-weight: bold;">
+                </div>
+                <div class="delivery-info-row">
+                    <input type="text" id="ent-client-contact" class="info-input" placeholder="👤 Nom du Contact" style="width: 48%;">
+                    <input type="text" id="ent-client-phone" class="info-input" placeholder="📞 Tél. de contact" style="width: 48%;">
+                </div>
+                <div class="delivery-info-row">
+                    <input type="date" id="ent-delivery-date" class="info-input" style="width: 48%;">
+                    <input type="time" id="ent-delivery-time" class="info-input" style="width: 48%;">
+                </div>
+                <textarea id="ent-other-info" class="info-input" placeholder="📝 Notes complémentaires" style="margin-bottom: 0;"></textarea>
+            </div>
+            
+            <div style="width: 100%; display: flex; gap: 15px; margin-top: 20px;">
+                <button class="btn btn-purple" onclick="submitEntrepriseOrder()">TRANSMETTRE LA COMMANDE PRO</button>
+                <button class="btn btn-red" onclick="location.reload()">DÉCONNEXION</button>
+            </div>
+        </div>
+
+        <!-- Succès -->
+        <div id="success-screen">
+            <span style="font-size: 4em; color: #9c27b0; display:block; margin-bottom:20px;">✅</span>
+            <h1 style="color: #ce93d8;">Commande Transmise !</h1>
+            <button class="btn btn-purple" style="width:50%; margin-top:20px;" onclick="resetToDashboard()">NOUVELLE COMMANDE</button>
+        </div>
     </div>
 
     <script>
@@ -312,459 +172,192 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const authorizedUsers = [
-            { name: "admin", pass: "ad!025489@ADM", grade: "Administrateur", needsDetails: false },
-            { name: "Direction Roxwood", pass: "dr!456985@DIR", grade: "", needsDetails: true }, 
-            { name: "Responsable", pass: "re!896458@RES", grade: "", needsDetails: true }, 
-            { name: "Hibiscus Evergreen", pass: "he!06122003@EM", grade: "Employé", needsDetails: false },
-            { name: "Kayla Mayers", pass: "km!09031999@EM", grade: "Employé", needsDetails: false },
-            { name: "Oliver Campbell", pass: "oc!03092002@EM", grade: "Employé", needsDetails: false },
-            { name: "Issa Wekesa", pass: "iw!17082003@EM", grade: "Employé", needsDetails: false }
+        // --- MOTS DE PASSE PARTENAIRES ---
+        const authorizedEntreprises = [
+            { name: "Flywheels", pass: "fw!852369@FLY" },
+            { name: "Custom Motors", pass: "cm?741258@CUS" },
+            { name: "Auto Exotic", pass: "ae-963258@AUT" },
+            { name: "Esthétique Vinewood", pass: "ev*159357@EST" },
+            { name: "Esthétique Vespucci", pass: "ev+357159@EST" },
+            { name: "Esthétique Paleto", pass: "ep=456789@EST" },
+            { name: "Esthétique Sandy", pass: "es!987654@EST" },
+            { name: "Delight", pass: "de?123987@DEL" },
+            { name: "Yellow Jack", pass: "yj-654123@YEL" },
+            { name: "Rex Dinners", pass: "rd*548947@REX" }
         ];
 
-        const validManagementUsers = [
-            { fname: "Léa", lname: "Castor", grade: "Patron", account: "Direction Roxwood" },
-            { fname: "Ethan", lname: "Revers", grade: "Co-patron", account: "Direction Roxwood" },
-            { fname: "Anna", lname: "Fox", grade: "DRH", account: "Direction Roxwood" },
-            { fname: "Gabriela", lname: "Jimenez", grade: "Responsable", account: "Responsable" },
-            { fname: "Luc", lname: "Bernard", grade: "Chef d'équipe", account: "Responsable" }
-        ];
+        // --- CATALOGUES PERSONNALISÉS PAR ENTREPRISE ---
+        const catalogsByEnterprise = {
+            "Flywheels": [
+                { name: "Caoutchouc", price: 3.5 },
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Custom Motors": [
+                { name: "Caoutchouc", price: 3.5 },
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Auto Exotic": [
+                { name: "Caoutchouc", price: 3.5 },
+                { name: "Solvant", price: 20.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Eponge", price: 2.0 }
+            ],
+            "Esthétique Vinewood": [ { name: "Encre", price: 2.0 } ],
+            "Esthétique Vespucci": [ { name: "Encre", price: 2.0 } ],
+            "Esthétique Paleto": [ { name: "Encre", price: 2.0 } ],
+            "Esthétique Sandy": [ { name: "Encre", price: 2.0 } ],
+            "Delight": [
+                { name: "Pain burger", price: 2.0 },
+                { name: "Bagel", price: 2.0 },
+                { name: "Pain grillé", price: 2.0 },
+                { name: "Pâtes", price: 2.0 },
+                { name: "Nouille", price: 2.0 },
+                { name: "Moutarde", price: 2.0 },
+                { name: "Caramel", price: 2.0 },
+                { name: "Crème fraîche", price: 2.0 },
+                { name: "Barre de chocolat", price: 2.0 },
+                { name: "Eau purifiée", price: 2.0 }
+            ],
+            "Rex Dinners": [
+                { name: "Pain burger", price: 2.0 },
+                { name: "Tortilla", price: 2.0 },
+                { name: "Coquilles à Tacos", price: 2.0 },
+                { name: "Moutarde", price: 2.0 },
+                { name: "Crème fraîche", price: 2.0 },
+                { name: "Barre de chocolat", price: 2.0 },
+                { name: "Eau purifiée", price: 2.0 }
+            ],
+            "Yellow Jack": [
+                { name: "Pain burger", price: 2.0 },
+                { name: "Tortilla", price: 2.0 },
+                { name: "Moutarde", price: 2.0 },
+                { name: "Barre de chocolat", price: 2.0 },
+                { name: "Eau purifiée", price: 2.0 },
+                { name: "Papier a rouler", price: 2.0 }
+            ]
+        };
 
-        let pendingUser = null;
-        let currentAccountId = ""; 
-        let currentSessionName = ""; 
-        let currentSessionGrade = ""; 
+        let currentSessionName = "";
+        let currentEnterpriseInventory = [];
 
-        let ordersHistory = []; 
-        let filteredOrders = [];
-        let ordersEntHistory = [];
-        let filteredEntOrders = [];
-        let candidaturesHistory = [];
-        let filteredCandidatures = [];
-        let logsHistory = [];
-        let filteredLogs = [];
+        function checkEntrepriseLogin() {
+            const nameSelect = document.getElementById("ent-login-name");
+            const name = nameSelect.options[nameSelect.selectedIndex]?.value;
+            const pwd = document.getElementById("ent-password").value;
 
-        let currentOrderPage = 1;
-        let currentEntOrderPage = 1;
-        let currentCandPage = 1;
-        let currentLogPage = 1;
-        const perPage = 10;
-
-        function checkLogin() {
-            const u = document.getElementById("username").value;
-            const p = document.getElementById("password").value;
+            const found = authorizedEntreprises.find(e => e.name === name && e.pass === pwd);
             
-            const foundUser = authorizedUsers.find(user => user.name === u && user.pass === p);
-            
-            if(foundUser) {
-                if(foundUser.needsDetails) {
-                    pendingUser = foundUser;
-                    document.getElementById("login-screen").style.display = "none";
-                    document.getElementById("step2-login-screen").style.display = "block";
-                    
-                    const gradeSelect = document.getElementById("step2-grade");
-                    gradeSelect.innerHTML = "";
-                    
-                    if (foundUser.name === "Direction Roxwood") { 
-                        gradeSelect.innerHTML += `<option value="DRH">DRH</option>`;
-                        gradeSelect.innerHTML += `<option value="Co-patron">Co-patron</option>`;
-                        gradeSelect.innerHTML += `<option value="Patron">Patron</option>`;
-                    } else if (foundUser.name === "Responsable") { 
-                        gradeSelect.innerHTML += `<option value="Chef d'équipe">Chef d'équipe</option>`;
-                        gradeSelect.innerHTML += `<option value="Responsable">Responsable</option>`;
-                    }
-                } else { 
-                    finalizeLogin(foundUser.name, foundUser.grade, foundUser.name); 
-                }
+            if(found) {
+                document.getElementById("entreprise-login-screen").style.display = "none";
+                document.getElementById("error-ent").style.display = "none";
+                
+                currentSessionName = found.name;
+                currentEnterpriseInventory = catalogsByEnterprise[found.name] || [];
+                
+                document.getElementById("top-user-badge").style.display = "block";
+                document.getElementById("top-user-name").innerText = found.name;
+                document.getElementById("ent-company-name").value = found.name;
+                
+                document.getElementById("entreprise-dashboard").style.display = "block";
+                initEntrepriseTable();
             } else { 
-                document.getElementById("error").style.display = "block"; 
+                document.getElementById("error-ent").style.display = "block"; 
             }
         }
 
-        function submitStep2() {
-            const fnameInput = document.getElementById("step2-firstname").value.trim();
-            const lnameInput = document.getElementById("step2-lastname").value.trim();
-            const gradeSelect = document.getElementById("step2-grade").value;
+        function initEntrepriseTable() {
+            const grid = document.getElementById("ent-product-grid");
+            grid.innerHTML = ""; 
             
-            const isValid = validManagementUsers.find(u => 
-                u.fname.toLowerCase() === fnameInput.toLowerCase() && 
-                u.lname.toLowerCase() === lnameInput.toLowerCase() && 
-                u.grade === gradeSelect && 
-                u.account === pendingUser.name
-            );
-            
-            if (isValid) {
-                const fullName = isValid.fname + " " + isValid.lname;
-                finalizeLogin(pendingUser.name, gradeSelect, fullName);
-            } else {
-                document.getElementById("error-step2").style.display = "block";
-            }
-        }
-
-        function finalizeLogin(accountId, grade, displayFullName) {
-            currentAccountId = accountId; 
-            currentSessionName = displayFullName; 
-            currentSessionGrade = grade;
-            
-            if (accountId !== "admin") {
-                db.ref('logs').push({ 
-                    employe: displayFullName, 
-                    grade: grade, 
-                    date: new Date().toLocaleString('fr-FR'), 
-                    timestamp: firebase.database.ServerValue.TIMESTAMP 
-                });
-            }
-            
-            document.getElementById("login-screen").style.display = "none";
-            document.getElementById("step2-login-screen").style.display = "none";
-            document.getElementById("main-app").style.display = "block";
-            
-            if (accountId === "admin" || accountId === "Direction Roxwood") { 
-                document.getElementById("btn-candidatures").style.display = "block"; 
-                syncCandidatures(); 
-            }
-            if (accountId === "admin" || accountId === "Direction Roxwood" || accountId === "Responsable") { 
-                document.getElementById("btn-logs").style.display = "block"; 
-                syncLogs(); 
-            }
-
-            document.getElementById("top-user-badge").style.display = "block";
-            document.getElementById("top-user-name").innerText = displayFullName;
-            document.getElementById("top-user-grade").innerText = grade || "Non défini";
-            
-            syncDatabase(); 
-            switchTab('history-screen'); 
-        }
-
-        function switchTab(tabId) {
-            const allTabs = ['history-screen', 'history-ent-screen', 'candidatures-screen', 'logs-screen'];
-            
-            allTabs.forEach(id => {
-                document.getElementById(id).style.display = 'none';
-                if(document.getElementById('btn-' + id)) {
-                    document.getElementById('btn-' + id).classList.remove('active');
-                }
+            currentEnterpriseInventory.forEach((item, index) => {
+                let card = `
+                <div class="product-card ent-card">
+                    <div class="prod-name">${item.name}</div>
+                    <div class="prod-price">Prix pro : ${item.price.toFixed(2)} $</div>
+                    <input type="number" min="0" class="qty-input" oninput="calculateEntrepriseTotal()" id="ent-qty-${index}" placeholder="0">
+                    <div class="prod-subtotal" id="ent-sub-${index}">Total : 0.00 $</div>
+                </div>`;
+                grid.innerHTML += card;
             });
-            
-            document.getElementById(tabId).style.display = 'block';
-            
-            if(document.getElementById('btn-' + tabId)) {
-                document.getElementById('btn-' + tabId).classList.add('active');
-            }
         }
 
-        // --- DATABASE SYNC ---
-        function syncDatabase() {
-            db.ref('orders').orderByChild('timestamp').on('value', (snapshot) => {
-                ordersHistory = []; 
-                ordersEntHistory = [];
+        function calculateEntrepriseTotal() {
+            let grandTotal = 0;
+            currentEnterpriseInventory.forEach((item, index) => {
+                let qty = parseInt(document.getElementById(`ent-qty-${index}`).value) || 0;
+                let subtotal = item.price * qty;
                 
-                snapshot.forEach((child) => { 
-                    const order = { id: child.key, ...child.val() };
-                    if (order.type === "Entreprise") {
-                        ordersEntHistory.unshift(order); 
-                    } else {
-                        ordersHistory.unshift(order);
-                    }
-                });
-                filterOrders(); 
-                filterEntOrders();
-            });
-        }
-
-        function updateField(path, val) { 
-            db.ref(path).set(val); 
-        }
-        function del(path) { 
-            if(confirm("Supprimer définitivement cet élément de la base de données ?")) {
-                db.ref(path).remove(); 
-            }
-        }
-
-        // --- RENDER HELPERS ---
-        function getEmployeOptions(currentAssignee) {
-            let opts = `<option value="">-- Non assigné --</option>`;
-            
-            const names = authorizedUsers.filter(u => !u.needsDetails && u.name !== "admin").map(u => u.name);
-            validManagementUsers.forEach(u => names.push(u.fname + " " + u.lname));
-            
-            if(!names.includes(currentSessionName) && currentAccountId !== "admin") {
-                names.push(currentSessionName);
-            }
-            if(currentAssignee && !names.includes(currentAssignee) && currentAssignee !== "admin") {
-                names.push(currentAssignee);
-            }
-            
-            const uniqueNames = [...new Set(names)];
-            uniqueNames.forEach(n => {
-                opts += `<option value="${n}" ${currentAssignee === n ? 'selected' : ''}>${n}</option>`;
-            });
-            
-            return opts;
-        }
-
-        // --- CIVILS ---
-        function filterOrders() {
-            const query = document.getElementById('search-orders').value.toLowerCase();
-            filteredOrders = ordersHistory.filter(o => {
-                const str = `${o.client} ${o.phone} ${o.articles} ${o.zone} ${o.status} ${o.enCharge}`.toLowerCase();
-                return str.includes(query);
-            });
-            currentOrderPage = 1; 
-            renderHistory();
-        }
-
-        function changeOrderPage(delta) { 
-            currentOrderPage += delta; 
-            renderHistory(); 
-        }
-
-        function goToOrderPage() { 
-            currentOrderPage = parseInt(document.getElementById('order-page-input').value) || 1; 
-            renderHistory(); 
-        }
-
-        function renderHistory() {
-            const tbody = document.getElementById('history-body'); 
-            tbody.innerHTML = '';
-            
-            const totalPages = Math.max(1, Math.ceil(filteredOrders.length / perPage));
-            if(currentOrderPage < 1) currentOrderPage = 1; 
-            if(currentOrderPage > totalPages) currentOrderPage = totalPages;
-            
-            document.getElementById('order-total-pages').innerText = totalPages; 
-            document.getElementById('order-page-input').value = currentOrderPage;
-            
-            const startIndex = (currentOrderPage - 1) * perPage;
-            const endIndex = startIndex + perPage;
-            
-            filteredOrders.slice(startIndex, endIndex).forEach(order => {
-                const statOpts = ["En attente de préparation", "Disponible à la livraison", "Livraison en cours", "Livré"].map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('');
-                
-                tbody.innerHTML += `
-                <tr>
-                    <td style="color:#aaa;">${order.dateCreation}</td>
-                    <td>
-                        <strong style="color:#fff;">${order.client}</strong><br>
-                        <span style="color:#ff9800; font-size:0.9em;">📞 ${order.phone}</span>
-                    </td>
-                    <td style="text-align:left; line-height:1.4;">
-                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
-                        <span style="color:#64b5f6;">📍 <strong>Livraison :</strong></span> ${order.zone} <i>(${order.dateLivraison})</i><br>
-                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
-                    </td>
-                    <td style="color:#4caf50; font-weight:bold;">${order.total} $</td>
-                    <td><select class="status-select charge-select" onchange="updateField('orders/${order.id}/enCharge', this.value)">${getEmployeOptions(order.enCharge)}</select></td>
-                    <td><select class="status-select" onchange="updateField('orders/${order.id}/status', this.value)">${statOpts}</select></td>
-                    <td style="text-align:center;"><button class="btn-action btn-delete" onclick="del('orders/${order.id}')">X</button></td>
-                </tr>`;
-            });
-        }
-
-        // --- PROS ---
-        function filterEntOrders() {
-            const query = document.getElementById('search-ent-orders').value.toLowerCase();
-            filteredEntOrders = ordersEntHistory.filter(o => {
-                const str = `${o.client} ${o.phone} ${o.articles} ${o.status} ${o.enCharge}`.toLowerCase();
-                return str.includes(query);
-            });
-            currentEntOrderPage = 1; 
-            renderEntHistory();
-        }
-
-        function changeEntOrderPage(delta) { 
-            currentEntOrderPage += delta; 
-            renderEntHistory(); 
-        }
-
-        function goToEntOrderPage() { 
-            currentEntOrderPage = parseInt(document.getElementById('order-ent-page-input').value) || 1; 
-            renderEntHistory(); 
-        }
-
-        function renderEntHistory() {
-            const tbody = document.getElementById('history-ent-body'); 
-            tbody.innerHTML = '';
-            
-            const totalPages = Math.max(1, Math.ceil(filteredEntOrders.length / perPage));
-            if(currentEntOrderPage < 1) currentEntOrderPage = 1; 
-            if(currentEntOrderPage > totalPages) currentEntOrderPage = totalPages;
-            
-            document.getElementById('order-ent-total-pages').innerText = totalPages; 
-            document.getElementById('order-ent-page-input').value = currentEntOrderPage;
-            
-            const startIndex = (currentEntOrderPage - 1) * perPage;
-            const endIndex = startIndex + perPage;
-            
-            filteredEntOrders.slice(startIndex, endIndex).forEach(order => {
-                const statOpts = ["En attente de préparation", "Disponible à la livraison", "Livraison en cours", "Livré"].map(s => `<option value="${s}" ${order.status===s?'selected':''}>${s}</option>`).join('');
-                
-                let entName = order.client;
-                let contact = ""; 
-                if(order.client.includes("(")) { 
-                    entName = order.client.split(' (')[0]; 
-                    contact = order.client.split('(')[1].replace(')',''); 
+                if(document.getElementById(`ent-sub-${index}`)) {
+                    document.getElementById(`ent-sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
                 }
                 
-                tbody.innerHTML += `
-                <tr>
-                    <td style="color:#aaa;">${order.dateCreation}</td>
-                    <td>
-                        <strong style="color:#ce93d8;">${entName}</strong><br>
-                        <span style="color:#aaa; font-size:0.8em;">👤 ${contact}</span><br>
-                        <span style="color:#ff9800; font-size:0.8em;">📞 ${order.phone}</span>
-                    </td>
-                    <td style="text-align:left; line-height:1.4;">
-                        <span style="color:#81c784;">🛒 <strong>Panier :</strong></span> ${order.articles}<br>
-                        <span style="color:#64b5f6;">🗓️ <strong>Date prévue :</strong></span> ${order.dateLivraison}<br>
-                        <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
-                    </td>
-                    <td style="color:#ab47bc; font-weight:bold;">${order.total} $</td>
-                    <td><select class="status-select charge-select" style="border-color:#ce93d8;" onchange="updateField('orders/${order.id}/enCharge', this.value)">${getEmployeOptions(order.enCharge)}</select></td>
-                    <td><select class="status-select" style="border-color:#ce93d8;" onchange="updateField('orders/${order.id}/status', this.value)">${statOpts}</select></td>
-                    <td style="text-align:center;"><button class="btn-action btn-delete" onclick="del('orders/${order.id}')">X</button></td>
-                </tr>`;
+                grandTotal += subtotal;
             });
+            document.getElementById("ent-grand-total").innerText = grandTotal.toFixed(2) + " $";
+            return grandTotal;
         }
 
-        // --- CVS ---
-        function syncCandidatures() {
-            db.ref('candidatures').orderByChild('timestamp').on('value', (snapshot) => { 
-                candidaturesHistory = []; 
-                snapshot.forEach(c => {
-                    candidaturesHistory.unshift({ id: c.key, ...c.val() });
-                }); 
-                filterCandidatures(); 
+        function submitEntrepriseOrder() {
+            const total = calculateEntrepriseTotal();
+            const contactName = document.getElementById("ent-client-contact").value.trim();
+            const phone = document.getElementById("ent-client-phone").value.trim();
+
+            if(total <= 0) { 
+                alert("Erreur : La commande est vide !"); 
+                return; 
+            }
+            if(!contactName || !phone) { 
+                alert("Attention : Nom du contact et Téléphone obligatoires."); 
+                return; 
+            }
+
+            let articlesList = [];
+            currentEnterpriseInventory.forEach((item, index) => {
+                let qty = parseInt(document.getElementById(`ent-qty-${index}`).value) || 0;
+                if(qty > 0) {
+                    articlesList.push(`<b>${qty}x</b> ${item.name}`);
+                }
             });
+
+            const newOrder = {
+                type: "Entreprise", 
+                dateCreation: new Date().toLocaleString('fr-FR'), 
+                client: `${currentSessionName} (${contactName})`, 
+                phone: phone,
+                articles: articlesList.join(' | '), 
+                zone: "Non applicable", 
+                dateLivraison: document.getElementById("ent-delivery-date").value ? `${document.getElementById("ent-delivery-date").value.split('-').reverse().join('/')} à ${document.getElementById("ent-delivery-time").value}` : "Dès que possible",
+                infos: document.getElementById("ent-other-info").value.trim() || "Aucune note",
+                total: total.toFixed(2), 
+                enCharge: "", 
+                status: "En attente de préparation", 
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            db.ref('orders').push(newOrder)
+                .then(() => {
+                    document.getElementById("entreprise-dashboard").style.display = "none";
+                    document.getElementById("success-screen").style.display = "block";
+                })
+                .catch((e) => alert("Erreur : " + e.message));
         }
 
-        function filterCandidatures() { 
-            const query = document.getElementById('search-cands').value.toLowerCase(); 
-            filteredCandidatures = candidaturesHistory.filter(c => {
-                const str = `${c.prenom} ${c.nom} ${c.experience} ${c.status}`.toLowerCase();
-                return str.includes(query);
-            }); 
-            currentCandPage = 1; 
-            renderCandidatures(); 
-        }
-
-        function changeCandPage(delta) { 
-            currentCandPage += delta; 
-            renderCandidatures(); 
-        }
-
-        function goToCandPage() { 
-            currentCandPage = parseInt(document.getElementById('cand-page-input').value) || 1; 
-            renderCandidatures(); 
-        }
-
-        function renderCandidatures() {
-            const tbody = document.getElementById('candidatures-body'); 
-            tbody.innerHTML = '';
+        function resetToDashboard() {
+            document.querySelectorAll(".qty-input").forEach(i => i.value = "");
+            document.getElementById("ent-client-contact").value = "";
+            document.getElementById("ent-client-phone").value = "";
+            document.getElementById("ent-delivery-date").value = "";
+            document.getElementById("ent-delivery-time").value = "";
+            document.getElementById("ent-other-info").value = "";
             
-            const totalPages = Math.max(1, Math.ceil(filteredCandidatures.length / perPage));
-            if(currentCandPage < 1) currentCandPage = 1; 
-            if(currentCandPage > totalPages) currentCandPage = totalPages;
+            calculateEntrepriseTotal();
             
-            document.getElementById('cand-total-pages').innerText = totalPages; 
-            document.getElementById('cand-page-input').value = currentCandPage;
-            
-            const startIndex = (currentCandPage - 1) * perPage;
-            const endIndex = startIndex + perPage;
-            
-            filteredCandidatures.slice(startIndex, endIndex).forEach(cand => {
-                let rowClass = ""; 
-                if(cand.status === "accepté") { rowClass="cand-accepted"; }
-                else if(cand.status === "refusé") { rowClass="cand-rejected"; }
-                
-                tbody.innerHTML += `
-                <tr class="${rowClass}">
-                    <td style="color:#aaa;">${cand.dateCreation}</td>
-                    <td><strong style="color:#fff; font-size:1.1em;">${cand.prenom} ${cand.nom}</strong></td>
-                    <td>
-                        🎂 ${cand.age} ans<br>
-                        <span style="color:#ff9800;">📞 ${cand.phone}</span>
-                    </td>
-                    <td style="text-align:left; line-height:1.4;">
-                        <span style="color:#ddd;"><i>Exp:</i> "${cand.experience}"</span><br><br>
-                        <span style="color:#b3e5fc;"><i>Mot:</i> "${cand.motivation}"</span>
-                    </td>
-                    <td style="text-align:center; vertical-align:middle;">
-                        <button class="btn-icon-round ${cand.appreciation ? 'has-notes' : ''}" onclick="document.getElementById('app-${cand.id}').style.display = document.getElementById('app-${cand.id}').style.display === 'none' ? 'block' : 'none'">
-                            ${cand.appreciation ? '📝' : '➕'}
-                        </button>
-                        <div id="app-${cand.id}" style="display:none; margin-top:10px;">
-                            <textarea id="txt-${cand.id}" class="appreciation-input" placeholder="Notes d'entretien...">${cand.appreciation || ''}</textarea>
-                            <button class="btn btn-blue btn-small" style="width:100%;" onclick="updateField('candidatures/${cand.id}/appreciation', document.getElementById('txt-${cand.id}').value); document.getElementById('app-${cand.id}').style.display='none';">Sauver</button>
-                        </div>
-                    </td>
-                    <td style="text-align:center; white-space:nowrap;">
-                        <button class="btn-action btn-accept" onclick="updateField('candidatures/${cand.id}/status', 'accepté')" title="Accepter">✅</button>
-                        <button class="btn-action btn-reject" onclick="updateField('candidatures/${cand.id}/status', 'refusé')" title="Refuser">❌</button>
-                        <button class="btn-action btn-delete" onclick="del('candidatures/${cand.id}')" title="Supprimer">🗑️</button>
-                    </td>
-                </tr>`;
-            });
-        }
-
-        // --- LOGS ---
-        function syncLogs() { 
-            db.ref('logs').orderByChild('timestamp').on('value', (snapshot) => { 
-                logsHistory = []; 
-                snapshot.forEach(log => {
-                    logsHistory.unshift({ id: log.key, ...log.val() });
-                }); 
-                filterLogs(); 
-            }); 
-        }
-
-        function filterLogs() { 
-            const query = document.getElementById('search-logs').value.toLowerCase(); 
-            filteredLogs = logsHistory.filter(l => {
-                const str = `${l.employe} ${l.date} ${l.grade}`.toLowerCase();
-                return str.includes(query);
-            }); 
-            currentLogPage = 1; 
-            renderLogs(); 
-        }
-
-        function changeLogPage(delta) { 
-            currentLogPage += delta; 
-            renderLogs(); 
-        }
-
-        function goToLogPage() { 
-            currentLogPage = parseInt(document.getElementById('log-page-input').value) || 1; 
-            renderLogs(); 
-        }
-
-        function renderLogs() {
-            const tbody = document.getElementById('logs-body'); 
-            tbody.innerHTML = '';
-            
-            const totalPages = Math.max(1, Math.ceil(filteredLogs.length / perPage));
-            if(currentLogPage < 1) currentLogPage = 1; 
-            if(currentLogPage > totalPages) currentLogPage = totalPages;
-            
-            document.getElementById('log-total-pages').innerText = totalPages; 
-            document.getElementById('log-page-input').value = currentLogPage;
-            
-            document.getElementById('th-log-action').style.display = currentAccountId === 'admin' ? 'table-cell' : 'none';
-            
-            const startIndex = (currentLogPage - 1) * perPage;
-            const endIndex = startIndex + perPage;
-            
-            filteredLogs.slice(startIndex, endIndex).forEach(log => {
-                let actionTd = currentAccountId === "admin" ? `<td style="text-align:center;"><button class="btn-action btn-delete" onclick="del('logs/${log.id}')">🗑️</button></td>` : '';
-                const gradeBadge = log.grade ? ` <span style="color:#ff9800; font-size:0.85em;">(${log.grade})</span>` : '';
-                
-                tbody.innerHTML += `
-                <tr>
-                    <td style="color:#aaa;">${log.date}</td>
-                    <td><strong style="color:#64b5f6;">${log.employe}</strong>${gradeBadge}</td>
-                    ${actionTd}
-                </tr>`;
-            });
+            document.getElementById("success-screen").style.display = "none";
+            document.getElementById("entreprise-dashboard").style.display = "block";
         }
 
         function updateClock() {
