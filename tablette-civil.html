@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1500">    
+    <title>LTD Roxwood - Commande & CV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- le firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        /* --- le disigne global --- */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto Slab', serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('ltd.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-x: hidden; 
+        }
+
+        .container {
+            position: relative;
+            background-color: rgba(45, 45, 45, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            width: 98%; 
+            max-width: 1500px; 
+            text-align: center;
+            border: 1px solid #555;
+            backdrop-filter: blur(5px);
+            margin: 20px auto;
+        }
+
+        .top-left-clock {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            background-color: rgba(26, 26, 26, 0.9);
+            border: 1px solid #64b5f6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-align: center;
+            line-height: 1.5;
+            color: #e0e0e0;
+            min-width: 230px; 
+            font-variant-numeric: tabular-nums; 
+        }
+        .top-left-clock span { color: #64b5f6; font-weight: bold; }
+
+        h1 { color: #ff9800; letter-spacing: 1px; margin-bottom: 15px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        h3 { color: #ff9800; border-bottom: 2px solid #ff9800; padding-bottom: 10px; margin-top: 30px; font-size: 1.5em; text-align: left; }
+        h3.pack-title { color: #4caf50; border-bottom: 2px solid #4caf50; margin-top: 40px; }
+        p { font-size: 1.1em; margin-bottom: 20px; }
+
+        /* --- la grille des produits --- */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 20px; }
+        .product-card { background-color: rgba(30, 30, 30, 0.8); border: 1px solid #ff9800; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: 0.2s; }
+        .product-card.pack-card { border: 1px solid #4caf50; }
+        .product-card.pack-card .prod-name { color: #81c784; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 152, 0, 0.2); background-color: rgba(40, 40, 40, 0.9); }
+        
+        .prod-name { font-size: 0.9em; font-weight: bold; color: #ff9800; margin-bottom: 5px; height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; }
+        .prod-price { color: #ccc; font-size: 0.9em; margin-bottom: 10px; }
+        .prod-subtotal { margin-top: 10px; font-weight: bold; color: #4caf50; }
+
+        /* --- inputs --- */
+        .info-input, select.info-input { width: 100%; padding: 12px; background-color: rgba(26, 26, 26, 0.8); border: 1px solid #ff9800; color: white; border-radius: 8px; text-align: center; font-family: 'Roboto Slab', serif; font-size: 1em; }
+        select.info-input option { background-color: #1a1a1a; color: white; }
+        .qty-input { width: 80px; padding: 8px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: white; border-radius: 5px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; font-size: 1.2em; }
+        textarea.info-input { height: 80px; text-align: left; resize: vertical; }
+
+        /* --- barre de total pour les commandes --- */
+        .total-bar { background-color: rgba(51, 51, 51, 0.9); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #4caf50; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .total-label { font-size: 1.2em; font-weight: bold; color: white; }
+        .total-amount { font-size: 1.8em; font-weight: bold; color: #4caf50; }
+
+        /* --- boutons --- */
+        .btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #ff9800, #e68900); border: none; color: #1a1a1a; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.1em; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); transition: 0.2s; }
+        .btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+        .btn-green { background: linear-gradient(45deg, #43a047, #2e7d32); color: white; }
+        .btn-blue { background: linear-gradient(45deg, #1976d2, #1565c0); color: white; }
+        .btn-red { background: linear-gradient(45deg, #d32f2f, #b71c1c); color: white; }
+
+        /* --- differente section / zone --- */
+        .delivery-info-section { margin-top: 30px; text-align: left; background-color: rgba(34, 34, 34, 0.6); padding: 20px; border-radius: 10px; border: 1px solid #444; }
+        .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; }
+        .delivery-info-row .info-input { margin: 0; }
+        
+        #dashboard, #candidature-form-screen, #success-screen, #success-cv-screen { display: none; }
+        .success-icon { font-size: 4em; margin-bottom: 20px; display: block; color: #43a047; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div id="top-left-clock" class="top-left-clock">
+            📅 <span id="real-time-display"></span>
+        </div>
+
+        <!-- acceuil sur site web -->
+        <div id="welcome-screen">
+            <h1>LTD Roxwood</h1>
+            <p>Bienvenue sur le portail public du LTD Roxwood.</p>
+            <br>
+            <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+                <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
+                <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Commande -->
+        <div id="dashboard">
+            <h1>Nouvelle Commande</h1>
+            <h3>PRODUITS STANDARDS</h3>
+            <div id="product-grid-standard" class="product-grid"></div>
+            
+            <h3 class="pack-title">OFFRES SPÉCIALES (PACKS)</h3>
+            <div id="product-grid-pack" class="product-grid"></div>
+            
+            <div class="total-bar">
+                <span class="total-label">TOTAL À PAYER :</span>
+                <span class="total-amount" id="grand-total">0.00 $</span>
+            </div>
+            
+            <div class="delivery-info-section">
+                <h3>INFORMATIONS DE LIVRAISON</h3>
+                <div class="delivery-info-row">
+                    <input type="text" id="client-firstname" class="info-input" placeholder="Prénom" style="width: 48%;">
+                    <input type="text" id="client-lastname" class="info-input" placeholder="Nom" style="width: 48%;">
+                </div>
+                <div class="delivery-info-row">
+                    <input type="text" id="client-phone" class="info-input" placeholder="📞 Tél. de contact" style="width: 25%;">
+                    <input type="date" id="delivery-date" class="info-input" style="width: 20%;">
+                    <input type="time" id="delivery-time" class="info-input" style="width: 15%;">
+                    <select id="delivery-zone" class="info-input" style="width: 35%;" onchange="calculateTotal()">
+                        <option value="0">Roxwood / Paleto (0$)</option>
+                        <option value="150">Nord (Sandy et alentours) (150$)</option>
+                        <option value="300">Sud (À Partir Du Péage) (300$)</option>
+                    </select>
+                </div>
+                <textarea id="other-info" class="info-input" placeholder="📝 Informations supplémentaires / Instructions" style="margin-bottom: 0;"></textarea>
+            </div>
+            
+            <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
+                <button class="btn btn-green" onclick="submitOrder()">VALIDER LA COMMANDE</button>
+                <button class="btn btn-red" onclick="location.reload()">ANNULER</button>
+            </div>
+        </div>
+
+        <!-- Formulaire CV -->
+        <div id="candidature-form-screen">
+            <h1 style="color: #1976d2;">Déposer une candidature</h1>
+            <p>Rejoignez l'équipe du LTD Roxwood ! Remplissez ce formulaire avec soin.</p>
+            
+            <div class="delivery-info-section" style="width: 80%; margin: 0 auto;">
+                <div class="delivery-info-row">
+                    <input type="text" id="cv-firstname" class="info-input" placeholder="Prénom" style="width: 48%;">
+                    <input type="text" id="cv-lastname" class="info-input" placeholder="Nom" style="width: 48%;">
+                </div>
+                <div class="delivery-info-row">
+                    <input type="number" id="cv-age" class="info-input" placeholder="Âge" style="width: 25%;">
+                    <input type="text" id="cv-phone" class="info-input" placeholder="📞 Tél. de contact" style="width: 70%;">
+                </div>
+                <textarea id="cv-experience" class="info-input" placeholder="💼 Vos expériences précédentes" style="height: 100px; margin-bottom: 15px;"></textarea>
+                <textarea id="cv-motivation" class="info-input" placeholder="🔥 Vos motivations pour nous rejoindre" style="height: 120px;"></textarea>
+            </div>
+            
+            <div style="width: 50%; margin: 20px auto 0; display: flex; flex-direction: column; gap: 15px;">
+                <button class="btn btn-blue" onclick="submitCV()">ENVOYER MA CANDIDATURE</button>
+                <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
+            </div>
+        </div>
+
+        <!-- Ecrans de succès -->
+        <div id="success-screen">
+            <span class="success-icon">✅</span>
+            <h1 style="color: #43a047;">Commande Validée !</h1>
+            <p>La commande a bien été transmise.</p>
+            <div style="width: 50%; margin: 20px auto 0;">
+                <button class="btn" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+            </div>
+        </div>
+
+        <div id="success-cv-screen">
+            <span class="success-icon">✅</span>
+            <h1 style="color: #43a047;">Candidature Envoyée !</h1>
+            <p>Votre CV a bien été transmis à la direction du LTD Roxwood.</p>
+            <div style="width: 50%; margin: 20px auto 0;">
+                <button class="btn" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxqUR8EtJw6gnUCUVQ5DTvbOnpvpPqZ3E",
+            authDomain: "ltd-roxwood-afe8b.firebaseapp.com",
+            databaseURL: "https://ltd-roxwood-afe8b-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ltd-roxwood-afe8b"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // --- CATALOGUE CIVIL ---
+        const inventory = [
+            { name: "Caoutchouc", price: 5.0 },
+            { name: "Appât", price: 10.0 },
+            { name: "Bouteille d'eau", price: 8.0 },
+            { name: "Fertilisant", price: 8.0 },
+            { name: "Pot de fleur", price: 8.0 },
+            { name: "Lumière Violette", price: 36.0 },
+            { name: "Sachet Vide", price: 5.0 },
+            { name: "Foret de perceuse", price: 600.0 },
+            { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
+        ];
+
+        function showClientSpace() {
+            document.getElementById("welcome-screen").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            initTable();
+        }
+
+        function showCandidatureForm() {
+            document.getElementById("welcome-screen").style.display = "none";
+            document.getElementById("candidature-form-screen").style.display = "block";
+        }
+
+        function initTable() {
+            const gridStandard = document.getElementById("product-grid-standard");
+            const gridPack = document.getElementById("product-grid-pack");
+            gridStandard.innerHTML = ""; 
+            gridPack.innerHTML = "";
+
+            inventory.forEach((item, index) => {
+                const isPack = item.name.toLowerCase().includes("pack");
+                let cardClass = "product-card " + (isPack ? "pack-card" : "");
+                
+                let card = `
+                <div class="${cardClass}">
+                    <div class="prod-name">${item.name}</div>
+                    <div class="prod-price">Prix : ${item.price.toFixed(2)} $</div>
+                    <input type="number" min="0" class="qty-input" oninput="calculateTotal()" id="qty-${index}" placeholder="0">
+                    <div class="prod-subtotal" id="sub-${index}">Total : 0.00 $</div>
+                </div>`;
+                
+                if (isPack) {
+                    gridPack.innerHTML += card;
+                } else {
+                    gridStandard.innerHTML += card;
+                }
+            });
+        }
+
+        function calculateTotal() {
+            let grandTotal = 0;
+            inventory.forEach((item, index) => {
+                let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
+                let subtotal = item.price * qty;
+                if(document.getElementById(`sub-${index}`)) {
+                    document.getElementById(`sub-${index}`).innerText = "Total : " + subtotal.toFixed(2) + " $";
+                }
+                grandTotal += subtotal;
+            });
+            
+            const zoneSelect = document.getElementById("delivery-zone");
+            const zoneFee = zoneSelect ? (parseFloat(zoneSelect.value) || 0) : 0;
+            grandTotal += zoneFee;
+            
+            if(document.getElementById("grand-total")) {
+                document.getElementById("grand-total").innerText = grandTotal.toFixed(2) + " $";
+            }
+            return grandTotal;
+        }
+
+        function submitOrder() {
+            const total = calculateTotal();
+            const firstname = document.getElementById("client-firstname").value.trim();
+            const lastname = document.getElementById("client-lastname").value.trim();
+            const phone = document.getElementById("client-phone").value.trim();
+
+            if(total <= 0) {
+                alert("Erreur : La commande est vide !");
+                return;
+            }
+            if(firstname === "" || lastname === "") {
+                alert("Attention : Nom et Prénom obligatoires.");
+                return;
+            }
+            if(phone === "") {
+                alert("Attention : Téléphone obligatoire.");
+                return;
+            }
+
+            let articlesList = [];
+            inventory.forEach((item, index) => {
+                let qty = parseInt(document.getElementById(`qty-${index}`).value) || 0;
+                if(qty > 0) articlesList.push(`<b>${qty}x</b> ${item.name}`);
+            });
+
+            const zoneSelect = document.getElementById("delivery-zone");
+            const newOrder = {
+                type: "Civil",
+                dateCreation: new Date().toLocaleString('fr-FR'),
+                client: `${firstname} ${lastname}`,
+                phone: phone,
+                articles: articlesList.join(' | '),
+                zone: zoneSelect.options[zoneSelect.selectedIndex].text,
+                dateLivraison: document.getElementById("delivery-date").value ? `${document.getElementById("delivery-date").value.split('-').reverse().join('/')} à ${document.getElementById("delivery-time").value}` : "Dès que possible",
+                infos: document.getElementById("other-info").value.trim() || "Aucune note",
+                total: total.toFixed(2),
+                enCharge: "", 
+                status: "En attente de préparation",
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            db.ref('orders').push(newOrder)
+                .then(() => {
+                    document.getElementById("dashboard").style.display = "none";
+                    document.getElementById("success-screen").style.display = "block";
+                })
+                .catch((e) => alert("Erreur : " + e.message));
+        }
+
+        function submitCV() {
+            const prenom = document.getElementById("cv-firstname").value.trim();
+            const nom = document.getElementById("cv-lastname").value.trim();
+            const age = document.getElementById("cv-age").value.trim();
+            const phone = document.getElementById("cv-phone").value.trim();
+            const experience = document.getElementById("cv-experience").value.trim();
+            const motivation = document.getElementById("cv-motivation").value.trim();
+
+            if(!prenom || !nom || !age || !phone || !experience || !motivation) {
+                alert("Attention : Tous les champs sont obligatoires pour envoyer votre candidature !");
+                return;
+            }
+
+            const newCV = {
+                dateCreation: new Date().toLocaleString('fr-FR'),
+                prenom: prenom,
+                nom: nom,
+                age: age,
+                phone: phone,
+                experience: experience,
+                motivation: motivation,
+                appreciation: "",       
+                status: "en attente",   
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            db.ref('candidatures').push(newCV)
+                .then(() => {
+                    document.getElementById("candidature-form-screen").style.display = "none";
+                    document.getElementById("success-cv-screen").style.display = "block";
+                })
+                .catch((e) => alert("Erreur : " + e.message));
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const clockEl = document.getElementById("real-time-display");
+            if(clockEl) clockEl.innerText = dateStr + " - " + timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
