@@ -64,10 +64,41 @@
         }
         .top-left-clock span { color: #64b5f6; font-weight: bold; }
 
-        h1 { color: #ff9800; letter-spacing: 1px; margin-bottom: 15px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        h1 { color: #ff9800; letter-spacing: 1px; margin-bottom: 5px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
         h3 { color: #ff9800; border-bottom: 2px solid #ff9800; padding-bottom: 10px; margin-top: 30px; font-size: 1.5em; text-align: left; }
         h3.pack-title { color: #4caf50; border-bottom: 2px solid #4caf50; margin-top: 40px; }
         p { font-size: 1.1em; margin-bottom: 20px; }
+
+        /* --- NAVBAR (Onglets) --- */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 20px;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid transparent;
+            color: white;
+            font-family: 'Roboto Slab', serif;
+            font-weight: bold;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .nav-btn:hover { filter: brightness(1.2); transform: scale(1.03); }
+        
+        #btn-dashboard { border-color: #4caf50; }
+        #btn-dashboard.active { background-color: #4caf50; color: #1a1a1a; }
+        
+        #btn-candidature-form-screen { border-color: #1976d2; }
+        #btn-candidature-form-screen.active { background-color: #1976d2; color: #1a1a1a; }
 
         /* --- la grille des produits --- */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 20px; }
@@ -103,7 +134,7 @@
         .delivery-info-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; }
         .delivery-info-row .info-input { margin: 0; }
         
-        #dashboard, #candidature-form-screen, #success-screen, #success-cv-screen { display: none; }
+        #main-navbar, #dashboard, #candidature-form-screen, #success-screen, #success-cv-screen { display: none; }
         .success-icon { font-size: 4em; margin-bottom: 20px; display: block; color: #43a047; }
     </style>
 </head>
@@ -115,20 +146,30 @@
             📅 <span id="real-time-display"></span>
         </div>
 
-        <!-- acceuil sur site web -->
-        <div id="welcome-screen">
+        <div id="header-titles">
             <h1>LTD Roxwood</h1>
-            <p>Bienvenue sur le portail public du LTD Roxwood.</p>
-            <br>
+            <p style="color:#aaa; margin-bottom: 0;">Portail des services publics</p>
+        </div>
+
+        <!-- Accueil -->
+        <div id="welcome-screen" style="margin-top: 40px;">
+            <p style="font-size: 1.2em; margin-bottom: 40px;">Bienvenue ! Que souhaitez-vous faire aujourd'hui ?</p>
             <div style="width: 50%; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-                <button class="btn btn-green" onclick="showClientSpace()">🛒 PASSER UNE COMMANDE</button>
-                <button class="btn btn-blue" onclick="showCandidatureForm()">📝 DÉPOSER UN CV</button>
+                <button class="btn btn-green" onclick="openSpace('dashboard')">🛒 PASSER UNE COMMANDE</button>
+                <button class="btn btn-blue" onclick="openSpace('candidature-form-screen')">📝 DÉPOSER UN CV</button>
             </div>
+        </div>
+
+        <!-- Barre de navigation (Masquée sur l'accueil) -->
+        <div class="navbar" id="main-navbar">
+            <button class="nav-btn" id="btn-dashboard" onclick="switchTab('dashboard')">🛒 Passer Commande</button>
+            <button class="nav-btn" id="btn-candidature-form-screen" onclick="switchTab('candidature-form-screen')">📝 Déposer un CV</button>
+            <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
         </div>
 
         <!-- Dashboard Commande -->
         <div id="dashboard">
-            <h1>Nouvelle Commande</h1>
+            <h1 style="color: #4caf50; font-size: 2em; display: none;">Nouvelle Commande</h1>
             <h3>PRODUITS STANDARDS</h3>
             <div id="product-grid-standard" class="product-grid"></div>
             
@@ -161,31 +202,30 @@
             
             <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-green" onclick="submitOrder()">VALIDER LA COMMANDE</button>
-                <button class="btn btn-red" onclick="location.reload()">ANNULER</button>
+                <button class="btn btn-red" onclick="location.reload()">ANNULER / RETOUR ACCUEIL</button>
             </div>
         </div>
 
         <!-- Formulaire CV -->
         <div id="candidature-form-screen">
-            <h1 style="color: #1976d2;">Déposer une candidature</h1>
-            <p>Rejoignez l'équipe du LTD Roxwood ! Remplissez ce formulaire avec soin.</p>
+            <h1 style="color: #1976d2; font-size: 2em; display: none;">Déposer une candidature</h1>
+            <p style="margin-top: 20px;">Rejoignez l'équipe du LTD Roxwood ! Remplissez ce formulaire avec soin.</p>
             
-            <div class="delivery-info-section" style="width: 80%; margin: 0 auto;">
+            <div class="delivery-info-section" style="width: 80%; margin: 0 auto; border-color: #1976d2;">
                 <div class="delivery-info-row">
-                    <input type="text" id="cv-firstname" class="info-input" placeholder="Prénom" style="width: 48%;">
-                    <input type="text" id="cv-lastname" class="info-input" placeholder="Nom" style="width: 48%;">
+                    <input type="text" id="cv-firstname" class="info-input" placeholder="Prénom" style="width: 48%; border-color: #1976d2;">
+                    <input type="text" id="cv-lastname" class="info-input" placeholder="Nom" style="width: 48%; border-color: #1976d2;">
                 </div>
                 <div class="delivery-info-row">
-                    <input type="number" id="cv-age" class="info-input" placeholder="Âge" style="width: 25%;">
-                    <input type="text" id="cv-phone" class="info-input" placeholder="📞 Tél. de contact" style="width: 70%;">
+                    <input type="number" id="cv-age" class="info-input" placeholder="Âge" style="width: 25%; border-color: #1976d2;">
+                    <input type="text" id="cv-phone" class="info-input" placeholder="📞 Tél. de contact" style="width: 70%; border-color: #1976d2;">
                 </div>
-                <textarea id="cv-experience" class="info-input" placeholder="💼 Vos expériences précédentes" style="height: 100px; margin-bottom: 15px;"></textarea>
-                <textarea id="cv-motivation" class="info-input" placeholder="🔥 Vos motivations pour nous rejoindre" style="height: 120px;"></textarea>
+                <textarea id="cv-experience" class="info-input" placeholder="💼 Vos expériences précédentes" style="height: 100px; margin-bottom: 15px; border-color: #1976d2;"></textarea>
+                <textarea id="cv-motivation" class="info-input" placeholder="🔥 Vos motivations pour nous rejoindre" style="height: 120px; border-color: #1976d2;"></textarea>
             </div>
             
             <div style="width: 50%; margin: 20px auto 0; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn btn-blue" onclick="submitCV()">ENVOYER MA CANDIDATURE</button>
-                <button class="btn btn-red" onclick="location.reload()">RETOUR</button>
             </div>
         </div>
 
@@ -193,18 +233,18 @@
         <div id="success-screen">
             <span class="success-icon">✅</span>
             <h1 style="color: #43a047;">Commande Validée !</h1>
-            <p>La commande a bien été transmise.</p>
+            <p>La commande a bien été transmise à notre équipe.</p>
             <div style="width: 50%; margin: 20px auto 0;">
                 <button class="btn" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
             </div>
         </div>
 
         <div id="success-cv-screen">
-            <span class="success-icon">✅</span>
-            <h1 style="color: #43a047;">Candidature Envoyée !</h1>
+            <span class="success-icon" style="color: #1976d2;">✅</span>
+            <h1 style="color: #1976d2;">Candidature Envoyée !</h1>
             <p>Votre CV a bien été transmis à la direction du LTD Roxwood.</p>
             <div style="width: 50%; margin: 20px auto 0;">
-                <button class="btn" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+                <button class="btn btn-blue" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
             </div>
         </div>
 
@@ -233,17 +273,32 @@
             { name: "Pack Jardinage (300 Eau, 100 Ferti, 10 Lum.)", price: 4000.0 }
         ];
 
-        function showClientSpace() {
+        // --- OUVERTURE DE L'ESPACE DEPUIS L'ACCUEIL ---
+        function openSpace(tabId) {
             document.getElementById("welcome-screen").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            initTable();
+            document.getElementById("main-navbar").style.display = "flex"; // Affiche la navbar
+            switchTab(tabId);
         }
 
-        function showCandidatureForm() {
-            document.getElementById("welcome-screen").style.display = "none";
-            document.getElementById("candidature-form-screen").style.display = "block";
+        // --- GESTION DES ONGLETS ---
+        function switchTab(tabId) {
+            const allTabs = ['dashboard', 'candidature-form-screen', 'success-screen', 'success-cv-screen'];
+            
+            allTabs.forEach(id => {
+                document.getElementById(id).style.display = 'none';
+                if(document.getElementById('btn-' + id)) {
+                    document.getElementById('btn-' + id).classList.remove('active');
+                }
+            });
+            
+            document.getElementById(tabId).style.display = 'block';
+            
+            if(document.getElementById('btn-' + tabId)) {
+                document.getElementById('btn-' + tabId).classList.add('active');
+            }
         }
 
+        // --- INITIALISATION DE LA TABLE DES PRODUITS ---
         function initTable() {
             const gridStandard = document.getElementById("product-grid-standard");
             const gridPack = document.getElementById("product-grid-pack");
@@ -270,6 +325,7 @@
             });
         }
 
+        // --- CALCUL DU TOTAL ---
         function calculateTotal() {
             let grandTotal = 0;
             inventory.forEach((item, index) => {
@@ -291,6 +347,7 @@
             return grandTotal;
         }
 
+        // --- SOUMISSION DE LA COMMANDE ---
         function submitOrder() {
             const total = calculateTotal();
             const firstname = document.getElementById("client-firstname").value.trim();
@@ -334,12 +391,12 @@
 
             db.ref('orders').push(newOrder)
                 .then(() => {
-                    document.getElementById("dashboard").style.display = "none";
-                    document.getElementById("success-screen").style.display = "block";
+                    switchTab('success-screen');
                 })
                 .catch((e) => alert("Erreur : " + e.message));
         }
 
+        // --- SOUMISSION DU CV ---
         function submitCV() {
             const prenom = document.getElementById("cv-firstname").value.trim();
             const nom = document.getElementById("cv-lastname").value.trim();
@@ -368,12 +425,12 @@
 
             db.ref('candidatures').push(newCV)
                 .then(() => {
-                    document.getElementById("candidature-form-screen").style.display = "none";
-                    document.getElementById("success-cv-screen").style.display = "block";
+                    switchTab('success-cv-screen');
                 })
                 .catch((e) => alert("Erreur : " + e.message));
         }
 
+        // --- HORLOGE ---
         function updateClock() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -381,6 +438,12 @@
             const clockEl = document.getElementById("real-time-display");
             if(clockEl) clockEl.innerText = dateStr + " - " + timeStr;
         }
+        
+        // Initialisation de la page
+        window.onload = () => {
+            initTable();
+        };
+        
         setInterval(updateClock, 1000);
         updateClock();
     </script>
