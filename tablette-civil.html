@@ -202,7 +202,7 @@
             
             <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-green" onclick="submitOrder()">VALIDER LA COMMANDE</button>
-                <button class="btn btn-red" onclick="location.reload()">ANNULER / RETOUR ACCUEIL</button>
+                <button class="btn btn-red" onclick="resetOrderForm()">VIDER LE PANIER</button>
             </div>
         </div>
 
@@ -345,6 +345,31 @@
                 document.getElementById("grand-total").innerText = grandTotal.toFixed(2) + " $";
             }
             return grandTotal;
+        }
+
+        // --- RESET DU FORMULAIRE DE COMMANDE ---
+        function resetOrderForm() {
+            // Remettre les quantités à zéro
+            inventory.forEach((item, index) => {
+                const qtyInput = document.getElementById(`qty-${index}`);
+                if (qtyInput) qtyInput.value = "";
+                const subtotalText = document.getElementById(`sub-${index}`);
+                if (subtotalText) subtotalText.innerText = "Total : 0.00 $";
+            });
+
+            // Vider les champs d'informations
+            document.getElementById("client-firstname").value = "";
+            document.getElementById("client-lastname").value = "";
+            document.getElementById("client-phone").value = "";
+            document.getElementById("delivery-date").value = "";
+            document.getElementById("delivery-time").value = "";
+            document.getElementById("other-info").value = "";
+            
+            // Remettre la zone de livraison par défaut
+            document.getElementById("delivery-zone").selectedIndex = 0;
+
+            // Recalculer le total (pour qu'il revienne à 0)
+            calculateTotal();
         }
 
         // --- SOUMISSION DE LA COMMANDE ---
