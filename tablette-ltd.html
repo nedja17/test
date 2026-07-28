@@ -177,6 +177,7 @@
                 <input type="text" id="step2-lastname" class="login-input" placeholder="Votre Nom">
                 <select id="step2-grade" class="info-input"></select>
                 <button class="btn btn-blue" onclick="submitStep2()">VALIDER MON ACCÈS</button>
+                <button class="btn btn-red" onclick="goBackToStep1()">RETOUR</button>
                 <p id="error-step2" style="color:red; display:none; margin: 0; font-weight: bold;">Accès refusé.</p>
             </div>
         </div>
@@ -382,6 +383,17 @@
             } else { 
                 document.getElementById("error").style.display = "block"; 
             }
+        }
+
+        function goBackToStep1() {
+            document.getElementById("step2-login-screen").style.display = "none";
+            document.getElementById("login-screen").style.display = "block";
+            document.getElementById("error-step2").style.display = "none";
+            
+            // On vide les champs du formulaire étape 2 par sécurité
+            document.getElementById("step2-firstname").value = "";
+            document.getElementById("step2-lastname").value = "";
+            pendingUser = null;
         }
 
         function submitStep2() {
