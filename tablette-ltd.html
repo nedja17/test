@@ -328,8 +328,8 @@
             { fname: "Ethan", lname: "Revers", grade: "Patron", account: "Direction Paleto" },
             { fname: "Anna", lname: "Jiménez", grade: "Co-patronne", account: "Direction Paleto" },
             { fname: "Gabriela", lname: "Jiménez", grade: "RH", account: "Gestion Paleto" }, 
-            { fname: "test5", lname: "5", grade: "Responsable", account: "Responsable" },
-            { fname: "test6", lname: "6", grade: "Chef d'équipe", account: "Responsable" }
+            { fname: "test5", lname: "5", grade: "Responsable Ravitailleur", account: "Responsable" },
+            { fname: "test6", lname: "6", grade: "Responsable Epicier", account: "Responsable" }
         ];
 
         let pendingUser = null;
@@ -373,8 +373,8 @@
                     } else if (foundUser.name === "Gestion Paleto") {   
                         gradeSelect.innerHTML += `<option value="RH">RH</option>`;
                     } else if (foundUser.name === "Responsable") { 
-                        gradeSelect.innerHTML += `<option value="Responsable">Responsable</option>`;
-                        gradeSelect.innerHTML += `<option value="Chef d'équipe">Chef d'équipe</option>`;
+                        gradeSelect.innerHTML += `<option value="Responsable Ravitailleur">Responsable Ravitailleur</option>`;
+                        gradeSelect.innerHTML += `<option value="Responsable Epicier">Responsable Epicier</option>`;
                     }
                 } else { 
                     finalizeLogin(foundUser.name, foundUser.grade, foundUser.name); 
