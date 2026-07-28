@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1500">    
-    <title>LTD Roxwood - Espace Employé</title>
+    <title>LTD Paleto - Espace Employé</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -314,7 +314,7 @@
 
         const authorizedUsers = [
             { name: "admin", pass: "ad!025489@ADM", grade: "Administrateur", needsDetails: false },
-            { name: "Direction Roxwood", pass: "dr!456985@DIR", grade: "", needsDetails: true }, 
+            { name: "Direction Paleto", pass: "dr!456985@DIR", grade: "", needsDetails: true }, 
             { name: "Responsable", pass: "re!896458@RES", grade: "", needsDetails: true }, 
             { name: "Hibiscus Evergreen", pass: "he!06122003@EM", grade: "Employé", needsDetails: false },
             { name: "Kayla Mayers", pass: "km!09031999@EM", grade: "Employé", needsDetails: false },
@@ -323,9 +323,9 @@
         ];
 
         const validManagementUsers = [
-            { fname: "Léa", lname: "Castor", grade: "Patron", account: "Direction Roxwood" },
-            { fname: "Ethan", lname: "Revers", grade: "Co-patron", account: "Direction Roxwood" },
-            { fname: "Anna", lname: "Fox", grade: "DRH", account: "Direction Roxwood" },
+            { fname: "Léa", lname: "Castor", grade: "Patron", account: "Direction Paleto" },
+            { fname: "Ethan", lname: "Revers", grade: "Co-patron", account: "Direction Paleto" },
+            { fname: "Anna", lname: "Fox", grade: "DRH", account: "Direction Paleto" },
             { fname: "Gabriela", lname: "Jimenez", grade: "Responsable", account: "Responsable" },
             { fname: "Luc", lname: "Bernard", grade: "Chef d'équipe", account: "Responsable" }
         ];
@@ -365,7 +365,7 @@
                     const gradeSelect = document.getElementById("step2-grade");
                     gradeSelect.innerHTML = "";
                     
-                    if (foundUser.name === "Direction Roxwood") { 
+                    if (foundUser.name === "Direction Paleto") { 
                         gradeSelect.innerHTML += `<option value="DRH">DRH</option>`;
                         gradeSelect.innerHTML += `<option value="Co-patron">Co-patron</option>`;
                         gradeSelect.innerHTML += `<option value="Patron">Patron</option>`;
@@ -419,11 +419,11 @@
             document.getElementById("step2-login-screen").style.display = "none";
             document.getElementById("main-app").style.display = "block";
             
-            if (accountId === "admin" || accountId === "Direction Roxwood") { 
+            if (accountId === "admin" || accountId === "Direction Paleto") { 
                 document.getElementById("btn-candidatures").style.display = "block"; 
                 syncCandidatures(); 
             }
-            if (accountId === "admin" || accountId === "Direction Roxwood" || accountId === "Responsable") { 
+            if (accountId === "admin" || accountId === "Direction Paleto" || accountId === "Responsable") { 
                 document.getElementById("btn-logs").style.display = "block"; 
                 syncLogs(); 
             }
