@@ -204,7 +204,7 @@
                 <button class="nav-btn" id="btn-history-ent" onclick="switchTab('history-ent-screen')">🏢 Suivi Pros</button>
                 <button class="nav-btn" id="btn-candidatures" style="display:none;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
                 <button class="nav-btn" id="btn-logs" style="display:none;" onclick="switchTab('logs-screen')">📊 Logs</button>
-                <button class="nav-btn" style="background-color: #d32f2f; border: 1px solid #b71c1c;" onclick="location.reload()">❌ Quitter</button>
+                <button class="nav-btn" style="background-color: #d32f2f; border: 1px solid #b71c1c;" onclick="location.reload()">❌ Déconnextion</button>
             </div>
 
             <!-- Suivi Civils -->
@@ -466,20 +466,30 @@
             switchTab('history-screen'); 
         }
 
+        // --- GESTION DES ONGLETS CORRIGÉE ---
         function switchTab(tabId) {
-            const allTabs = ['history-screen', 'history-ent-screen', 'candidatures-screen', 'logs-screen'];
-            
-            allTabs.forEach(id => {
-                document.getElementById(id).style.display = 'none';
-                if(document.getElementById('btn-' + id)) {
-                    document.getElementById('btn-' + id).classList.remove('active');
+            // Dictionnaire associant chaque écran à l'ID de son bouton
+            const tabs = {
+                'history-screen': 'btn-history',
+                'history-ent-screen': 'btn-history-ent',
+                'candidatures-screen': 'btn-candidatures',
+                'logs-screen': 'btn-logs'
+            };
+
+            // 1. On cache tous les écrans et on enlève la couleur (classe "active") de tous les boutons
+            for (let screenId in tabs) {
+                document.getElementById(screenId).style.display = 'none';
+                let btnId = tabs[screenId];
+                if (document.getElementById(btnId)) {
+                    document.getElementById(btnId).classList.remove('active');
                 }
-            });
-            
+            }
+
+            // 2. On affiche l'écran demandé et on colorie (ajoute la classe "active") son bouton
             document.getElementById(tabId).style.display = 'block';
-            
-            if(document.getElementById('btn-' + tabId)) {
-                document.getElementById('btn-' + tabId).classList.add('active');
+            let activeBtnId = tabs[tabId];
+            if (activeBtnId && document.getElementById(activeBtnId)) {
+                document.getElementById(activeBtnId).classList.add('active');
             }
         }
 
@@ -584,7 +594,7 @@
                         <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
                     </td>
                     <td style="color:#4caf50; font-weight:bold;">${order.total} $</td>
-                    <td><select class="status-select" onchange="updateField('orders/${order.id}/enCharge', this.value)">${getEmployeOptions(order.enCharge)}</select></td>
+                    <td><select class="status-select charge-select" onchange="updateField('orders/${order.id}/enCharge', this.value)">${getEmployeOptions(order.enCharge)}</select></td>
                     <td><select class="status-select" onchange="updateField('orders/${order.id}/status', this.value)">${statOpts}</select></td>
                     <td style="text-align:center;"><button class="btn-action btn-delete" onclick="del('orders/${order.id}')">X</button></td>
                 </tr>`;
