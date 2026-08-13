@@ -72,7 +72,6 @@
         .nav-btn {
             padding: 10px 20px;
             background-color: rgba(30, 30, 30, 0.8);
-            border: 1px solid #ff9800;
             color: white;
             font-family: 'Roboto Slab', serif;
             font-weight: bold;
@@ -81,11 +80,18 @@
             transition: 0.2s;
         }
         
-        /* COULEURS DES ONGLETS ACTIFS */
-        #btn-history:hover, #btn-history.active { background-color: #ff9800; color: #1a1a1a; }
-        #btn-history-ent:hover, #btn-history-ent.active { background-color: #9c27b0 !important; color: white !important; }
-        #btn-candidatures:hover, #btn-candidatures.active { background-color: #1976d2 !important; color: white !important; }
-        #btn-logs:hover, #btn-logs.active { background-color: #64b5f6 !important; color: #1a1a1a !important; }
+        /* THÈMES DES ONGLETS ACTIFS */
+        #btn-history { border: 1px solid #4caf50; }
+        #btn-history:hover, #btn-history.active { background-color: #4caf50; color: #1a1a1a; }
+        
+        #btn-history-ent { border: 1px solid #9c27b0; }
+        #btn-history-ent:hover, #btn-history-ent.active { background-color: #9c27b0; color: white; }
+        
+        #btn-candidatures { border: 1px solid #1976d2; }
+        #btn-candidatures:hover, #btn-candidatures.active { background-color: #1976d2; color: white; }
+        
+        #btn-logs { border: 1px solid #64b5f6; }
+        #btn-logs:hover, #btn-logs.active { background-color: #64b5f6; color: #1a1a1a; }
         
         /* INPUTS & BTNS */
         .login-input, .info-input, select.info-input {
@@ -127,11 +133,14 @@
         /* TABLES */
         .history-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 10px; text-align: left; background-color: rgba(30, 30, 30, 0.8); border-radius: 8px; overflow: hidden; }
         .history-table th, .history-table td { padding: 15px; border-bottom: 1px solid #444; vertical-align: middle; word-wrap: break-word; font-size: 0.9em;}
-        .history-table th { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; font-weight: bold; }
-        #history-ent-screen .history-table th { background-color: rgba(156, 39, 176, 0.2); color: #ce93d8; }
         
-        .status-select { background-color: #1a1a1a; color: white; border: 1px solid #ff9800; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
-        .charge-select { border: 1px solid #64b5f6; } 
+        /* THÈMES DES EN-TÊTES DE TABLEAUX (La bande orange/verte/violette) */
+        #history-screen .history-table th { background-color: rgba(76, 175, 80, 0.2); color: #4caf50; font-weight: bold; }
+        #history-ent-screen .history-table th { background-color: rgba(156, 39, 176, 0.2); color: #ce93d8; font-weight: bold; }
+        #candidatures-screen .history-table th { background-color: rgba(25, 118, 210, 0.2); color: #64b5f6; font-weight: bold; }
+        #logs-screen .history-table th { background-color: rgba(100, 181, 246, 0.2); color: #64b5f6; font-weight: bold; }
+        
+        .status-select { background-color: #1a1a1a; color: white; border: 1px solid #4caf50; padding: 8px; border-radius: 4px; width: 100%; font-size: 0.9em; }
 
         .pagination-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; color: #ccc; }
         .page-input { width: 60px; padding: 5px; background-color: rgba(255, 255, 255, 0.1); border: 1px solid #ff9800; color: white; border-radius: 4px; text-align: center; font-weight: bold; font-family: 'Roboto Slab', serif; }
@@ -192,10 +201,10 @@
             
             <div class="navbar">
                 <button class="nav-btn active" id="btn-history" onclick="switchTab('history-screen')">📋 Suivi Civils</button>
-                <button class="nav-btn" id="btn-history-ent" style="border-color: #9c27b0;" onclick="switchTab('history-ent-screen')">🏢 Suivi Pros</button>
-                <button class="nav-btn" id="btn-candidatures" style="display:none; border-color: #1976d2;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
-                <button class="nav-btn" id="btn-logs" style="display:none; border-color: #64b5f6;" onclick="switchTab('logs-screen')">📊 Logs</button>
-                <button class="nav-btn" style="background-color: #d32f2f; border-color: #b71c1c;" onclick="location.reload()">❌ Quitter</button>
+                <button class="nav-btn" id="btn-history-ent" onclick="switchTab('history-ent-screen')">🏢 Suivi Pros</button>
+                <button class="nav-btn" id="btn-candidatures" style="display:none;" onclick="switchTab('candidatures-screen')">📄 Candidatures</button>
+                <button class="nav-btn" id="btn-logs" style="display:none;" onclick="switchTab('logs-screen')">📊 Logs</button>
+                <button class="nav-btn" style="background-color: #d32f2f; border: 1px solid #b71c1c;" onclick="location.reload()">❌ Quitter</button>
             </div>
 
             <!-- Suivi Civils -->
@@ -220,9 +229,9 @@
                 </table>
                 
                 <div class="pagination-container">
-                    <button class="page-btn" onclick="changeOrderPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="order-page-input" class="page-input" value="1" onchange="goToOrderPage()"> / <span id="order-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeOrderPage(1)">➡️</button>
+                    <button class="page-btn" style="border-color: #4caf50;" onclick="changeOrderPage(-1)">⬅️</button>
+                    <span>Page <input type="number" id="order-page-input" class="page-input" style="border-color: #4caf50;" value="1" onchange="goToOrderPage()"> / <span id="order-total-pages">1</span></span>
+                    <button class="page-btn" style="border-color: #4caf50;" onclick="changeOrderPage(1)">➡️</button>
                 </div>
             </div>
 
@@ -248,9 +257,9 @@
                 </table>
                 
                 <div class="pagination-container">
-                    <button class="page-btn" onclick="changeEntOrderPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="order-ent-page-input" class="page-input" value="1" onchange="goToEntOrderPage()"> / <span id="order-ent-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeEntOrderPage(1)">➡️</button>
+                    <button class="page-btn" style="border-color: #9c27b0;" onclick="changeEntOrderPage(-1)">⬅️</button>
+                    <span>Page <input type="number" id="order-ent-page-input" class="page-input" style="border-color: #9c27b0;" value="1" onchange="goToEntOrderPage()"> / <span id="order-ent-total-pages">1</span></span>
+                    <button class="page-btn" style="border-color: #9c27b0;" onclick="changeEntOrderPage(1)">➡️</button>
                 </div>
             </div>
 
@@ -275,9 +284,9 @@
                 </table>
                 
                 <div class="pagination-container">
-                    <button class="page-btn" onclick="changeCandPage(-1)">⬅️</button>
-                    <span>Page <input type="number" id="cand-page-input" class="page-input" value="1" onchange="goToCandPage()"> / <span id="cand-total-pages">1</span></span>
-                    <button class="page-btn" onclick="changeCandPage(1)">➡️</button>
+                    <button class="page-btn" style="border-color: #1976d2;" onclick="changeCandPage(-1)">⬅️</button>
+                    <span>Page <input type="number" id="cand-page-input" class="page-input" style="border-color: #1976d2;" value="1" onchange="goToCandPage()"> / <span id="cand-total-pages">1</span></span>
+                    <button class="page-btn" style="border-color: #1976d2;" onclick="changeCandPage(1)">➡️</button>
                 </div>
             </div>
 
@@ -458,22 +467,20 @@
         }
 
         function switchTab(tabId) {
-            document.getElementById('history-screen').style.display = 'none';
-            document.getElementById('history-ent-screen').style.display = 'none';
-            document.getElementById('candidatures-screen').style.display = 'none';
-            document.getElementById('logs-screen').style.display = 'none';
+            const allTabs = ['history-screen', 'history-ent-screen', 'candidatures-screen', 'logs-screen'];
             
-            document.getElementById('btn-history').classList.remove('active');
-            document.getElementById('btn-history-ent').classList.remove('active');
-            if(document.getElementById('btn-candidatures')) document.getElementById('btn-candidatures').classList.remove('active');
-            if(document.getElementById('btn-logs')) document.getElementById('btn-logs').classList.remove('active');
+            allTabs.forEach(id => {
+                document.getElementById(id).style.display = 'none';
+                if(document.getElementById('btn-' + id)) {
+                    document.getElementById('btn-' + id).classList.remove('active');
+                }
+            });
             
             document.getElementById(tabId).style.display = 'block';
             
-            if(tabId === 'history-screen') document.getElementById('btn-history').classList.add('active');
-            else if(tabId === 'history-ent-screen') document.getElementById('btn-history-ent').classList.add('active');
-            else if(tabId === 'candidatures-screen') document.getElementById('btn-candidatures').classList.add('active');
-            else if(tabId === 'logs-screen') document.getElementById('btn-logs').classList.add('active');
+            if(document.getElementById('btn-' + tabId)) {
+                document.getElementById('btn-' + tabId).classList.add('active');
+            }
         }
 
         // --- DATABASE SYNC ---
@@ -577,7 +584,7 @@
                         <span style="color:#e57373;">📝 <strong>Notes :</strong></span> ${order.infos}
                     </td>
                     <td style="color:#4caf50; font-weight:bold;">${order.total} $</td>
-                    <td><select class="status-select charge-select" onchange="updateField('orders/${order.id}/enCharge', this.value)">${getEmployeOptions(order.enCharge)}</select></td>
+                    <td><select class="status-select" onchange="updateField('orders/${order.id}/enCharge', this.value)">${getEmployeOptions(order.enCharge)}</select></td>
                     <td><select class="status-select" onchange="updateField('orders/${order.id}/status', this.value)">${statOpts}</select></td>
                     <td style="text-align:center;"><button class="btn-action btn-delete" onclick="del('orders/${order.id}')">X</button></td>
                 </tr>`;
