@@ -80,7 +80,12 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .nav-btn:hover, .nav-btn.active { background-color: #ff9800; color: #1a1a1a; }
+        
+        /* COULEURS DES ONGLETS ACTIFS */
+        #btn-history:hover, #btn-history.active { background-color: #ff9800; color: #1a1a1a; }
+        #btn-history-ent:hover, #btn-history-ent.active { background-color: #9c27b0 !important; color: white !important; }
+        #btn-candidatures:hover, #btn-candidatures.active { background-color: #1976d2 !important; color: white !important; }
+        #btn-logs:hover, #btn-logs.active { background-color: #64b5f6 !important; color: #1a1a1a !important; }
         
         /* INPUTS & BTNS */
         .login-input, .info-input, select.info-input {
@@ -140,7 +145,7 @@
         .cand-rejected { background-color: rgba(211, 47, 47, 0.15) !important; border-left: 5px solid #d32f2f; }
 
         /* Hide screens */
-        #step2-login-screen, #main-app, #history-screen, #history-ent-screen, #logs-screen, #candidatures-screen { display: none; }
+        #step2-login-screen, #main-app, #history-ent-screen, #logs-screen, #candidatures-screen { display: none; }
         
     </style>
 </head>
@@ -453,20 +458,22 @@
         }
 
         function switchTab(tabId) {
-            const allTabs = ['history-screen', 'history-ent-screen', 'candidatures-screen', 'logs-screen'];
+            document.getElementById('history-screen').style.display = 'none';
+            document.getElementById('history-ent-screen').style.display = 'none';
+            document.getElementById('candidatures-screen').style.display = 'none';
+            document.getElementById('logs-screen').style.display = 'none';
             
-            allTabs.forEach(id => {
-                document.getElementById(id).style.display = 'none';
-                if(document.getElementById('btn-' + id)) {
-                    document.getElementById('btn-' + id).classList.remove('active');
-                }
-            });
+            document.getElementById('btn-history').classList.remove('active');
+            document.getElementById('btn-history-ent').classList.remove('active');
+            if(document.getElementById('btn-candidatures')) document.getElementById('btn-candidatures').classList.remove('active');
+            if(document.getElementById('btn-logs')) document.getElementById('btn-logs').classList.remove('active');
             
             document.getElementById(tabId).style.display = 'block';
             
-            if(document.getElementById('btn-' + tabId)) {
-                document.getElementById('btn-' + tabId).classList.add('active');
-            }
+            if(tabId === 'history-screen') document.getElementById('btn-history').classList.add('active');
+            else if(tabId === 'history-ent-screen') document.getElementById('btn-history-ent').classList.add('active');
+            else if(tabId === 'candidatures-screen') document.getElementById('btn-candidatures').classList.add('active');
+            else if(tabId === 'logs-screen') document.getElementById('btn-logs').classList.add('active');
         }
 
         // --- DATABASE SYNC ---
